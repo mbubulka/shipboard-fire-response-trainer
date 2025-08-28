@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCA Training System</title>
+    <!-- Assessment functionality only -->
+    <!-- Add any other CSS or meta tags from original file -->
+</head>
+<body>
+    <div id="modeSelection" class="mode-selection">
+        <h1>DCA Training System</h1>
+        <div class="mode-grid">
+            <div class="mode-card" onclick="startScenarioMode()">
+                <div class="mode-icon">🎮</div>
+                <div class="mode-title">Scenario Analysis</div>
+                <div class="mode-description">
+                    Interactive scenario-based training with AI feedback
+                </div>
+                <ul class="mode-features">
+                    <li>Real-time AI assistance</li>
+                    <li>Dynamic scenario branching</li>
+                    <li>Performance metrics</li>
+                    <li>Success probability metrics</li>
+                </ul>
+                <div class="mode-badge">DQN + AWS Lambda</div>
+            </div>
+
+            <div class="mode-card" onclick="startAssessmentMode()">
+                <div class="mode-icon">📋</div>
+                <div class="mode-title">DCA Assessment</div>
+                <div class="mode-description">
+                    Multiple-choice training assessments with AI-powered feedback
+                </div>
+                <ul class="mode-features">
+                    <li>Comprehensive question bank</li>
+                    <li>Adaptive difficulty</li>
+                    <li>Detailed explanations</li>
+                    <li>Progress tracking</li>
+                </ul>
+                <div class="mode-badge">Multiple Choice</div>
+            </div>
+        </div>
+        
+        <div class="nav-bar">
+            <button class="nav-btn" onclick="showModeSelection()">🔄 Training Modes</button>
+            <button class="nav-btn" onclick="showHelp()">❓ Help</button>
+        </div>
+    </div>
+
+    <div id="assessmentContent" class="assessment-content">
+        <!-- Assessment content will be dynamically inserted here -->
+    </div>
+
+    <script>
+        // Global state variables - defined only once
+        let currentMode = 'selection';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let assessmentQuestions = [];
+
+        // Assessment data structure
+        const SCENARIO_ASSESSMENT = {
+            title: "DCA Comprehensive Assessment",
+            description: "Test your knowledge of damage control and firefighting procedures through realistic scenarios",
+            scenarios: [
+                {
+                    id: "initial_response",
+                    title: "Initial Fire Response Scenario",
+                    description: "You receive a report of smoke in the forward berthing area",
+                    questions: [
+                        {
+                            id: "size_up",
+                            question: "Smoke is reported in the forward berthing area. What should be your first three actions in order?",
+                            options: [
+                                "Sound general quarters, notify chain of command, dispatch investigation team",
+                                "Evacuate the space, activate fire suppression, call damage control central",
+                                "Verify smoke report, sound general quarters, set fire boundaries",
+                                "Call for assistance, start ventilation, begin evacuation"
+                            ],
+                            correct: 0,
+                            explanation: "Initial response requires immediate alert (GQ), command notification for decision-making authority, and investigation to assess the situation.",
+                            resources: "Initial response procedures prioritize alert, command, and investigation"
+                        },
+                        {
+                            id: "risk_assessment",
+                            question: "The investigation team reports active fire in a mattress with moderate smoke. What is your primary concern?",
+                            options: [
+                                "Structural damage to bulkheads",
+                                "Rapid fire spread through ventilation",
+                                "Personnel evacuation and accountability",
+                                "Water damage from firefighting"
+                            ],
+                            correct: 2,
+                            explanation: "In berthing areas, personnel evacuation and accountability is the immediate priority due to life safety concerns.",
+                            resources: "Life safety always takes precedence in occupied spaces"
+                        }
+                    ]
+                },
+                {
+                    id: "fire_containment",
+                    title: "Fire Containment Phase",
+                    description: "Fire has been confirmed in the forward berthing with heavy smoke",
+                    questions: [
+                        {
+                            id: "boundary_cooling",
+                            question: "How should boundaries be established around the fire area?",
+                            options: [
+                                "One boundary immediately adjacent to the fire",
+                                "Two boundaries with the primary at the fire and secondary one compartment out",
+                                "Three boundaries with safe zones between each",
+                                "Four boundaries creating multiple containment zones"
+                            ],
+                            correct: 1,
+                            explanation: "Primary and secondary boundaries provide containment while allowing for tactical operations and safety zones.",
+                            resources: "Proper boundary control prevents fire spread while enabling response"
+                        },
+                        {
+                            id: "ventilation_strategy",
+                            question: "What ventilation strategy should be implemented?",
+                            options: [
+                                "Maximize exhaust to remove smoke",
+                                "Shut down all ventilation systems",
+                                "Natural ventilation through opening hatches",
+                                "Coordinate ventilation with fire attack plan"
+                            ],
+                            correct: 3,
+                            explanation: "Ventilation must be coordinated with fire attack to prevent fire spread and support firefighting efforts.",
+                            resources: "Ventilation affects fire behavior and firefighting effectiveness"
+                        }
+                    ]
+                },
+                {
+                    id: "fire_attack",
+                    title: "Fire Attack Operations",
+                    description: "Teams are in position to begin fire attack",
+                    questions: [
+                        {
+                            id: "attack_method",
+                            question: "Team reports high heat with no visible flame. What attack method should be used?",
+                            options: [
+                                "Direct attack with straight stream",
+                                "Indirect attack with fog pattern",
+                                "Combination attack with cooling and penetration",
+                                "Wait for better visibility"
+                            ],
+                            correct: 2,
+                            explanation: "High heat with no visible flame suggests deep-seated fire requiring both cooling and penetration.",
+                            resources: "Attack methods must match fire conditions"
+                        },
+                        {
+                            id: "team_rotation",
+                            question: "How should attack teams be rotated during extended operations?",
+                            options: [
+                                "Every 30 minutes regardless of conditions",
+                                "When air supply reaches 50%",
+                                "Based on individual team assessment",
+                                "After each attack evolution"
+                            ],
+                            correct: 1,
+                            explanation: "50% air supply provides safe margin for exit while maintaining operational effectiveness.",
+                            resources: "Team rotation ensures safety and sustained operations"
+                        }
+                    ]
+                },
+                {
+                    id: "overhaul",
+                    title: "Overhaul and Salvage Operations",
+                    description: "Main body of fire is extinguished, beginning overhaul",
+                    questions: [
+                        {
+                            id: "heat_detection",
+                            question: "What method should be used to check for hidden fire extension?",
+                            options: [
+                                "Visual inspection only",
+                                "Thermal imaging camera and physical inspection",
+                                "Wait for cool down period",
+                                "Remove all affected materials"
+                            ],
+                            correct: 1,
+                            explanation: "Combining thermal imaging with physical inspection provides most thorough detection of hidden hot spots.",
+                            resources: "Multiple detection methods ensure thorough overhaul"
+                        },
+                        {
+                            id: "salvage_priority",
+                            question: "What is the priority for salvage operations?",
+                            options: [
+                                "Remove all water immediately",
+                                "Document damage for reports",
+                                "Protect critical equipment and remove water",
+                                "Begin repairs immediately"
+                            ],
+                            correct: 2,
+                            explanation: "Protecting critical equipment while managing water prevents secondary damage and maintains ship capabilities.",
+                            resources: "Effective salvage prevents secondary damage"
+                        }
+                    ]
+                },
+                {
+                    id: "special_hazards",
+                    title: "Special Hazards Response",
+                    description: "Fire reported in the electronics equipment space with potential hazardous materials",
+                    questions: [
+                        {
+                            id: "hazmat_identification",
+                            question: "You identify lithium batteries in the fire area. What special considerations must be addressed?",
+                            options: [
+                                "Use standard water fire suppression",
+                                "Only use CO2 extinguishers",
+                                "Consider Class D extinguishing agents and establish battery cooling protocol",
+                                "Immediately flood the space"
+                            ],
+                            correct: 2,
+                            explanation: "Lithium battery fires require specific extinguishing agents and prolonged cooling to prevent thermal runaway.",
+                            resources: "Special hazards require specific tactical approaches"
+                        },
+                        {
+                            id: "electrical_safety",
+                            question: "With energized electrical equipment involved, what protective measures are required?",
+                            options: [
+                                "Standard turnout gear is sufficient",
+                                "Non-conductive gloves and tools, verify power isolation",
+                                "Wait for complete power loss before entry",
+                                "Use water fog pattern only"
+                            ],
+                            correct: 1,
+                            explanation: "Electrical hazards require specific PPE and verification of power isolation while maintaining readiness to respond.",
+                            resources: "Electrical fire safety protocols protect responders"
+                        }
+                    ]
+                },
+                {
+                    id: "multi_space_fire",
+                    title: "Multi-Space Fire Scenario",
+                    description: "Fire has spread from initial compartment to adjacent spaces",
+                    questions: [
+                        {
+                            id: "resource_allocation",
+                            question: "With fire in three adjacent compartments, how should teams be deployed?",
+                            options: [
+                                "Equal resources to all three spaces",
+                                "Focus all resources on the most severe area",
+                                "Establish primary attack on point of origin, containment teams on spread",
+                                "Wait for additional resources before engaging"
+                            ],
+                            correct: 2,
+                            explanation: "Primary attack at origin while containing spread prevents further extension and allows systematic extinguishment.",
+                            resources: "Resource allocation affects overall fire control"
+                        },
+                        {
+                            id: "communication_coordination",
+                            question: "How should communications be managed between multiple attack teams?",
+                            options: [
+                                "Each team on separate frequencies",
+                                "All teams monitor all communications",
+                                "Designated command channel and tactical channels",
+                                "Teams communicate through relay personnel only"
+                            ],
+                            correct: 2,
+                            explanation: "Separate command and tactical channels maintain clear communication while preventing radio confusion.",
+                            resources: "Effective communication crucial in complex scenarios"
+                        },
+                        {
+                            id: "strategic_priorities",
+                            question: "What is the priority when fire threatens critical ship systems in multiple spaces?",
+                            options: [
+                                "Protect all systems equally",
+                                "Focus on highest value system only",
+                                "Establish protection for critical systems while containing fire spread",
+                                "Evacuate all spaces and use fixed systems"
+                            ],
+                            correct: 2,
+                            explanation: "Protecting critical systems while maintaining overall fire control preserves ship capabilities.",
+                            resources: "Strategic priorities balance ship survival needs"
+                        }
+                    ]
+                }
+                
+            ]
+        };
+
+        // Function to show mode selection screen
+        function showModeSelection() {
+            document.getElementById('modeSelection').style.display = 'grid';
+            document.getElementById('assessmentContent').classList.remove('active');
+            currentMode = 'selection';
+        }
+
+        // Function to start scenario mode
+        function startScenarioMode() {
+            window.location.href = './index.html';
+        }
+
+        // Function to start assessment mode
+        function startAssessmentMode() {
+            document.getElementById('modeSelection').style.display = 'none';
+            document.getElementById('assessmentContent').classList.add('active');
+            currentMode = 'assessment';
+            initializeAssessment();
+        }
+
+        // Function to initialize assessment
+        function initializeAssessment() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            // Flatten questions from all scenarios
+            assessmentQuestions = SCENARIO_ASSESSMENT.scenarios.reduce((acc, scenario) => {
+                return acc.concat(scenario.questions.map(q => ({...q, scenario: scenario.title})));
+            }, []);
+
+            // Shuffle questions
+            assessmentQuestions = shuffleArray(assessmentQuestions);
+            
+            // Start feedback session
+            if (window.startDCAFeedbackSession) {
+                window.startDCAFeedbackSession({
+                    id: 'assessment_' + Date.now(),
+                    type: 'comprehensive'
+                });
+            }
+
+            showCurrentQuestion();
+        }
+
+        // Function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to show current question
+        function showCurrentQuestion() {
+            const question = assessmentQuestions[currentQuestionIndex];
+            const content = document.getElementById('assessmentContent');
+            
+            content.innerHTML = `
+                <div class="assessment-header">
+                    <h2>${question.scenario}</h2>
+                    <div class="progress">Question ${currentQuestionIndex + 1} of ${assessmentQuestions.length}</div>
+                    <div class="score">Score: ${score}</div>
+                </div>
+                <div class="question-area">
+                    <p class="question">${question.question}</p>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <button class="option" onclick="selectAnswer(${index})">${option}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to select answer
+        function selectAnswer(index) {
+            const question = assessmentQuestions[currentQuestionIndex];
+            selectedAnswer = index;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            // Show submit button
+            const questionArea = document.querySelector('.question-area');
+            if (!questionArea.querySelector('.submit-btn')) {
+                const submitBtn = document.createElement('button');
+                submitBtn.className = 'submit-btn';
+                submitBtn.textContent = 'Submit Answer';
+                submitBtn.onclick = submitAnswer;
+                questionArea.appendChild(submitBtn);
+            }
+        }
+
+        // Function to submit answer
+        function submitAnswer() {
+            const question = assessmentQuestions[currentQuestionIndex];
+            const isCorrect = selectedAnswer === question.correct;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Log action with feedback system
+            if (window.logDCAAction) {
+                window.logDCAAction({
+                    questionId: question.id,
+                    userAction: selectedAnswer,
+                    correct: isCorrect,
+                    scenario: question.scenario
+                });
+            }
+            
+            showFeedback(isCorrect);
+        }
+
+        // Function to show feedback
+        function showFeedback(isCorrect) {
+            const question = assessmentQuestions[currentQuestionIndex];
+            const content = document.getElementById('assessmentContent');
+            
+            content.innerHTML = `
+                <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                    <h3>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</h3>
+                    <p><strong>Explanation:</strong> ${question.explanation}</p>
+                    <p><strong>Resources:</strong> ${question.resources}</p>
+                    <button onclick="nextQuestion()">Next Question</button>
+                </div>
+            `;
+        }
+
+        // Function to move to next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= assessmentQuestions.length) {
+                showResults();
+            } else {
+                showCurrentQuestion();
+            }
+        }
+
+        // Function to show final results
+        function showResults() {
+            const content = document.getElementById('assessmentContent');
+            const percentage = (score / assessmentQuestions.length) * 100;
+            
+            // Show the basic results first
+            content.innerHTML = `
+                <div class="results">
+                    <h2>Assessment Complete! 🎉</h2>
+                    <div class="score-display">
+                        <p style="font-size: 48px; color: #1976d2; margin: 20px 0;">${percentage.toFixed(1)}%</p>
+                        <p>Final Score: ${score} out of ${assessmentQuestions.length} correct</p>
+                    </div>
+                    <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 10px;">
+                        ${percentage >= 75 ? 
+                            "Outstanding! You've demonstrated excellent understanding." :
+                            percentage >= 60 ? 
+                            "Good job! Consider reviewing the areas where you had difficulty." :
+                            "This is a good starting point. Focus on reviewing the core concepts."}
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button onclick="startAssessmentMode()" 
+                                style="background: #1976d2; color: white; border: none; padding: 10px 20px; margin: 0 10px; border-radius: 5px; cursor: pointer;">
+                            Try Again
+                        </button>
+                        <button onclick="showModeSelection()" 
+                                style="background: #f5f5f5; color: #333; border: 1px solid #ddd; padding: 10px 20px; margin: 0 10px; border-radius: 5px; cursor: pointer;">
+                            Return to Menu
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // No feedback system, just continue with results display
+            
+            // Add styles for the new elements
+            const style = document.createElement('style');
+            style.textContent = `
+                .results {
+                    text-align: center;
+                    padding: 30px;
+                    background: white;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }
+                .large-score {
+                    font-size: 48px;
+                    font-weight: bold;
+                    color: #1976d2;
+                    margin: 20px 0;
+                }
+                .performance-badge {
+                    display: inline-block;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    margin: 10px 0;
+                }
+                .performance-badge.excellent {
+                    background-color: #4caf50;
+                    color: white;
+                }
+                .performance-badge.good {
+                    background-color: #2196f3;
+                    color: white;
+                }
+                .performance-badge.needs-improvement {
+                    background-color: #ff9800;
+                    color: white;
+                }
+                .feedback-message {
+                    margin: 20px 0;
+                    padding: 15px;
+                    background: #f5f5f5;
+                    border-radius: 10px;
+                    font-style: italic;
+                }
+                .action-buttons {
+                    margin-top: 30px;
+                }
+                .action-buttons button {
+                    margin: 0 10px;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    transition: all 0.3s ease;
+                }
+                .primary-btn {
+                    background: #1976d2;
+                    color: white;
+                    border: none;
+                }
+                .primary-btn:hover {
+                    background: #1565c0;
+                    transform: translateY(-2px);
+                }
+                .secondary-btn {
+                    background: #f5f5f5;
+                    color: #333;
+                    border: 1px solid #ddd;
+                }
+                .secondary-btn:hover {
+                    background: #eeeeee;
+                    transform: translateY(-2px);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Helper function to get feedback message based on score
+        function getFeedbackMessage(percentage) {
+            if (percentage >= 90) {
+                return "Outstanding performance! You've demonstrated excellent understanding of DCA procedures and protocols.";
+            } else if (percentage >= 75) {
+                return "Great job! You show strong knowledge of damage control procedures with some room for refinement.";
+            } else if (percentage >= 60) {
+                return "Good effort! Consider reviewing the areas where you had difficulty to strengthen your knowledge.";
+            } else {
+                return "This is a good starting point. Focus on reviewing the core concepts and try again to improve your score.";
+            }
+        }
+        // Function to show help
+        function showHelp() {
+            alert('Help and instructions coming soon!');
+        }
+
+        // Initialize to mode selection on load
+        showModeSelection();
+    </script>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .mode-selection {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .mode-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .mode-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .mode-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .mode-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .mode-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mode-features li {
+            margin: 5px 0;
+            color: #444;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .nav-bar {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .nav-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .nav-btn:hover {
+            background: #1565c0;
+        }
+
+        .assessment-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .assessment-content.active {
+            display: block;
+        }
+
+        .question-area {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+        }
+
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .feedback {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .feedback.correct {
+            border-left: 5px solid #28a745;
+        }
+
+        .feedback.incorrect {
+            border-left: 5px solid #dc3545;
+        }
+
+        .results {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .mode-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

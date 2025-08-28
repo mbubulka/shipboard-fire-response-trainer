@@ -1,0 +1,86 @@
+{
+  "system_info": {
+    "name": "Comprehensive Fire Response Training System",
+    "version": "1.0",
+    "created": "2025-08-27T08:41:23.016308",
+    "sources": [
+      "nfpa_1500",
+      "nfpa_1521",
+      "nfpa_1670",
+      "uscg_cg022",
+      "navy_rvss"
+    ]
+  },
+  "training_standards": {
+    "nfpa_standards": {
+      "nfpa_1500": {
+        "focus": "Occupational safety and health programs",
+        "key_areas": [
+          "Risk management procedures",
+          "Personnel safety protocols",
+          "Training program requirements",
+          "Equipment safety standards",
+          "Medical and fitness requirements"
+        ]
+      },
+      "nfpa_1521": {
+        "focus": "Safety officer professional qualifications",
+        "key_areas": [
+          "Incident safety officer duties",
+          "Risk assessment procedures",
+          "Safety communication protocols",
+          "Personnel accountability systems",
+          "Post-incident safety analysis"
+        ]
+      },
+      "nfpa_1670": {
+        "focus": "Technical search and rescue operations",
+        "key_areas": [
+          "Confined space rescue",
+          "Structural collapse rescue",
+          "Water rescue operations",
+          "Rope rescue techniques",
+          "Medical considerations"
+        ]
+      }
+    },
+    "military_standards": {
+      "navy_rvss": {
+        "focus": "Naval visual communications",
+        "key_areas": [
+          "Visual signal procedures",
+          "Emergency communication protocols",
+          "Bridge-to-bridge communications",
+          "Damage control signals",
+          "Flight operations coordination"
+        ]
+      },
+      "uscg_procedures": {
+        "focus": "Coast Guard firefighting and safety",
+        "key_areas": [
+          "Marine firefighting techniques",
+          "Shipboard safety procedures",
+          "Inter-agency coordination",
+          "Search and rescue operations",
+          "Maritime emergency response"
+        ]
+      }
+    }
+  },
+  "integrated_procedures": {
+    "shipboard_specific": [
+      "Aircraft carrier fire suppression systems",
+      "Aviation fuel fire response procedures",
+      "Flight deck emergency protocols",
+      "Engineering space firefighting",
+      "Damage control coordination"
+    ],
+    "inter_service": [
+      "Navy-Coast Guard coordination procedures",
+      "Multi-platform emergency response",
+      "Standardized communication protocols",
+      "Resource sharing agreements",
+      "Joint training requirements"
+    ]
+  }
+}

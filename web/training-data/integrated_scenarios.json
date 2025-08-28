@@ -1,0 +1,92 @@
+[
+  {
+    "id": "unified_safety_001",
+    "title": "Shipboard SAFETY OFFICER RESPONSE - MAJOR FIRE",
+    "category": "safety_management",
+    "sources": [
+      "nfpa_1500",
+      "nfpa_1521",
+      "navy_rvss"
+    ],
+    "description": "Major fire event requiring safety officer coordination, risk assessment, and personnel accountability using naval communication protocols.",
+    "learning_objectives": [
+      "Apply NFPA 1500 safety program principles",
+      "Execute NFPA 1521 safety officer procedures",
+      "Implement Navy RVSS communication protocols",
+      "Coordinate multi-agency safety response"
+    ],
+    "scenario_details": {
+      "location": "Shipboard engineering spaces and adjacent compartments",
+      "conditions": "Major fire, structural compromise, multiple casualties",
+      "resources": "Ship safety officer, repair parties, medical team, bridge",
+      "safety_priorities": "Personnel accountability, exposure assessment, evacuation coordination"
+    },
+    "assessment_criteria": [
+      "NFPA 1500 safety program implementation",
+      "NFPA 1521 safety officer decision-making",
+      "Navy communication protocol adherence",
+      "Risk assessment accuracy",
+      "Personnel accountability maintenance"
+    ]
+  },
+  {
+    "id": "unified_rescue_001",
+    "title": "CONFINED SPACE RESCUE - FIRE CASUALTY",
+    "category": "technical_rescue",
+    "sources": [
+      "nfpa_1670",
+      "uscg_cg022",
+      "navy_rvss"
+    ],
+    "description": "Firefighter down in confined engineering space requiring technical rescue with Coast Guard coordination procedures.",
+    "learning_objectives": [
+      "Apply NFPA 1670 technical rescue operations",
+      "Implement USCG rescue coordination procedures",
+      "Execute Navy confined space protocols",
+      "Coordinate inter-service rescue operations"
+    ],
+    "scenario_details": {
+      "location": "Shipboard machinery space - confined area",
+      "conditions": "Firefighter unconscious, toxic atmosphere, structural hazards",
+      "resources": "Technical rescue team, ship medical, USCG helicopter",
+      "rescue_priorities": "Immediate life safety, atmospheric monitoring, extraction planning"
+    },
+    "assessment_criteria": [
+      "NFPA 1670 rescue operation procedures",
+      "USCG coordination protocol execution",
+      "Navy confined space safety compliance",
+      "Inter-service communication effectiveness",
+      "Medical treatment coordination"
+    ]
+  },
+  {
+    "id": "unified_marine_001",
+    "title": "MULTI-PLATFORM MARINE FIRE RESPONSE",
+    "category": "marine_operations",
+    "sources": [
+      "uscg_cg022",
+      "navy_rvss",
+      "nfpa_1500"
+    ],
+    "description": "Fire aboard Shipboard requiring USCG assistance and multi-platform coordination using standardized marine firefighting procedures.",
+    "learning_objectives": [
+      "Apply USCG marine firefighting procedures",
+      "Execute Navy inter-ship communication protocols",
+      "Implement NFPA safety standards at sea",
+      "Coordinate multi-platform emergency response"
+    ],
+    "scenario_details": {
+      "location": "Shipboard flight deck and hangar bay",
+      "conditions": "Aircraft fire, aviation fuel involvement, sea state 4",
+      "resources": "Shipboard fire teams, USCG cutter, helicopter support",
+      "marine_factors": "Weather conditions, platform coordination, resource sharing"
+    },
+    "assessment_criteria": [
+      "USCG firefighting procedure application",
+      "Navy visual signal protocol execution",
+      "NFPA safety standard adherence",
+      "Multi-platform coordination effectiveness",
+      "Resource allocation optimization"
+    ]
+  }
+]

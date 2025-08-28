@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCA Training Portal - Shipboard Fire Response Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .start-panel, .question-panel, .results-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .question-panel {
+            display: none;
+        }
+        
+        .results-panel {
+            display: none;
+        }
+        
+        .scenario-context {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #fff;
+        }
+        
+        .question-text {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .choice-btn.correct {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            border-color: #2ecc71;
+        }
+        
+        .choice-btn.incorrect {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border-color: #c0392b;
+        }
+        
+        .feedback {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.2);
+            height: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #ffd700, #ffed4a);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+        
+        .phase-indicator {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .ai-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+        
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <a href="../" class="back-link">← Back to Portfolio</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔥 DCA Training Portal</h1>
+            <p>Advanced Shipboard Fire Response Assessment System</p>
+            <div class="ai-indicator">🤖 AI-Powered Question Generation</div>
+        </div>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="start-panel">
+            <h2 style="margin-bottom: 20px;">Shipboard Damage Control Assistant Training</h2>
+            
+            <div class="scenario-context">
+                <h3>🚨 Training Scenario</h3>
+                <p><strong>Ship:</strong> DDG-51 Class Destroyer</p>
+                <p><strong>Location:</strong> Engine Room #2</p>
+                <p><strong>Incident:</strong> Class B Fire (JP-5 Fuel)</p>
+                <p><strong>Conditions:</strong> Underway operations, limited crew availability</p>
+            </div>
+            
+            <p style="margin: 20px 0; font-size: 1.1rem;">
+                This assessment will test your knowledge of damage control procedures, resource management, 
+                and decision-making under pressure. You'll face 10 progressive questions that adapt based on your responses.
+            </p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn" onclick="startTraining()">🚨 Begin DCA Assessment</button>
+            </div>
+        </div>
+        
+        <!-- Question Screen -->
+        <div id="question-screen" class="question-panel">
+            <div class="phase-indicator">
+                <h3 id="phase-title">Loading...</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+                <span id="question-counter">Question 1 of 10</span>
+            </div>
+            
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+            
+            <div id="choices-container"></div>
+            
+            <div id="feedback" class="feedback">
+                <h4>AI Analysis:</h4>
+                <p id="feedback-text"></p>
+                <button class="btn" onclick="nextQuestion()" style="margin-top: 15px;">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- Results Screen -->
+        <div id="results-screen" class="results-panel">
+            <h2 style="text-align: center; margin-bottom: 20px;">🎯 Training Assessment Complete</h2>
+            
+            <div class="score-display">
+                <div style="font-size: 3rem; margin: 20px 0;">
+                    <span id="final-score">85%</span>
+                </div>
+                <div id="performance-level">DCA Qualified</div>
+            </div>
+            
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3>📊 Performance Analysis</h3>
+                <div id="detailed-results"></div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn" onclick="restartTraining()">🔄 Retake Assessment</button>
+                <button class="btn" onclick="window.location.href='../'" style="margin-left: 15px; background: linear-gradient(45deg, #3498db, #2980b9);">← Back to Portfolio</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DCA Training Questions Database (FREE - No API calls)
+        const dcaQuestions = [
+            {
+                phase: "Initial Assessment",
+                question: "You arrive at Engine Room #2 and observe a Class B fire involving JP-5 fuel. Your immediate priority as DCA should be:",
+                choices: [
+                    "Immediately apply AFFF foam to the fire source",
+                    "Ensure personnel accountability and establish fire boundaries", 
+                    "Shut down all electrical power to the compartment",
+                    "Request immediate port return for emergency response"
+                ],
+                correct: 1,
+                feedback: "Correct! Personnel safety and fire containment are the immediate priorities. Establishing fire boundaries prevents spread while ensuring all personnel are accounted for."
+            },
+            {
+                phase: "Resource Assessment", 
+                question: "With limited crew available during underway operations, which resource allocation strategy is most effective?",
+                choices: [
+                    "Deploy maximum personnel to the fire scene immediately",
+                    "Establish a balanced response team while maintaining ship operations",
+                    "Focus all efforts on fire suppression, suspend other operations",
+                    "Wait for additional personnel before beginning suppression efforts"
+                ],
+                correct: 1,
+                feedback: "Excellent decision! Maintaining ship operations while deploying an effective response team ensures both fire suppression and vessel safety."
+            },
+            {
+                phase: "Suppression Strategy",
+                question: "For a JP-5 fuel fire in the engine room, the most appropriate suppression agent is:",
+                choices: [
+                    "Water spray to cool surrounding surfaces",
+                    "AFFF (Aqueous Film Forming Foam) for fuel fires", 
+                    "CO2 flooding system activation",
+                    "Dry chemical powder application"
+                ],
+                correct: 1,
+                feedback: "Correct! AFFF is specifically designed for Class B (flammable liquid) fires and creates a film barrier to prevent re-ignition."
+            },
+            {
+                phase: "Ventilation Management",
+                question: "Engine room ventilation during active fire suppression should be:",
+                choices: [
+                    "Increased to maximum to clear smoke quickly",
+                    "Maintained at normal levels for crew safety",
+                    "Reduced or secured to prevent fire spread",
+                    "Switched to emergency ventilation mode only"
+                ],
+                correct: 2,
+                feedback: "Good choice! Reducing ventilation prevents feeding oxygen to the fire and helps contain suppression agents in the space."
+            },
+            {
+                phase: "Safety Monitoring",
+                question: "Critical safety parameters to monitor during engine room fire suppression include:",
+                choices: [
+                    "Only fire temperature and suppression agent levels",
+                    "Air quality, structural integrity, and personnel exposure",
+                    "Engine performance and fuel system pressure only", 
+                    "Ship's speed and navigation systems primarily"
+                ],
+                correct: 1,
+                feedback: "Excellent! Comprehensive safety monitoring prevents secondary casualties and ensures suppression team safety."
+            },
+            {
+                phase: "Communication Protocol",
+                question: "As DCA, your communication priority during the emergency should be:",
+                choices: [
+                    "Provide detailed technical updates every 5 minutes",
+                    "Maintain continuous contact with Bridge and Engineering",
+                    "Focus only on fire team coordination communications", 
+                    "Wait for significant developments before reporting"
+                ],
+                correct: 1,
+                feedback: "Perfect! Continuous communication ensures coordinated response and enables critical decision-making at all levels."
+            },
+            {
+                phase: "Systems Management",
+                question: "Critical systems that should be secured or modified during engine room fire response:",
+                choices: [
+                    "Only the fuel systems directly involved in the fire",
+                    "All electrical systems in the affected compartment immediately",
+                    "Fuel, electrical, and ventilation systems in a coordinated sequence",
+                    "No systems should be modified during active suppression"
+                ],
+                correct: 2,
+                feedback: "Correct! Coordinated system isolation prevents fire spread while maintaining essential capabilities for suppression."
+            },
+            {
+                phase: "Personnel Management", 
+                question: "For personnel working in the fire-affected area, your safety protocol should include:",
+                choices: [
+                    "Standard work uniforms with basic safety equipment",
+                    "Full firefighting ensemble with SCBA and backup personnel",
+                    "Minimal exposure time with rotating 30-minute shifts",
+                    "Remote suppression only, no personnel entry"
+                ],
+                correct: 1,
+                feedback: "Excellent! Full protection with SCBA and backup ensures personnel safety in toxic/oxygen-deficient environments."
+            },
+            {
+                phase: "Damage Assessment",
+                question: "Post-suppression damage assessment priorities should focus on:",
+                choices: [
+                    "Cosmetic damage and cleanup requirements only",
+                    "Structural integrity, system functionality, and safety hazards",
+                    "Insurance documentation and cost estimates primarily",
+                    "Immediate return to normal operations timeline"
+                ],
+                correct: 1,
+                feedback: "Perfect! Comprehensive damage assessment ensures safe operations and identifies critical repair priorities."
+            },
+            {
+                phase: "Recovery Planning",
+                question: "Your recommendation for engine room operations post-fire suppression should be:",
+                choices: [
+                    "Immediate return to full operational status",
+                    "Systematic inspection, testing, and graduated restoration",
+                    "Minimal operations until port arrival only", 
+                    "Emergency operations mode with reduced capability"
+                ],
+                correct: 1,
+                feedback: "Excellent! Systematic restoration ensures safety while maximizing operational capability during transit."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = [];
+
+        function startTraining() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('question-screen').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = dcaQuestions[currentQuestion];
+            
+            // Update phase and progress
+            document.getElementById('phase-title').textContent = question.phase;
+            document.getElementById('question-counter').textContent = `Question ${currentQuestion + 1} of ${dcaQuestions.length}`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / dcaQuestions.length) * 100}%`;
+            
+            // Show question
+            document.getElementById('question-text').textContent = question.question;
+            
+            // Create choices
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+            
+            question.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.textContent = `${String.fromCharCode(65 + index)}. ${choice}`;
+                button.onclick = () => selectAnswer(index);
+                choicesContainer.appendChild(button);
+            });
+            
+            // Hide feedback
+            document.getElementById('feedback').style.display = 'none';
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = dcaQuestions[currentQuestion];
+            const correct = selectedIndex === question.correct;
+            
+            if (correct) score++;
+            answers.push({
+                question: currentQuestion,
+                selected: selectedIndex,
+                correct: correct
+            });
+            
+            // Show visual feedback
+            const choices = document.querySelectorAll('.choice-btn');
+            choices.forEach((choice, index) => {
+                choice.disabled = true;
+                if (index === question.correct) {
+                    choice.classList.add('correct');
+                } else if (index === selectedIndex && !correct) {
+                    choice.classList.add('incorrect');
+                }
+            });
+            
+            // Show AI feedback
+            document.getElementById('feedback-text').textContent = question.feedback;
+            document.getElementById('feedback').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < dcaQuestions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('question-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+            
+            const percentage = Math.round((score / dcaQuestions.length) * 100);
+            document.getElementById('final-score').textContent = `${percentage}%`;
+            
+            let performanceLevel;
+            if (percentage >= 90) performanceLevel = "Expert DCA - Outstanding Performance";
+            else if (percentage >= 80) performanceLevel = "Qualified DCA - Strong Knowledge";
+            else if (percentage >= 70) performanceLevel = "Developing DCA - Additional Training Recommended";
+            else performanceLevel = "Requires Remedial Training";
+            
+            document.getElementById('performance-level').textContent = performanceLevel;
+            
+            // Detailed results
+            const detailedResults = document.getElementById('detailed-results');
+            detailedResults.innerHTML = `
+                <p><strong>Questions Correct:</strong> ${score} of ${dcaQuestions.length}</p>
+                <p><strong>Accuracy Rate:</strong> ${percentage}%</p>
+                <p><strong>Strongest Areas:</strong> ${getStrongestAreas()}</p>
+                <p><strong>Development Areas:</strong> ${getDevelopmentAreas()}</p>
+                <p><strong>AI Assessment:</strong> ${getAIAssessment(percentage)}</p>
+            `;
+        }
+
+        function getStrongestAreas() {
+            const phases = {};
+            answers.forEach(answer => {
+                const phase = dcaQuestions[answer.question].phase;
+                if (!phases[phase]) phases[phase] = { correct: 0, total: 0 };
+                phases[phase].total++;
+                if (answer.correct) phases[phase].correct++;
+            });
+            
+            const strongest = Object.entries(phases)
+                .sort(([,a], [,b]) => (b.correct/b.total) - (a.correct/a.total))
+                .slice(0, 2)
+                .map(([phase]) => phase);
+            
+            return strongest.join(', ') || 'All areas show development opportunities';
+        }
+
+        function getDevelopmentAreas() {
+            const phases = {};
+            answers.forEach(answer => {
+                const phase = dcaQuestions[answer.question].phase;
+                if (!phases[phase]) phases[phase] = { correct: 0, total: 0 };
+                phases[phase].total++;
+                if (answer.correct) phases[phase].correct++;
+            });
+            
+            const weakest = Object.entries(phases)
+                .sort(([,a], [,b]) => (a.correct/a.total) - (b.correct/b.total))
+                .slice(0, 2)
+                .map(([phase]) => phase);
+            
+            return weakest.join(', ') || 'Consistent performance across all areas';
+        }
+
+        function getAIAssessment(percentage) {
+            if (percentage >= 90) return "Demonstrates exceptional understanding of damage control principles and emergency response protocols.";
+            else if (percentage >= 80) return "Shows solid grasp of DCA responsibilities with room for refinement in complex scenarios.";
+            else if (percentage >= 70) return "Basic competency evident, recommend focused training on critical decision-making.";
+            else return "Requires comprehensive review of damage control procedures and emergency protocols.";
+        }
+
+        function restartTraining() {
+            currentQuestion = 0;
+            score = 0;
+            answers = [];
+            document.getElementById('results-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

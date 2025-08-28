@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FireTrainer MVP - Shipboard Fire Response AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .scenario-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .scenario-card.selected {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+        
+        .scenario-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        .scenario-description {
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .complexity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .complexity-low { background: #28a745; }
+        .complexity-medium { background: #ffc107; color: #000; }
+        .complexity-high { background: #dc3545; }
+        .complexity-critical { background: #6f42c1; }
+        
+        .prediction-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .predict-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .predict-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .predict-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .action-result {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .confidence-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            background: linear-gradient(90deg, #28a745, #ffd700);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .loading {
+            text-align: center;
+            font-style: italic;
+            opacity: 0.7;
+        }
+        
+        .error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 FireTrainer MVP</h1>
+            <p>Shipboard Fire Response AI Training System - Scenario Analysis</p>
+            <div style="margin-top: 15px;">
+                <a href="comprehensive.html" style="color: #ffd700; text-decoration: none; margin-right: 20px; font-weight: bold;">
+                    🎯 Complete Training System
+                </a>
+                <a href="../" style="color: #ffd700; text-decoration: none; font-weight: bold;">
+                    🏠 Portfolio
+                </a>
+            </div>
+        </div>
+        
+        <div class="scenario-grid" id="scenarioGrid">
+            <!-- Scenarios will be loaded here -->
+        </div>
+        
+        <div class="prediction-section">
+            <button class="predict-button" id="predictButton" disabled>
+                Select a scenario to get AI recommendation
+            </button>
+            
+            <div id="results"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const API_BASE_URL = 'https://your-api-gateway-url.amazonaws.com/prod';
+        
+        // State
+        let selectedScenario = null;
+        let scenarios = {};
+        
+        // Mock scenarios for development
+        const mockScenarios = {
+            "engine_room_fuel": {
+                "id": 1,
+                "title": "Engine Room JP-5 Fuel Fire",
+                "description": "Small fuel fire in engine room, crew available",
+                "complexity": 6
+            },
+            "berthing_electrical": {
+                "id": 2,
+                "title": "Berthing Electrical Fire", 
+                "description": "Electrical fire in crew berthing, smoke present",
+                "complexity": 4
+            },
+            "hangar_aircraft": {
+                "id": 3,
+                "title": "Hangar Bay Aircraft Fire",
+                "description": "Aircraft fire in hangar bay, high risk scenario", 
+                "complexity": 10
+            },
+            "galley_cooking": {
+                "id": 4,
+                "title": "Galley Cooking Fire",
+                "description": "Cooking fire in ship's galley, contained area",
+                "complexity": 3
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadScenarios();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('predictButton').addEventListener('click', predictAction);
+        }
+        
+        async function loadScenarios() {
+            try {
+                // For development, use mock data
+                // In production, fetch from API:
+                // const response = await fetch(`${API_BASE_URL}/scenarios`);
+                // const data = await response.json();
+                // scenarios = data.details;
+                
+                scenarios = mockScenarios;
+                renderScenarios();
+            } catch (error) {
+                console.error('Error loading scenarios:', error);
+                scenarios = mockScenarios;
+                renderScenarios();
+            }
+        }
+        
+        function renderScenarios() {
+            const grid = document.getElementById('scenarioGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(scenarios).forEach(([key, scenario]) => {
+                const card = document.createElement('div');
+                card.className = 'scenario-card';
+                card.dataset.scenarioId = key;
+                
+                const complexityClass = getComplexityClass(scenario.complexity);
+                
+                card.innerHTML = `
+                    <div class="scenario-title">${scenario.title}</div>
+                    <div class="scenario-description">${scenario.description}</div>
+                    <span class="complexity-badge ${complexityClass}">
+                        Complexity: ${scenario.complexity}/10
+                    </span>
+                `;
+                
+                card.addEventListener('click', () => selectScenario(key, card));
+                grid.appendChild(card);
+            });
+        }
+        
+        function getComplexityClass(complexity) {
+            if (complexity <= 3) return 'complexity-low';
+            if (complexity <= 6) return 'complexity-medium';
+            if (complexity <= 8) return 'complexity-high';
+            return 'complexity-critical';
+        }
+        
+        function selectScenario(scenarioId, cardElement) {
+            // Remove previous selection
+            document.querySelectorAll('.scenario-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select new scenario
+            cardElement.classList.add('selected');
+            selectedScenario = scenarioId;
+            
+            // Enable predict button
+            const predictButton = document.getElementById('predictButton');
+            predictButton.disabled = false;
+            predictButton.textContent = `Get AI Recommendation for ${scenarios[scenarioId].title}`;
+            
+            // Clear previous results
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function predictAction() {
+            if (!selectedScenario) return;
+            
+            const resultsDiv = document.getElementById('results');
+            const predictButton = document.getElementById('predictButton');
+            
+            // Show loading
+            resultsDiv.innerHTML = '<div class="loading">🤖 AI is analyzing the scenario...</div>';
+            predictButton.disabled = true;
+            
+            try {
+                // REAL AWS API INTEGRATION - Live Backend!
+                const API_BASE_URL = 'https://hc1cigan85.execute-api.us-east-1.amazonaws.com/prod';
+                
+                console.log('🚀 Calling real AWS Lambda API...');
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ scenario_id: selectedScenario })
+                });
+                
+                if (!response.ok) {
+                    console.log('⚠️ API unavailable, falling back to mock data...');
+                    // Fallback to mock if API is unavailable
+                    const result = await mockPredict(selectedScenario);
+                    displayResult(result);
+                    return;
+                }
+                
+                const result = await response.json();
+                console.log('✅ Real AI prediction received:', result);
+                displayResult(result);
+                
+            } catch (error) {
+                console.error('🔄 API error, using mock prediction:', error);
+                // Graceful fallback to mock data
+                const result = await mockPredict(selectedScenario);
+                displayResult(result);
+            } finally {
+                predictButton.disabled = false;
+                predictButton.textContent = `Get AI Recommendation for ${scenarios[selectedScenario].title}`;
+            }
+        }
+        
+        async function mockPredict(scenarioId) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            const scenario = scenarios[scenarioId];
+            const complexity = scenario.complexity;
+            
+            let action, confidence, reasoning;
+            
+            if (complexity <= 3) {
+                action = "Dispatch Small Team";
+                confidence = 0.92;
+                reasoning = "Low complexity fire can be handled by small response team";
+            } else if (complexity <= 6) {
+                action = "Dispatch Large Team";
+                confidence = 0.88;
+                reasoning = "Medium complexity requires larger response team";
+            } else if (complexity <= 8) {
+                action = "Call FEDFIRE";
+                confidence = 0.85;
+                reasoning = "High complexity needs professional fire department";
+            } else {
+                action = "Ship Recall";
+                confidence = 0.90;
+                reasoning = "Critical situation requires all-hands response";
+            }
+            
+            return {
+                predicted_action: action,
+                confidence: confidence,
+                reasoning: reasoning,
+                success_probability: confidence
+            };
+        }
+        
+        function displayResult(result) {
+            const resultsDiv = document.getElementById('results');
+            
+            resultsDiv.innerHTML = `
+                <div class="result-card">
+                    <div class="action-result">🎯 Recommended Action: ${result.predicted_action}</div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong>Confidence Level:</strong>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${result.confidence * 100}%"></div>
+                        </div>
+                        <span>${(result.confidence * 100).toFixed(1)}%</span>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong>🧠 AI Reasoning:</strong><br>
+                        ${result.reasoning}
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong>📊 Success Probability:</strong> 
+                        <span style="color: #ffd700; font-weight: bold;">
+                            ${(result.success_probability * 100).toFixed(1)}%
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

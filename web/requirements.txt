@@ -1,0 +1,4 @@
+flask>=2.3.0
+flask-cors>=4.0.0
+waitress>=2.1.2
+numpy>=1.24.0  # Required by feedback_system.py

@@ -1,0 +1,7 @@
+﻿{
+  "httpMethod": "GET",
+  "path": "/scenarios",
+  "headers": {},
+  "queryStringParameters": null,
+  "body": null
+}

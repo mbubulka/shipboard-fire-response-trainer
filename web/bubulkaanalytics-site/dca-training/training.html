@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCA Training Portal - Shipboard Fire Response Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .scenario-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .scenario-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-align: center;
+        }
+        
+        .scenario-description {
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #e74c3c;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .question-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .answer-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        
+        .answer-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(45deg, #219a52, #27ae60);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: none;
+        }
+        
+        .feedback-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .military-feedback {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+            margin-bottom: 15px;
+        }
+        
+        .score-display {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        
+        .score-item {
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: #ffd700;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .api-status {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 DCA Training Portal</h1>
+            <p>Shipboard Fire Response Assessment & Training System</p>
+            <p>AI-Powered Military Standards Evaluation</p>
+        </div>
+
+        <div class="scenario-section">
+            <div class="api-status">
+                <strong>💡 Demo Mode:</strong> This demo uses Mistral-7B AI for military-focused feedback. 
+                For full AI features, add your free Hugging Face API key to the code.
+                <a href="https://huggingface.co/join" target="_blank" style="color: #ffd700; text-decoration: underline;">Get Free API Key</a>
+            </div>
+
+            <div class="scenario-title">🚨 FIRE EMERGENCY SCENARIO</div>
+            <div class="scenario-description" id="scenarioDescription">
+                <strong>ENGINE ROOM JP-5 FIRE</strong><br>
+                Location: Main Engine Room, Frame 75-85<br>
+                Fire Type: JP-5 fuel fire involving lube oil systems<br>
+                Current Conditions: Heavy smoke, temperature rising, crew evacuated<br>
+                Available Resources: DCA team, FEDFIRE personnel, ship's fire party<br>
+                Time Factor: 0800 hours, full crew complement aboard
+            </div>
+            
+            <div class="training-sources" id="trainingSources" style="margin-top: 15px; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 5px; border-left: 4px solid #ffd700;">
+                <strong>📚 Training Standards Applied:</strong>
+                <span id="sourcesList">Maritime Standards, NSTM 555</span>
+            </div>
+
+            <div class="question-section">
+                <div class="question" id="currentQuestion">
+                    As the Damage Control Assistant (DCA), you are first on scene of this engine room fire. 
+                    The Engineering Officer of the Watch reports JP-5 fuel and lube oil are involved. 
+                    What are your immediate actions and priorities? Provide your response in proper maritime terminology.
+                </div>
+                
+                <textarea 
+                    class="answer-input" 
+                    id="userAnswer" 
+                    placeholder="Enter your response using proper military terminology and procedures. Include immediate actions, resource allocation, and communication protocols...
+
+Example military terms to use:
+• DCA (Damage Control Assistant)
+• FEDFIRE (Federal Fire Fighting)
+• EOOW (Engineering Officer of the Watch)
+• Repair Party, Fire Party
+• General Quarters (GQ)
+• Compartment isolation
+• AFFF, PKP, CO2 systems"
+                ></textarea>
+                
+                <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">
+                    📝 Submit Response for AI Analysis
+                </button>
+            </div>
+
+            <div class="feedback-section" id="feedbackSection">
+                <div class="feedback-title">🎯 AI INSTRUCTOR FEEDBACK</div>
+                <div class="military-feedback" id="militaryFeedback">
+                    <!-- AI feedback will appear here -->
+                </div>
+                <div class="score-display" id="scoreDisplay">
+                    <!-- Scores will appear here -->
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="../" class="nav-btn">🏠 Return to Portfolio</a>
+                <button class="nav-btn" onclick="newScenario()">🔄 New Scenario</button>
+                <button class="nav-btn" onclick="advancedMode()">⚡ Advanced Training</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Enhanced Knowledge Base -->
+    <script src="../enhanced-dca-knowledge-base.js"></script>
+    
+    <script>
+        // Hugging Face API Configuration
+        const HF_API_KEY = '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'; // Your free Hugging Face API key
+        const MODEL_URL = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1';
+        
+        // Enhanced maritime fire scenarios combining NFPA, USCG, and shipboard standards
+        let currentScenario = 0;
+        let scenarios = [
+            // Original scenarios
+            {
+                title: "ENGINE ROOM JP-5 FIRE",
+                description: "Location: Main Engine Room, Frame 75-85<br>Fire Type: JP-5 fuel fire involving lube oil systems<br>Current Conditions: Heavy smoke, temperature rising, crew evacuated<br>Available Resources: DCA team, FEDFIRE personnel, ship's fire party<br>Time Factor: 0800 hours, full crew complement aboard",
+                question: "As the Damage Control Assistant (DCA), you are first on scene of this engine room fire. The Engineering Officer of the Watch reports JP-5 fuel and lube oil are involved. What are your immediate actions and priorities? Provide your response in proper maritime terminology.",
+                keywords: ['DCA', 'EOOW', 'compartment', 'isolation', 'AFFF', 'ventilation', 'repair party'],
+                sources: ['Maritime Standards', 'NSTM 555']
+            },
+            // Enhanced integrated scenarios
+            {
+                title: "Shipboard SAFETY OFFICER RESPONSE - MAJOR FIRE",
+                description: "Location: Shipboard engineering spaces and adjacent compartments<br>Fire Type: Major structural fire with multiple casualties<br>Current Conditions: Heavy smoke, structural compromise, communication challenges<br>Available Resources: Ship safety officer, repair parties, medical team, bridge<br>Standards: NFPA 1500/1521, Maritime RVSS protocols",
+                question: "As Shipboard Safety Officer trained in NFPA 1500/1521 standards, coordinate the comprehensive safety response to this major engineering fire. Address personnel accountability, risk assessment, and inter-agency communication using proper maritime terminology and NFPA safety protocols.",
+                keywords: ['Safety Officer', 'NFPA 1500', 'NFPA 1521', 'risk assessment', 'personnel accountability', 'Maritime RVSS', 'repair parties'],
+                sources: ['NFPA 1500', 'NFPA 1521', 'Maritime RVSS']
+            },
+            {
+                title: "CONFINED SPACE RESCUE - FIRE CASUALTY",
+                description: "Location: Shipboard machinery space - confined area<br>Emergency: Firefighter unconscious in toxic atmosphere<br>Current Conditions: Structural hazards, toxic atmosphere, technical rescue required<br>Available Resources: Technical rescue team, ship medical, USCG helicopter<br>Standards: NFPA 1670, USCG CG-022, shipboard confined space protocols",
+                question: "As technical rescue specialist following NFPA 1670 and USCG procedures, develop the rescue plan for the firefighter down in this confined machinery space. Coordinate with USCG assets and ensure shipboard confined space safety compliance.",
+                keywords: ['NFPA 1670', 'technical rescue', 'confined space', 'USCG coordination', 'atmospheric monitoring', 'extraction'],
+                sources: ['NFPA 1670', 'USCG CG-022', 'Maritime RVSS']
+            },
+            {
+                title: "MULTI-PLATFORM MARINE FIRE RESPONSE",
+                description: "Location: Shipboard flight deck and hangar bay<br>Fire Type: Aircraft fire with aviation fuel involvement<br>Current Conditions: Sea state 4, multi-platform coordination required<br>Available Resources: Shipboard fire teams, USCG cutter, helicopter support<br>Standards: USCG CG-022, Maritime RVSS, NFPA 1500 marine applications",
+                question: "As DCA coordinating multi-platform marine fire response using USCG CG-022 procedures and Maritime RVSS communication protocols, explain the coordination process between Shipboard and USCG assets for this flight deck aviation fuel fire.",
+                keywords: ['USCG coordination', 'Maritime RVSS', 'multi-platform', 'aviation fuel', 'marine firefighting', 'visual signals'],
+                sources: ['USCG CG-022', 'Maritime RVSS', 'NFPA 1500']
+            },
+            {
+                title: "BERTHING COMPARTMENT ELECTRICAL FIRE",
+                description: "Location: Enlisted berthing, 3-150-3-E<br>Fire Type: Electrical fire in rack lighting circuits<br>Current Conditions: Smoke visible, electrical systems sparking, crew evacuation in progress<br>Available Resources: Repair Party 3, ship's electricians, medical personnel<br>Time Factor: 2300 hours, reduced watchstanding",
+                question: "Electrical fire has been reported in enlisted berthing with active sparking and smoke. As DCA, outline your immediate response plan including electrical isolation procedures and crew safety measures.",
+                keywords: ['electrical isolation', 'repair party', 'medical', 'evacuation', 'CO2', 'power secure'],
+                sources: ['Maritime Standards', 'NFPA 1500']
+            },
+            {
+                title: "GALLEY GREASE FIRE",
+                description: "Location: Ship's galley, main deck<br>Fire Type: Class K grease fire involving deep fryers<br>Current Conditions: Active flames, smoke spreading to mess decks<br>Available Resources: Culinary specialists, ship's fire party, CO2 systems<br>Time Factor: 1200 hours, meal preparation in progress",
+                question: "A grease fire has erupted in the ship's galley during meal preparation. Detail your suppression strategy and coordination requirements as the DCA responding to this incident.",
+                keywords: ['class K', 'wet chemical', 'ventilation', 'mess decks', 'culinary', 'fire party'],
+                sources: ['Maritime Standards', 'NFPA Standards']
+            }
+        ];
+
+        async function submitAnswer() {
+            const userAnswer = document.getElementById('userAnswer').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const feedbackSection = document.getElementById('feedbackSection');
+            
+            if (!userAnswer) {
+                alert('Please provide your response before submitting.');
+                return;
+            }
+            
+            // Log action for RL feedback system
+            if (typeof window.logDCAAction === 'function') {
+                window.logDCAAction({
+                    actionType: 'text_response',
+                    userAction: userAnswer,
+                    aiRecommendation: 'See AI instructor feedback',
+                    scenario: scenarios[currentScenario].title,
+                    context: {
+                        scenarioDescription: scenarios[currentScenario].description,
+                        question: scenarios[currentScenario].question,
+                        keywords: scenarios[currentScenario].keywords
+                    },
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🤖 AI Analyzing Response...';
+            feedbackSection.style.display = 'block';
+            feedbackSection.innerHTML = '<div class="loading">🧠 Military AI Instructor analyzing your response...</div>';
+            
+            try {
+                let feedback;
+                
+                if (HF_API_KEY && HF_API_KEY.length > 10) {
+                    // Use real Mistral-7B AI
+                    feedback = await getMistralMilitaryFeedback(userAnswer, scenarios[currentScenario]);
+                } else {
+                    // Use intelligent mock feedback
+                    feedback = generateAdvancedMilitaryFeedback(userAnswer, scenarios[currentScenario]);
+                }
+                
+                displayFeedback(feedback);
+                
+                // Always show RL feedback modal after AI feedback (for testing/collection)
+                if (typeof window.logDCAAction === 'function') {
+                    setTimeout(() => {
+                        if (typeof window.dcaFeedbackManager !== 'undefined') {
+                            window.dcaFeedbackManager.promptForFeedback({
+                                aiRecommendation: 'Follow NFPA procedures for this scenario',
+                                userAction: userAnswer.substring(0, 50) + '...',
+                                qValue: Math.random() * 0.3 + 0.7, // Random confidence 70-100%
+                                reward: Math.random() > 0.3 ? 1 : -1, // Mostly positive
+                                context: {
+                                    scenario: scenarios[currentScenario].title,
+                                    keywords: scenarios[currentScenario].keywords
+                                }
+                            });
+                        }
+                    }, 2000); // Show feedback modal 2 seconds after AI response
+                }
+                
+            } catch (error) {
+                console.error('AI Error:', error);
+                // Fallback to mock military feedback
+                const mockFeedback = generateAdvancedMilitaryFeedback(userAnswer, scenarios[currentScenario]);
+                displayFeedback(mockFeedback);
+                
+                // Always show RL feedback modal after AI feedback (for testing/collection)
+                if (typeof window.logDCAAction === 'function') {
+                    setTimeout(() => {
+                        if (typeof window.dcaFeedbackManager !== 'undefined') {
+                            window.dcaFeedbackManager.promptForFeedback({
+                                aiRecommendation: 'Follow NFPA procedures for this scenario',
+                                userAction: userAnswer.substring(0, 50) + '...',
+                                qValue: Math.random() * 0.3 + 0.7, // Random confidence 70-100%
+                                reward: Math.random() > 0.3 ? 1 : -1, // Mostly positive
+                                context: {
+                                    scenario: scenarios[currentScenario].title,
+                                    keywords: scenarios[currentScenario].keywords
+                                }
+                            });
+                        }
+                    }, 2000); // Show feedback modal 2 seconds after AI response
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📝 Submit Response for AI Analysis';
+            }
+        }
+
+        async function getMistralMilitaryFeedback(answer, scenario) {
+            const prompt = `<s>[INST] You are a senior maritime damage control instructor with 20 years experience evaluating DCA responses.
+
+SCENARIO: ${scenario.title}
+TRAINEE RESPONSE: "${answer}"
+
+Provide military feedback in exactly this format:
+
+IMMEDIATE ASSESSMENT: [2 sentences on response quality]
+MARITIME TERMINOLOGY: [Grade use of proper maritime/DC terms - SATISFACTORY/NEEDS IMPROVEMENT]  
+TACTICAL SOUNDNESS: [Evaluate priorities and procedures - EXCELLENT/GOOD/MARGINAL]
+RECOMMENDATIONS: [Specific improvements needed]
+
+Keep under 120 words total. Use direct military language. [/INST]`;
+
+            const response = await fetch(MODEL_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${HF_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    inputs: prompt,
+                    parameters: {
+                        max_new_tokens: 150,
+                        temperature: 0.6,
+                        do_sample: true,
+                        top_p: 0.9
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('API request failed');
+            }
+
+            const result = await response.json();
+            return {
+                feedback: result[0]?.generated_text?.split('[/INST]')[1] || 'Unable to generate feedback',
+                source: 'Mistral-7B AI',
+                score: 85 // Default AI score
+            };
+        }
+
+        function generateAdvancedMilitaryFeedback(answer, scenario) {
+            const militaryTerms = scenario.keywords;
+            const usedTerms = militaryTerms.filter(term => 
+                answer.toLowerCase().includes(term.toLowerCase())
+            );
+            
+            const wordCount = answer.split(' ').length;
+            const hasUrgency = /immediate|first|priority|asap|urgent/i.test(answer);
+            const hasProcedures = /procedure|protocol|step|action|order/i.test(answer);
+            
+            let score = 70; // Base score
+            let termGrade, tacticalGrade, assessment, recommendations;
+            
+            // Evaluate military terminology usage
+            if (usedTerms.length >= 3) {
+                termGrade = "SATISFACTORY";
+                score += 15;
+            } else if (usedTerms.length >= 1) {
+                termGrade = "MARGINAL";
+                score += 5;
+            } else {
+                termGrade = "NEEDS IMPROVEMENT";
+                score -= 5;
+            }
+            
+            // Evaluate tactical soundness
+            if (hasUrgency && hasProcedures && wordCount > 60) {
+                tacticalGrade = "EXCELLENT";
+                score += 15;
+                assessment = "Response demonstrates solid understanding of DCA responsibilities and emergency response priorities.";
+            } else if (hasUrgency || hasProcedures) {
+                tacticalGrade = "GOOD";
+                score += 10;
+                assessment = "Response shows awareness of emergency procedures but could be more comprehensive.";
+            } else {
+                tacticalGrade = "MARGINAL";
+                assessment = "Response lacks urgency and specific procedural details expected of a DCA.";
+            }
+            
+            // Generate recommendations
+            if (usedTerms.length < 2) {
+                recommendations = "Increase use of standard maritime damage control terminology (DCA, FEDFIRE, repair party, etc.).";
+            } else if (wordCount < 40) {
+                recommendations = "Expand response to include specific procedures, personnel assignments, and communication protocols.";
+            } else {
+                recommendations = "Continue developing leadership communication and resource coordination skills.";
+            }
+            
+            const feedback = `IMMEDIATE ASSESSMENT: ${assessment} Response shows ${usedTerms.length > 0 ? 'proper' : 'limited'} use of military terminology.
+
+MILITARY TERMINOLOGY: ${termGrade} - Used ${usedTerms.length} key terms: ${usedTerms.join(', ') || 'none identified'}
+
+TACTICAL SOUNDNESS: ${tacticalGrade} - ${wordCount > 50 ? 'Detailed' : 'Basic'} response with ${hasUrgency ? 'appropriate' : 'insufficient'} urgency
+
+RECOMMENDATIONS: ${recommendations}`;
+
+            return {
+                feedback: feedback,
+                score: Math.max(60, Math.min(95, score)),
+                terminology_score: usedTerms.length >= 2 ? 85 : 65,
+                tactical_score: tacticalGrade === "EXCELLENT" ? 90 : tacticalGrade === "GOOD" ? 80 : 70,
+                source: 'Advanced Mock AI'
+            };
+        }
+
+        function displayFeedback(feedbackData) {
+            const feedbackSection = document.getElementById('feedbackSection');
+            
+            const feedback = feedbackData.feedback;
+            const score = feedbackData.score || 80;
+            const termScore = feedbackData.terminology_score || 75;
+            const tactScore = feedbackData.tactical_score || 80;
+            const source = feedbackData.source || 'AI System';
+            
+            feedbackSection.innerHTML = `
+                <div class="feedback-title">🎯 AI INSTRUCTOR FEEDBACK (${source})</div>
+                <div class="military-feedback">
+                    ${feedback.replace(/\n/g, '<br>')}
+                </div>
+                <div class="score-display">
+                    <div class="score-item">
+                        <div class="score-value">${score}</div>
+                        <div class="score-label">Overall Score</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value">${termScore}</div>
+                        <div class="score-label">Military Terms</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value">${tactScore}</div>
+                        <div class="score-label">Tactical Response</div>
+                    </div>
+                </div>
+                <div class="user-feedback-section" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px;">
+                    <h3 style="margin-bottom: 10px; color: white;">Disagree with this assessment? Provide your feedback:</h3>
+                    <textarea id="userFeedbackText" 
+                            style="width: 100%; min-height: 100px; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" 
+                            placeholder="Explain why you think the assessment is incorrect and reference specific procedures or documentation..."></textarea>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="submitUserFeedback()" 
+                                style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            Submit Feedback
+                        </button>
+                        <button onclick="skipFeedback()" 
+                                style="background: #666; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            Assessment is Correct
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            feedbackSection.style.display = 'block';
+        }
+
+        function newScenario() {
+            // Complete current episode for RL feedback
+            if (typeof window.completeDCAEpisode === 'function') {
+                window.completeDCAEpisode({
+                    scenario: scenarios[currentScenario].title,
+                    duration: Date.now() - (window.sessionStartTime || Date.now()),
+                    completion_type: 'scenario_complete'
+                });
+            }
+            
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            const scenario = scenarios[currentScenario];
+            
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${scenario.title}</strong><br>${scenario.description}`;
+            document.getElementById('currentQuestion').textContent = scenario.question;
+            
+            // Update training sources display
+            const sourcesElement = document.getElementById('sourcesList');
+            if (scenario.sources && sourcesElement) {
+                sourcesElement.textContent = scenario.sources.join(', ');
+            }
+            
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('feedbackSection').style.display = 'none';
+            
+            // Start new RL feedback session for new scenario
+            if (typeof window.startDCAFeedbackSession === 'function') {
+                window.sessionStartTime = Date.now();
+                window.startDCAFeedbackSession({
+                    scenario_type: 'dca_training',
+                    scenario_title: scenario.title,
+                    session_id: 'training_' + Date.now(),
+                    user_type: 'trainee'
+                });
+            }
+        }
+
+        function advancedMode() {
+            alert('🚀 Advanced Training Mode\n\nUpcoming Features:\n• Multi-step scenarios with time pressure\n• Team coordination exercises\n• NSTM compliance testing\n• Performance analytics dashboard\n• Certification tracking');
+        }
+
+        // User feedback handling functions
+        async function submitUserFeedback() {
+            const feedbackText = document.getElementById('userFeedbackText').value.trim();
+            if (!feedbackText) {
+                alert('Please provide detailed feedback before submitting.');
+                return;
+            }
+
+            // Get the current scenario and AI feedback for context
+            const scenario = scenarios[currentScenario];
+            const militaryFeedback = document.querySelector('.military-feedback').innerText;
+
+            // Collect feedback data
+            const feedbackData = {
+                scenario_title: scenario.title,
+                scenario_question: scenario.question,
+                user_feedback: feedbackText,
+                ai_feedback: militaryFeedback,
+                source_documents: scenario.sources,
+                timestamp: new Date().toISOString(),
+                context: {
+                    keywords: scenario.keywords,
+                    user_response: document.getElementById('userAnswer').value
+                }
+            };
+
+            try {
+                // Send feedback to the server
+                const response = await fetch('http://localhost:5000/api/rl-feedback/user-feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(feedbackData)
+                });
+
+                if (response.ok) {
+                    alert('Thank you for your feedback! It will be reviewed against our documentation to improve the training system.');
+                    document.querySelector('.user-feedback-section').style.display = 'none';
+                } else {
+                    throw new Error('Failed to submit feedback');
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                // Store feedback locally if server is unavailable
+                const storedFeedback = JSON.parse(localStorage.getItem('dcaUserFeedback') || '[]');
+                storedFeedback.push(feedbackData);
+                localStorage.setItem('dcaUserFeedback', JSON.stringify(storedFeedback));
+                alert('Feedback saved locally. It will be synchronized when the server connection is restored.');
+            }
+        }
+
+        function skipFeedback() {
+            // Log that the user agreed with the assessment
+            if (typeof window.logDCAAction === 'function') {
+                window.logDCAAction({
+                    actionType: 'assessment_agreement',
+                    scenario: scenarios[currentScenario].title,
+                    agreed: true,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            document.querySelector('.user-feedback-section').style.display = 'none';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔥 DCA Training Portal initialized');
+            console.log('💡 Ready for Mistral-7B military AI feedback');
+            console.log('🎯 Current scenario:', scenarios[currentScenario].title);
+            
+            // Initialize RL feedback system
+            if (typeof window.dcaFeedbackManager !== 'undefined') {
+                console.log('🤖 RL Feedback system connected');
+                window.sessionStartTime = Date.now();
+                // Start feedback session for training
+                window.startDCAFeedbackSession({
+                    scenario_type: 'dca_training',
+                    scenario_title: scenarios[currentScenario].title,
+                    session_id: 'training_' + Date.now(),
+                    user_type: 'trainee'
+                });
+            }
+        });
+    </script>
+    
+    <!-- Include RL Feedback Integration -->
+    <script src="../dca-feedback-integration.js"></script>
+</body>
+</html>

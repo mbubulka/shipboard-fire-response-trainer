@@ -1,0 +1,32 @@
+{
+  "nfpa_1500": {
+    "file": "1500 2021.pdf",
+    "title": "NFPA 1500 - Fire Department Occupational Safety and Health Program",
+    "focus": "Safety procedures and occupational health",
+    "year": 2021
+  },
+  "nfpa_1521": {
+    "file": "1521 2020.pdf",
+    "title": "NFPA 1521 - Fire Department Safety Officer Professional Qualifications",
+    "focus": "Safety officer roles and responsibilities",
+    "year": 2020
+  },
+  "nfpa_1670": {
+    "file": "1670 2017.pdf",
+    "title": "NFPA 1670 - Operations and Training for Technical Search and Rescue",
+    "focus": "Technical rescue operations",
+    "year": 2017
+  },
+  "uscg_cg022": {
+    "file": "CG 022 PVA Manuals Firefigthing and Personal Safety.pdf",
+    "title": "USCG CG-022 - Firefighting and Personal Safety Manual",
+    "focus": "Coast Guard firefighting procedures and safety",
+    "year": 2021
+  },
+  "navy_rvss": {
+    "file": "RVSS_11thEd-12Nov2021.pdf",
+    "title": "Navy RVSS - Recruit Visual Signals School 11th Edition",
+    "focus": "Naval visual communications and signals",
+    "year": 2021
+  }
+}

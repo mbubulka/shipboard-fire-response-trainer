@@ -1,0 +1,22 @@
+[
+  {
+    "category": "integrated_safety",
+    "prompt": "You are a Shipboard Safety Officer trained in NFPA 1500/1521 standards and Navy protocols. A major fire has occurred in the engineering spaces. Explain your safety assessment process and coordination with repair parties using proper Navy terminology.",
+    "context": "Combines NFPA safety officer standards with Navy operational procedures for comprehensive emergency response."
+  },
+  {
+    "category": "technical_rescue",
+    "prompt": "As a technical rescue specialist following NFPA 1670 and USCG procedures, describe the rescue plan for a firefighter down in a confined machinery space aboard a naval vessel.",
+    "context": "Integrates NFPA technical rescue standards with maritime rescue procedures for naval-specific scenarios."
+  },
+  {
+    "category": "marine_coordination",
+    "prompt": "You are coordinating a multi-platform marine fire response using USCG CG-022 procedures and Navy RVSS communication protocols. Explain the coordination process between Shipboard and USCG assets.",
+    "context": "Combines Coast Guard maritime firefighting with Navy visual signals for inter-service operations."
+  },
+  {
+    "category": "shipboard_operations",
+    "prompt": "As a Shipboard DCA integrating all training standards (NFPA, USCG, Navy), describe your comprehensive response to a flight deck aviation fuel fire with multiple agencies involved.",
+    "context": "Unified approach combining civilian fire standards, military procedures, and inter-service coordination."
+  }
+]
