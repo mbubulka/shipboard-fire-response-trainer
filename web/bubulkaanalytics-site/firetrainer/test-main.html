@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Response Training - Main Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .cards-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .card-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .card-badge {
+            background: rgba(0, 255, 0, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        
+        #assessmentSection {
+            display: none;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .question-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .option.selected {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+        }
+        
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Shipboard Fire Response Training</h1>
+            <p>Comprehensive Damage Control Assistant Training System</p>
+        </div>
+
+        <div id="mainCards" class="cards-container">
+            <div class="card" onclick="startScenario()">
+                <div class="card-icon">🎯</div>
+                <div class="card-title">Scenario Analysis</div>
+                <div class="card-description">
+                    AI-powered fire scenario predictions using advanced DQN neural network
+                </div>
+                <div class="card-badge">DQN + AWS Lambda</div>
+            </div>
+
+            <div class="card" onclick="startAssessment()">
+                <div class="card-icon">📋</div>
+                <div class="card-title">DCA Assessment</div>
+                <div class="card-description">
+                    Scenario-based training with AI evaluation and real-time feedback
+                </div>
+                <div class="card-badge">AI Powered</div>
+            </div>
+        </div>
+
+        <div id="assessmentSection">
+            <button class="back-btn" onclick="goBack()">← Back to Main</button>
+            <div class="question-card">
+                <!-- Questions will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedAnswer = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Sample questions array
+        const questions = [
+            {
+                question: "You discover a small electrical fire in the ship's control room. What is your immediate first action?",
+                options: [
+                    "A) Use water to extinguish the fire immediately",
+                    "B) Turn off electrical power to the area and use CO2 extinguisher", 
+                    "C) Use foam extinguisher on the electrical equipment",
+                    "D) Evacuate the area and wait for backup"
+                ],
+                correct: 1,
+                scenario: "Electrical Fire Emergency"
+            },
+            {
+                question: "A galley fire involving cooking oil has started. What type of extinguisher should you use?",
+                options: [
+                    "A) Water extinguisher",
+                    "B) CO2 extinguisher",
+                    "C) Class K (wet chemical) extinguisher",
+                    "D) Dry powder extinguisher"
+                ],
+                correct: 2,
+                scenario: "Galley Fire Emergency"
+            },
+            {
+                question: "You smell smoke coming from a storage compartment. What is your first action?",
+                options: [
+                    "A) Open the compartment immediately to investigate",
+                    "B) Test the door temperature before opening",
+                    "C) Use a fire extinguisher through the door",
+                    "D) Sound the fire alarm immediately"
+                ],
+                correct: 1,
+                scenario: "Compartment Fire Detection"
+            },
+            {
+                question: "A fire has started in the engine room. What is the most critical first step?",
+                options: [
+                    "A) Start firefighting immediately",
+                    "B) Shut down fuel supply and ventilation",
+                    "C) Evacuate all personnel",
+                    "D) Sound the general alarm"
+                ],
+                correct: 1,
+                scenario: "Engine Room Fire"
+            },
+            {
+                question: "You encounter a Class D metal fire. What should you NEVER use?",
+                options: [
+                    "A) Water or foam",
+                    "B) Dry sand",
+                    "C) Special dry powder",
+                    "D) Nitrogen gas"
+                ],
+                correct: 0,
+                scenario: "Metal Fire Emergency"
+            },
+            {
+                question: "During fire suppression, you notice the fire is spreading despite your efforts. What should you do?",
+                options: [
+                    "A) Continue with the same suppression method",
+                    "B) Switch to a different suppression agent",
+                    "C) Retreat and establish a defensive boundary",
+                    "D) Increase the amount of current suppression agent"
+                ],
+                correct: 2,
+                scenario: "Fire Suppression Failure"
+            },
+            {
+                question: "A fire alarm sounds in the berthing area. What is your immediate priority?",
+                options: [
+                    "A) Investigate the source of the alarm",
+                    "B) Ensure all personnel are accounted for and evacuated",
+                    "C) Begin firefighting operations",
+                    "D) Check fire detection equipment"
+                ],
+                correct: 1,
+                scenario: "Berthing Area Fire"
+            },
+            {
+                question: "You need to enter a smoke-filled compartment. What safety equipment is most critical?",
+                options: [
+                    "A) Fire extinguisher",
+                    "B) Self-contained breathing apparatus (SCBA)",
+                    "C) Fire axe",
+                    "D) Emergency lighting"
+                ],
+                correct: 1,
+                scenario: "Smoke-Filled Compartment"
+            },
+            {
+                question: "A fire has been extinguished. What is your next priority?",
+                options: [
+                    "A) Leave the area immediately",
+                    "B) Watch for re-ignition and hot spots",
+                    "C) Clean up the suppression agent",
+                    "D) Report to command immediately"
+                ],
+                correct: 1,
+                scenario: "Post-Fire Operations"
+            },
+            {
+                question: "You discover a fire in a space containing hazardous materials. What is your primary concern?",
+                options: [
+                    "A) Extinguishing the fire quickly",
+                    "B) Preventing spread to adjacent spaces",
+                    "C) Understanding the hazardous material's fire characteristics",
+                    "D) Evacuating the ship"
+                ],
+                correct: 2,
+                scenario: "Hazardous Material Fire"
+            }
+        ].slice(0, 10); // Cap at 10 questions for demo
+
+        function startScenario() {
+            alert('Scenario Analysis will redirect to the main scenario page');
+            // You can redirect to the scenario page here
+            // window.location.href = './index.html';
+        }
+
+        function startAssessment() {
+            document.getElementById('mainCards').style.display = 'none';
+            document.getElementById('assessmentSection').style.display = 'block';
+            currentQuestionIndex = 0;
+            score = 0;
+            showCurrentQuestion();
+        }
+
+        function showCurrentQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionCard = document.querySelector('.question-card');
+            
+            questionCard.innerHTML = `
+                <h3>Question ${currentQuestionIndex + 1} of ${questions.length}</h3>
+                <h4>${question.scenario}</h4>
+                <p>${question.question}</p>
+                
+                ${question.options.map((option, index) => `
+                    <div class="option" onclick="selectOption(${index})">
+                        ${option}
+                    </div>
+                `).join('')}
+                
+                <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit Answer</button>
+                
+                <div id="feedback" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; display: none;">
+                    <h4>AI Feedback:</h4>
+                    <p id="feedbackText"></p>
+                    <button class="submit-btn" onclick="nextQuestion()" style="margin-top: 10px;">Next Question</button>
+                </div>
+            `;
+            
+            selectedAnswer = null;
+        }
+
+        function goBack() {
+            document.getElementById('mainCards').style.display = 'flex';
+            document.getElementById('assessmentSection').style.display = 'none';
+            selectedAnswer = null;
+            currentQuestionIndex = 0;
+            score = 0;
+        }
+
+        function selectOption(index) {
+            // Clear previous selection
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Select new option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            selectedAnswer = index;
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= questions.length) {
+                showResults();
+            } else {
+                showCurrentQuestion();
+            }
+        }
+
+        function showResults() {
+            const questionCard = document.querySelector('.question-card');
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            questionCard.innerHTML = `
+                <h3>Assessment Complete!</h3>
+                <div style="font-size: 2rem; margin: 20px 0;">🎯</div>
+                <p><strong>Your Score: ${score} out of ${questions.length} (${percentage}%)</strong></p>
+                <p>Great job completing the DCA fire response assessment!</p>
+                <button class="submit-btn" onclick="startAssessment()">Try Again</button>
+                <button class="back-btn" onclick="goBack()" style="margin-left: 10px;">Back to Main</button>
+            `;
+        }
+
+        async function submitAnswer() {
+            if (selectedAnswer === null) return;
+
+            const currentQuestion = questions[currentQuestionIndex];
+            const feedbackDiv = document.getElementById('feedback');
+            const feedbackText = document.getElementById('feedbackText');
+
+            // Update score
+            if (selectedAnswer === currentQuestion.correct) {
+                score++;
+            }
+
+            try {
+                // Test API call
+                const response = await fetch('/api/dca-evaluate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        scenario: currentQuestion.scenario,
+                        question: currentQuestion.question,
+                        selected_response: currentQuestion.options[selectedAnswer],
+                        response_time_ms: 15000,
+                        is_correct: selectedAnswer === currentQuestion.correct
+                    })
+                });
+
+                const result = await response.json();
+                
+                feedbackText.innerHTML = `
+                    <strong>Score:</strong> ${(result.score * 100).toFixed(0)}% <br>
+                    <strong>Confidence:</strong> ${(result.confidence * 100).toFixed(0)}% <br>
+                    <strong>Feedback:</strong> ${result.feedback}
+                `;
+                
+                feedbackDiv.style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                feedbackText.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                feedbackDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -24,8 +24,10 @@ class NetlifySimulator(BaseHTTPRequestHandler):
     
     def do_GET(self):
         """Serve static files"""
-        # Parse the path
-        path = self.path.lstrip('/')
+        # Parse the path and remove query parameters
+        from urllib.parse import urlparse
+        parsed = urlparse(self.path)
+        path = parsed.path.lstrip('/')
         
         # Default to index.html
         if not path or path == '/':

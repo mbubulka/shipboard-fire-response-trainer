@@ -487,6 +487,8 @@
         let score = 0;
         let selectedAnswer = null;
         let assessmentQuestions = [];
+        let questionStartTime = null;
+        let responseTime = 0;
 
         // Assessment Data
         const SCENARIO_ASSESSMENT = {
@@ -692,6 +694,9 @@
             const question = assessmentQuestions[currentQuestionIndex];
             const content = document.getElementById('assessmentContent');
             
+            // Start timing for this question
+            questionStartTime = Date.now();
+            
             // Find the parent scenario for this question
             const scenario = SCENARIO_ASSESSMENT.scenarios.find(s => 
                 s.questions.some(q => q.id === question.id)
@@ -776,12 +781,29 @@
 
         // Function to submit answer and move to next question
         async function submitAnswer() {
+            // Check if an answer is selected
+            if (selectedAnswer === null) {
+                alert('Please select an answer before submitting.');
+                return;
+            }
+            
             const currentQuestion = assessmentQuestions[currentQuestionIndex];
             const selectedOption = currentQuestion.options[selectedAnswer];
             
+            // Calculate response time (in seconds)
+            responseTime = questionStartTime ? (Date.now() - questionStartTime) / 1000 : 30;
+            
             try {
+                console.log('Submitting answer:', {
+                    scenario: currentQuestion.scenario,
+                    question: currentQuestion.question,
+                    selected_response: selectedOption,
+                    response_time_ms: responseTime * 1000,
+                    is_correct: selectedAnswer === currentQuestion.correct
+                });
+                
                 // Send to DQN API for evaluation
-                const response = await fetch('http://localhost:5000/evaluate_response', {
+                const response = await fetch('/api/dca-evaluate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -790,14 +812,19 @@
                         scenario: currentQuestion.scenario,
                         question: currentQuestion.question,
                         selected_response: selectedOption,
-                        context: {
-                            phase: currentQuestion.scenario,
-                            question_type: currentQuestion.id
-                        }
+                        response_time_ms: responseTime * 1000,
+                        is_correct: selectedAnswer === currentQuestion.correct
                     })
                 });
 
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const aiEvaluation = await response.json();
+                console.log('AI Evaluation received:', aiEvaluation);
                 
                 // Store AI feedback for this question
                 currentQuestion.aiFeedback = aiEvaluation.feedback;
@@ -811,6 +838,7 @@
 
             } catch (error) {
                 console.error('AI Evaluation Error:', error);
+                alert('API Error: ' + error.message + '. Using basic scoring instead.');
                 // Fallback to basic scoring if AI evaluation fails
                 if (selectedAnswer === currentQuestion.correct) {
                     score++;
@@ -836,17 +864,20 @@
             Provide a brief, professional assessment of their readiness and specific areas for improvement.`;
 
             try {
-                const response = await fetch(MODEL_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${HF_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ inputs: prompt })
-                });
-
-                const result = await response.json();
-                return result[0].generated_text || "AI assessment unavailable at this time.";
+                // Simplified local assessment instead of Hugging Face API
+                let assessment = "";
+                if (performance.score >= 90) {
+                    assessment = "Outstanding performance! You demonstrate excellent understanding of shipboard fire response procedures. Your decision-making is swift and accurate. Continue maintaining this high standard.";
+                } else if (performance.score >= 80) {
+                    assessment = "Very good performance. You show strong competency in fire response procedures with only minor areas for improvement. Focus on consistent application of protocols.";
+                } else if (performance.score >= 70) {
+                    assessment = "Good foundation in fire response procedures. Some areas need attention. Review emergency protocols and practice scenario decision-making to improve response times.";
+                } else if (performance.score >= 60) {
+                    assessment = "Basic understanding evident but significant improvement needed. Focus on fundamental fire response procedures, safety protocols, and emergency decision-making.";
+                } else {
+                    assessment = "Requires substantial improvement. Recommend comprehensive review of fire response procedures, safety protocols, and additional training scenarios.";
+                }
+                return assessment;
             } catch (error) {
                 console.error('AI Assessment Error:', error);
                 return "AI assessment unavailable at this time.";
@@ -859,26 +890,21 @@
             const content = document.getElementById('assessmentContent');
             
             try {
-                // Get final AI analysis from DQN
-                const response = await fetch('http://localhost:5000/analyze_performance', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
+                // Create mock AI analysis since we simplified the system
+                const aiAnalysis = {
+                    overall_assessment: percentage >= 80 ? "Excellent performance" : 
+                                       percentage >= 70 ? "Good performance" : 
+                                       percentage >= 60 ? "Satisfactory performance" : "Needs improvement",
+                    decision_confidence: Math.min(95, percentage + 10),
+                    scenario_feedback: {
+                        "Fire Response": percentage >= 70 ? "Strong understanding of fire response procedures" : "Review fire response protocols",
+                        "Emergency Management": percentage >= 70 ? "Good emergency decision making" : "Practice emergency scenarios",
+                        "Safety Assessment": percentage >= 70 ? "Excellent safety awareness" : "Focus on safety procedures"
                     },
-                    body: JSON.stringify({
-                        score: percentage,
-                        questions: assessmentQuestions.map(q => ({
-                            scenario: q.scenario,
-                            question: q.question,
-                            selected_answer: q.options[selectedAnswer],
-                            correct: q.correct === selectedAnswer,
-                            ai_feedback: q.aiFeedback,
-                            ai_confidence: q.aiConfidence
-                        }))
-                    })
-                });
-
-                const aiAnalysis = await response.json();
+                    recommendations: percentage >= 70 ? 
+                        ["Continue practicing complex scenarios", "Maintain current training level"] :
+                        ["Review basic procedures", "Practice more scenarios", "Study safety protocols"]
+                };
                 
                 content.innerHTML = `
                     <div class="results-card">
@@ -1096,26 +1122,31 @@
 
                     const evaluation = await response.json();
                     this.showConsequences(evaluation);
-                    this.updateState(evaluation.new_state);
+                    // Don't call updateState since our API doesn't return new_state
+                    // this.updateState(evaluation.new_state);
                 } catch (error) {
                     console.error('Error evaluating choice:', error);
                     // Fallback to basic feedback if API fails
                     this.showConsequences({
-                        consequence: {
-                            explanation: "Unable to evaluate choice. Please try again.",
-                            time_penalty: 5
-                        },
-                        is_optimal: false
+                        score: 0.5,
+                        feedback: "Unable to evaluate choice. Please try again.",
+                        details: { time_score: 0.0 }
                     });
                 }
             }
 
             showConsequences(evaluation) {
-                const messageClass = evaluation.is_optimal ? 'success' : 'warning';
+                // Handle the actual API response format
+                const score = evaluation.score || 0;
+                const feedback = evaluation.feedback || 'No feedback available';
+                const isOptimal = score >= 0.8; // Consider scores >= 0.8 as optimal
+                const timePenalty = evaluation.details?.time_score ? Math.round((1 - evaluation.details.time_score) * 5) : 5;
+                
+                const messageClass = isOptimal ? 'success' : 'warning';
                 this.consequenceContainer.innerHTML = `
                     <div class="consequence-message ${messageClass}">
-                        <p><strong>Time Impact:</strong> +${evaluation.consequence.time_penalty} minutes</p>
-                        <p>${evaluation.consequence.explanation}</p>
+                        <p><strong>Time Impact:</strong> +${timePenalty} minutes</p>
+                        <p>${feedback}</p>
                     </div>
                 `;
             }
@@ -1129,7 +1160,17 @@
         // Initialize when the page loads
         window.addEventListener('load', () => {
             window.dcaAssessment = new DCAAssessmentHandler();
+            
+            // Ensure we start with mode selection visible
+            showModeSelection();
         });
+        
+        // Function to show mode selection (main page)
+        function showModeSelection() {
+            document.getElementById('modeSelection').style.display = 'grid';
+            document.getElementById('assessmentContent').classList.remove('active');
+            currentMode = null;
+        }
     </script>
 </body>
 </html>
