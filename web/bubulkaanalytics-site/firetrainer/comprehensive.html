@@ -1036,13 +1036,15 @@
     </div>
 
     <script>
-        // DCA Assessment Handler
+        // DCA Assessment Handler - DISABLED (conflicts with main assessment)
         class DCAAssessmentHandler {
             constructor() {
-                this.currentState = null;
-                this.currentQuestion = null;
-                this.bindElements();
-                this.initialize();
+                // DISABLED - this was conflicting with main assessment system
+                // this.currentState = null;
+                // this.currentQuestion = null;
+                // this.bindElements();
+                // this.initialize();
+                console.log('DCAAssessmentHandler disabled - using main assessment system');
             }
 
             bindElements() {
@@ -1162,9 +1164,7 @@
 
         // Initialize when the page loads
         window.addEventListener('load', () => {
-            window.dcaAssessment = new DCAAssessmentHandler();
-            
-            // Ensure we start with mode selection visible
+            // Only initialize mode selection, not any assessment system
             showModeSelection();
         });
         
