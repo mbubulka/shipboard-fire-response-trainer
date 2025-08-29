@@ -674,8 +674,8 @@
                 return acc.concat(scenario.questions.map(q => ({...q, scenario: scenario.title})));
             }, []);
 
-            // Shuffle questions
-            assessmentQuestions = shuffleArray(assessmentQuestions);
+            // Shuffle questions and limit to 10 for demo
+            assessmentQuestions = shuffleArray(assessmentQuestions).slice(0, 10);
             
             showCurrentQuestion();
         }
@@ -848,9 +848,12 @@
             if (currentQuestionIndex === assessmentQuestions.length - 1) {
                 showResults();
             } else {
-                currentQuestionIndex++;
-                selectedAnswer = null;
-                showCurrentQuestion();
+                // Brief delay to show feedback, then advance
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    selectedAnswer = null;
+                    showCurrentQuestion();
+                }, 1500);
             }
         }
 
