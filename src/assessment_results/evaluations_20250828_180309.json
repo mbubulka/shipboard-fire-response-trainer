@@ -1,0 +1,46 @@
+{
+  "timestamp": "20250828_180309",
+  "results": {
+    "total_questions": 2,
+    "correct_answers": 2,
+    "percentage": 100.0,
+    "responses": [
+      {
+        "scenario": "Initial Response",
+        "question": "You receive a report of smoke in the forward engine room. What is your first action?",
+        "selected": "Notify the bridge",
+        "correct": true,
+        "response_time_ms": 4000
+      },
+      {
+        "scenario": "Investigation Phase",
+        "question": "The investigator reports active fire in electrical panel 2B. What is your immediate response?",
+        "selected": "Send in fire team with PKP",
+        "correct": true,
+        "response_time_ms": 4000
+      }
+    ]
+  },
+  "evaluations": [
+    {
+      "score": 0.88,
+      "confidence": 0.91,
+      "feedback": "Good response with some room for improvement.",
+      "details": {
+        "time_score": 0.8,
+        "protocol_score": 1.0,
+        "safety_score": 0.8
+      }
+    },
+    {
+      "score": 1.0,
+      "confidence": 1.0,
+      "feedback": "Excellent response overall.",
+      "details": {
+        "time_score": 1.0,
+        "protocol_score": 1.0,
+        "safety_score": 1.0
+      }
+    }
+  ]
+}

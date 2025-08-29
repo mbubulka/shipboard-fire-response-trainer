@@ -9,9 +9,13 @@ import numpy as np
 from pathlib import Path
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dca_api import dca_api
 
 app = Flask(__name__)
 CORS(app)
+
+# Register DCA API blueprint
+app.register_blueprint(dca_api)
 
 # Global variables for the enhanced system
 enhanced_env = None

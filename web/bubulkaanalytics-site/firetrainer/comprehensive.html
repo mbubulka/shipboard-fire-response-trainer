@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shipboard Fire Response Training - Complete DCA Training System</title>
-    <script src="../dca-feedback-integration.js"></script>
     <style>
         * {
             margin: 0;
@@ -98,6 +97,79 @@
         
         .mode-features li {
             padding: 5px 0;
+        }
+        
+        /* DCA Assessment Styles */
+        .dca-assessment {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .question-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .choices-container {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .choice-option {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .choice-option:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .choice-option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .choice-option label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        
+        .consequence-message {
+            background: rgba(255, 193, 7, 0.2);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .consequence-message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border-left-color: #28a745;
+        }
+        
+        .consequence-message.warning {
+            background: rgba(220, 53, 69, 0.2);
+            border-left-color: #dc3545;
+        }
             padding-left: 20px;
             position: relative;
         }
@@ -125,6 +197,48 @@
             margin-bottom: 30px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             display: none;
+        }
+        
+        /* Scenario Information */
+        .scenario-info {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-title {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .scenario-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #ffd700;
+        }
         }
         
         .training-content.active {
@@ -364,7 +478,7 @@
         // Global Configuration
         const HF_API_KEY = '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';
         const MODEL_URL = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1';
-        const AI_FEEDBACK_ENABLED = true;
+        const AI_FEEDBACK_ENABLED = false;
         const USE_MOCK_DATA = false;
 
         // Global State
@@ -561,14 +675,6 @@
             // Shuffle questions
             assessmentQuestions = shuffleArray(assessmentQuestions);
             
-            // Start feedback session
-            if (window.startDCAFeedbackSession) {
-                window.startDCAFeedbackSession({
-                    id: 'assessment_' + Date.now(),
-                    type: 'comprehensive'
-                });
-            }
-
             showCurrentQuestion();
         }
 
@@ -862,6 +968,168 @@
 
         // Initialize to mode selection on load
         showModeSelection();
+    </script>
+
+    <!-- DCA Assessment Section -->
+    <div class="dca-assessment" id="dcaAssessment">
+        <!-- Scenario Information -->
+        <div class="scenario-info">
+            <h2 class="scenario-title">Current Scenario</h2>
+            <p class="scenario-description" id="scenarioDescription">
+                Loading scenario...
+            </p>
+            <div class="scenario-details">
+                <div class="detail-item">
+                    <span class="detail-label">Location:</span>
+                    <span id="fireLocation">--</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time Elapsed:</span>
+                    <span id="timeElapsed">0:00</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Smoke Condition:</span>
+                    <span id="smokeCondition">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Container -->
+        <div class="question-container" id="questionContainer">
+            <h3 class="question-text" id="questionText">Loading question...</h3>
+            <div class="choices-container" id="choicesContainer">
+                <!-- Choices will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Consequence Display -->
+        <div id="consequenceContainer"></div>
+    </div>
+
+    <script>
+        // DCA Assessment Handler
+        class DCAAssessmentHandler {
+            constructor() {
+                this.currentState = null;
+                this.currentQuestion = null;
+                this.bindElements();
+                this.initialize();
+            }
+
+            bindElements() {
+                this.scenarioDescription = document.getElementById('scenarioDescription');
+                this.fireLocation = document.getElementById('fireLocation');
+                this.timeElapsed = document.getElementById('timeElapsed');
+                this.smokeCondition = document.getElementById('smokeCondition');
+                this.questionText = document.getElementById('questionText');
+                this.choicesContainer = document.getElementById('choicesContainer');
+                this.consequenceContainer = document.getElementById('consequenceContainer');
+            }
+
+            async initialize() {
+                // Initialize with first question
+                this.currentQuestion = 'initial_response';
+                this.currentState = {
+                    fire_location: 'Engine Room 2',
+                    smoke_condition: 'light',
+                    time_elapsed: 0,
+                    compartments_affected: ['Engine Room 2'],
+                    boundaries_set: false,
+                    investigators_deployed: false,
+                    fedfire_arrived: false
+                };
+
+                this.updateScenarioDisplay();
+                this.displayQuestion();
+            }
+
+            updateScenarioDisplay() {
+                this.scenarioDescription.textContent = 
+                    `Fire reported in ${this.currentState.fire_location}. 
+                     ${this.currentState.compartments_affected.length > 1 ? 
+                       'Multiple compartments affected.' : 'Single compartment affected.'}`;
+                this.fireLocation.textContent = this.currentState.fire_location;
+                this.timeElapsed.textContent = `${Math.floor(this.currentState.time_elapsed)}:00`;
+                this.smokeCondition.textContent = this.currentState.smoke_condition;
+            }
+
+            displayQuestion() {
+                const question = {
+                    text: "What is your initial response to the reported fire?",
+                    choices: [
+                        "A. Wait for FEDFIRE to arrive",
+                        "B. Deploy investigators immediately",
+                        "C. Evacuate the entire compartment",
+                        "D. Set fire boundaries and deploy investigators"
+                    ]
+                };
+
+                this.questionText.textContent = question.text;
+                this.choicesContainer.innerHTML = question.choices
+                    .map(choice => `
+                        <div class="choice-option">
+                            <input type="radio" name="response" value="${choice[0]}" id="choice${choice[0]}">
+                            <label for="choice${choice[0]}">${choice}</label>
+                        </div>
+                    `).join('');
+
+                // Add event listeners to choices
+                this.choicesContainer.querySelectorAll('input[type="radio"]')
+                    .forEach(input => {
+                        input.addEventListener('change', (e) => this.handleChoice(e.target.value));
+                    });
+            }
+
+            async handleChoice(choice) {
+                try {
+                    const response = await fetch('/api/dca-evaluate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            question_id: this.currentQuestion,
+                            choice: choice,
+                            current_state: this.currentState
+                        })
+                    });
+
+                    const evaluation = await response.json();
+                    this.showConsequences(evaluation);
+                    this.updateState(evaluation.new_state);
+                } catch (error) {
+                    console.error('Error evaluating choice:', error);
+                    // Fallback to basic feedback if API fails
+                    this.showConsequences({
+                        consequence: {
+                            explanation: "Unable to evaluate choice. Please try again.",
+                            time_penalty: 5
+                        },
+                        is_optimal: false
+                    });
+                }
+            }
+
+            showConsequences(evaluation) {
+                const messageClass = evaluation.is_optimal ? 'success' : 'warning';
+                this.consequenceContainer.innerHTML = `
+                    <div class="consequence-message ${messageClass}">
+                        <p><strong>Time Impact:</strong> +${evaluation.consequence.time_penalty} minutes</p>
+                        <p>${evaluation.consequence.explanation}</p>
+                    </div>
+                `;
+            }
+
+            updateState(newState) {
+                this.currentState = newState;
+                this.updateScenarioDisplay();
+            }
+        }
+
+        // Initialize when the page loads
+        window.addEventListener('load', () => {
+            window.dcaAssessment = new DCAAssessmentHandler();
+        });
     </script>
 </body>
 </html>

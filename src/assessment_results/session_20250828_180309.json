@@ -1,0 +1,20 @@
+{
+  "score": 2,
+  "total_questions": 2,
+  "responses": [
+    {
+      "scenario": "Initial Response",
+      "question": "You receive a report of smoke in the forward engine room. What is your first action?",
+      "selected": "Notify the bridge",
+      "correct": true,
+      "response_time_ms": 4000
+    },
+    {
+      "scenario": "Investigation Phase",
+      "question": "The investigator reports active fire in electrical panel 2B. What is your immediate response?",
+      "selected": "Send in fire team with PKP",
+      "correct": true,
+      "response_time_ms": 4000
+    }
+  ]
+}

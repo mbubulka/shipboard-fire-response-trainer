@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCA Assessment with DQN Analysis - Test Version</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+        
+        .question-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-info {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .option-item.selected {
+            background: rgba(52, 152, 219, 0.3);
+            border-color: #3498db;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background: #3498db;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .results-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            text-align: center;
+            margin: 20px 0;
+            color: #2ecc71;
+        }
+
+        .feedback-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .feedback-detail {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .confidence-meter {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: #2ecc71;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DCA Assessment</h1>
+            <p>Test Version with DQN Analysis</p>
+        </div>
+
+        <div id="assessmentContent">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let selectedAnswer = null;
+        let startTime = null;
+        let responses = [];
+
+        async function submitAnswer() {
+            if (selectedAnswer === null) return;
+
+            const endTime = Date.now();
+            const responseTime = (endTime - startTime) / 1000; // Convert to seconds
+
+            try {
+                // Submit to our local API
+                const response = await fetch('http://localhost:8000/api/evaluate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        selectedOption: parseInt(selectedAnswer),
+                        responseTime: responseTime
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}`);
+                }
+
+                const evaluation = await response.json();
+                console.log('Received evaluation:', evaluation);
+                
+                // Store response and evaluation
+                responses.push({
+                    selectedAnswer,
+                    responseTime,
+                    evaluation: evaluation.evaluation // Server wraps in evaluation object
+                });
+
+                // Move to next question or show results
+                currentQuestionIndex++;
+                selectedAnswer = null;
+                
+                if (currentQuestionIndex < 2) { // We have 2 questions
+                    await showCurrentQuestion();
+                } else {
+                    showResults();
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                // Simple error handling
+                alert('There was an error submitting your answer. Please try again.');
+            }
+        }
+
+        function selectAnswer(index) {
+            selectedAnswer = index;
+            document.querySelectorAll('.option-item').forEach((item, i) => {
+                item.classList.toggle('selected', i === index);
+            });
+            
+            // Enable the submit button
+            document.querySelector('.nav-btn').disabled = false;
+        }
+
+        async function showCurrentQuestion() {
+            startTime = Date.now();
+            const content = document.getElementById('assessmentContent');
+            
+            try {
+                // Get current scenario from server
+                console.log('Fetching current scenario...');
+                const response = await fetch('http://localhost:8000/api/scenario');
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Server error:', errorText);
+                    throw new Error(`Server returned ${response.status}: ${errorText}`);
+                }
+                const scenario = await response.json();
+                console.log('Received scenario:', scenario);
+                
+                content.innerHTML = `
+                    <div class="question-card">
+                        <div class="scenario-info">
+                            Scenario: ${scenario.id}
+                        </div>
+                        <div class="question-text">
+                            ${scenario.description}
+                        </div>
+                        <div class="options">
+                            ${scenario.options.map((option, index) => `
+                                <div class="option-item" onclick="selectAnswer(${index})">
+                                    ${option}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="submitAnswer()" disabled>
+                                Submit Answer →
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                content.innerHTML = `
+                    <div class="error-card">
+                        <h2>Error</h2>
+                        <p>Failed to load scenario. Please try refreshing the page.</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showResults() {
+            const content = document.getElementById('assessmentContent');
+            
+            try {
+                const totalQuestions = responses.length;
+                if (totalQuestions === 0) {
+                    throw new Error('No responses to show');
+                }
+                
+                const scores = responses.map(r => r.evaluation.score || 0);
+                const confidences = responses.map(r => r.evaluation.confidence || 0);
+                const averageScore = scores.reduce((a, b) => a + b, 0) / totalQuestions;
+                const averageConfidence = confidences.reduce((a, b) => a + b, 0) / totalQuestions;
+                
+                content.innerHTML = `
+                    <div class="results-card">
+                        <h2>Assessment Complete</h2>
+                        <div class="score-display">${Math.round(averageScore * 100)}%</div>
+                        
+                        <p>Average Confidence: ${Math.round(averageConfidence * 100)}%</p>
+                        
+                        ${responses.map((response, index) => {
+                            const details = response.evaluation.details || {};
+                            return `
+                                <div class="feedback-section">
+                                    <h3>Question ${index + 1}</h3>
+                                    <div class="feedback-detail">
+                                        ${response.evaluation.feedback || 'No feedback available'}
+                                    </div>
+                                    <div class="confidence-meter">
+                                        <div class="confidence-fill" 
+                                             style="width: ${(response.evaluation.confidence || 0) * 100}%">
+                                        </div>
+                                    </div>
+                                    <div class="score-details">
+                                        <p>Protocol Score: ${Math.round((details.protocol_score || 0) * 100)}%</p>
+                                        <p>Safety Score: ${Math.round((details.safety_score || 0) * 100)}%</p>
+                                        <p>Overall Decision Score: ${Math.round((details.decision_score || 0) * 100)}%</p>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error showing results:', error);
+                content.innerHTML = `
+                    <div class="error-card">
+                        <h2>Error</h2>
+                        <p>Failed to show results. Please try again.</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Start the assessment
+        window.onload = showCurrentQuestion;
+    </script>
+</body>
+</html>
