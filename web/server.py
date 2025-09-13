@@ -9,10 +9,9 @@ from urllib.parse import parse_qs, urlparse
 
 # Add src directory to path so we can import our modules
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'test_dqn'))
 
-from dca_assessment_manager import DCAAssessmentManager
-from test_dqn.dca_response_evaluator import SimpleResponseEvaluator
+from dca_question_states import DCAAssessmentManager
+from dca_response_evaluator import SimpleResponseEvaluator
 
 # Initialize our assessment system
 assessment_manager = DCAAssessmentManager()
@@ -64,8 +63,8 @@ class DCAHandler(SimpleHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode())
 
 if __name__ == '__main__':
-    server = HTTPServer(('localhost', 5000), DCAHandler)
-    print('Starting server at http://localhost:5000')
+    server = HTTPServer(('localhost', 8000), DCAHandler)
+    print('Starting server at http://localhost:8000')
     try:
         server.serve_forever()
     except KeyboardInterrupt:

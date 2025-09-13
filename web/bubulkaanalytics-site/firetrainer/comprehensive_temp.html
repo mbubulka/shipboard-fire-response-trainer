@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1078,8 +1078,7 @@
         }
         
         .mode-features li {
-            padding: 5px 0 5px 20px;
-            position: relative;
+            padding: 5px 0;
         }
         
         /* DCA Assessment Styles */
@@ -1154,8 +1153,13 @@
             border-left-color: #dc3545;
         }
         
+        .mode-features li {
+            padding-left: 20px;
+            position: relative;
+        }
+        
         .mode-features li::before {
-            content: "✓";
+            content: "✅";
             position: absolute;
             left: 0;
         }
@@ -1411,7 +1415,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1> Shipboard Fire Response Training</h1>
+            <h1>🔥 Shipboard Fire Response Training</h1>
             <p><strong>When Seconds Count, Training Saves Lives</strong></p>
             <div class="mission-critical-info">
                 <p><strong>Why This Matters:</strong> Ship fires claim lives and vessels because traditional training can't replicate the chaos, time pressure, and complex decision-making of real emergencies. This AI-powered system bridges that gap.</p>
@@ -1437,17 +1441,17 @@
 
         <div id="modeSelection" class="training-modes">
             <div class="mode-card" onclick="startScenarioMode()">
-                <div class="mode-icon">🔍</div>
+                <div class="mode-icon">🎯</div>
                 <div class="mode-title">Scenario Analysis</div>
                 <div class="mode-description">
                     <strong>Predict Fire Outcomes Before They Happen</strong><br>
                     Experience the same scenarios that have challenged real crews: electrical fires in engine rooms, galley blazes spreading to berthing, fuel leaks igniting in confined spaces. Our DQN neural network has learned from thousands of fire incidents to predict what happens next based on your decisions.
                 </div>
                 <ul class="mode-features">
-                    <li>Real incident-based scenarios</li>
-                    <li>AI predicts fire spread patterns</li>
-                    <li>Decision confidence scoring</li>
-                    <li>Learn from mistakes without casualties</li>
+                    <li>🔥 Real incident-based scenarios</li>
+                    <li>🤖 AI predicts fire spread patterns</li>
+                    <li>📊 Decision confidence scoring</li>
+                    <li>⚡ Learn from mistakes without casualties</li>
                 </ul>
                 <div class="mode-badge">DQN + AWS Lambda</div>
             </div>
@@ -1460,10 +1464,10 @@
                     When smoke fills the compartment and seconds matter, can you identify the fire class, select the right suppression agent, and coordinate your team? This AI-powered assessment puts you in command during critical moments that separate competent sailors from heroes.
                 </div>
                 <ul class="mode-features">
-                    <li>Military-grade scenario realism</li>
-                    <li>  Mistral-7B AI evaluates decisions</li>
-                    <li> Time-pressure decision making</li>
-                    <li> Performance tracking & improvement</li>
+                    <li>🎖️ Military-grade scenario realism</li>
+                    <li>🧠 Mistral-7B AI evaluates decisions</li>
+                    <li>⏱️ Time-pressure decision making</li>
+                    <li>📈 Performance tracking & improvement</li>
                 </ul>
                 <div class="mode-badge">Mistral-7B + HuggingFace</div>
             </div>
@@ -1699,14 +1703,14 @@
             content.innerHTML = `
                 <div class="dqn-analysis-interface">
                     <div class="analysis-header">
-                        <h2> Fire Scenario Reality Check</h2>
+                        <h2>🎯 Fire Scenario Reality Check</h2>
                         <p>Our AI has analyzed thousands of real shipboard fire incidents. These scenarios aren't theoretical - they're based on actual emergencies that have tested real crews.</p>
                         <button onclick="returnToMenu()" class="analysis-btn secondary">Back to Menu</button>
                     </div>
                     
                     <div class="analysis-dashboard">
                         <div class="dashboard-section">
-                            <h3> Real Fire Scenarios We've Modeled</h3>
+                            <h3>🔥 Real Fire Scenarios We've Modeled</h3>
                             <p class="section-intro">These aren't training exercises - they're reconstructions of actual shipboard fires that have occurred in naval and commercial vessels worldwide.</p>
                             
                             <div class="scenario-showcase">
@@ -1720,9 +1724,9 @@
                                         Lower vehicle storage area fire spreads through multiple decks. Initial response delayed due to misidentification...
                                     </div>
                                     <div class="scenario-stats">
-                                        <span class="stat">4 days burning</span>
-                                        <span class="stat">$4 billion loss</span>
-                                        <span class="stat">  63 injuries</span>
+                                        <span class="stat">🔥 4 days burning</span>
+                                        <span class="stat">💰 $4 billion loss</span>
+                                        <span class="stat">⚠️ 63 injuries</span>
                                     </div>
                                 </div>
                                 
@@ -1736,9 +1740,9 @@
                                         Electrical fire in salon area while passengers sleep below deck. Crew response time critical...
                                     </div>
                                     <div class="scenario-stats">
-                                        <span class="stat"> 34 fatalities</span>
-                                        <span class="stat"> 3 AM start</span>
-                                        <span class="stat"> Limited egress</span>
+                                        <span class="stat">🔥 34 fatalities</span>
+                                        <span class="stat">⏰ 3 AM start</span>
+                                        <span class="stat">🚪 Limited egress</span>
                                     </div>
                                 </div>
                                 
@@ -1752,8 +1756,8 @@
                                         High-pressure fuel line failure near hot surfaces. Immediate vapor explosion risk in confined space...
                                     </div>
                                     <div class="scenario-stats">
-                                        <span class="stat"> 78% Class B</span>
-                                        <span class="stat"> 15 sec decision</span>
+                                        <span class="stat">🔥 78% Class B</span>
+                                        <span class="stat">⚡ 15 sec decision</span>
                                         <span class="stat">🔥 1200°F temp</span>
                                     </div>
                                 </div>
@@ -1768,16 +1772,16 @@
                                         Overheated cooking oil ignition during meal preparation. Spread to ventilation systems threatens adjacent spaces...
                                     </div>
                                     <div class="scenario-stats">
-                                        <span class="stat"> Class K fires</span>
-                                        <span class="stat"> 800 oil temp</span>
-                                        <span class="stat"> Vent system risk</span>
+                                        <span class="stat">🍳 Class K fires</span>
+                                        <span class="stat">🔥 800°F oil temp</span>
+                                        <span class="stat">💨 Vent system risk</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="dashboard-section">
-                            <h3>  Why These Scenarios Matter</h3>
+                            <h3>🧠 Why These Scenarios Matter</h3>
                             <div class="reality-check-grid">
                                 <div class="reality-point">
                                     <div class="point-icon">⏰</div>
@@ -1785,23 +1789,25 @@
                                     <p>Real fires don't wait. In the USS Bonhomme Richard incident, the critical 15-minute window<sup>3</sup> was missed due to delayed identification. Our scenarios replicate this exact time pressure.</p>
                                 </div>
                                 <div class="reality-point">
-                                    <div class="point-icon">⚠️</div>
+                                    <div class="point-icon">🌪️</div>
                                     <h4>Chaos Factor</h4>
                                     <p>Actual emergencies involve smoke, noise, panic, and communication breakdown. Our AI models these human factors that traditional training can't replicate.</p>
                                 </div>
                                 <div class="reality-point">
-                                    <div class="point-icon">💀</div>
+                                    <div class="point-icon">⚠️</div>
                                     <h4>Consequence Reality</h4>
                                     <p>Wrong decisions kill people and sink ships. The MV Conception fire shows how a single delayed response can turn manageable into catastrophic.</p>
                                 </div>
                                 <div class="reality-point">
-                                    <div class="point-icon">🔍</div>
+                                    <div class="point-icon">🎯</div>
                                     <h4>Pattern Recognition</h4>
                                     <p>Our AI identifies failure patterns from thousands of incidents. 67% of failures come from wrong suppression agent choice<sup>1</sup> - exactly what killed crews in real incidents.</p>
                                 </div>
                             </div>
-                        </div>                        <div class="dashboard-section">
-                            <h3> Our DQN Training Scenarios</h3>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>🤖 Our DQN Training Scenarios</h3>
                             <p style="margin-bottom: 20px; color: #b0bec5;">These AI-generated scenarios combine real incident patterns with adaptive difficulty to create the ultimate training experience.</p>
                             <div class="dqn-scenarios-grid">
                                 <div class="dqn-scenario-card">
@@ -1814,9 +1820,9 @@
                                         Primary fire in main engine lube oil system triggers secondary electrical fire. AI adjusts smoke density, crew availability, and system failures based on your decision speed and accuracy...
                                     </div>
                                     <div class="dqn-features">
-                                        <span class="feature">  AI adapts to your skill</span>
-                                        <span class="feature"> Real-time difficulty scaling</span>
-                                        <span class="feature"> Performance-based progression</span>
+                                        <span class="feature">🧠 AI adapts to your skill</span>
+                                        <span class="feature">⚡ Real-time difficulty scaling</span>
+                                        <span class="feature">📈 Performance-based progression</span>
                                     </div>
                                 </div>
                                 
@@ -1830,9 +1836,9 @@
                                         Electrical fire disables primary navigation systems during storm conditions. AI creates unique combinations of failures you've never seen, testing true understanding...
                                     </div>
                                     <div class="dqn-features">
-                                        <span class="feature">Infinite scenario variations</span>
-                                        <span class="feature">Never repeats exactly</span>
-                                        <span class="feature">Targets your weak points</span>
+                                        <span class="feature">🎲 Infinite scenario variations</span>
+                                        <span class="feature">🔄 Never repeats exactly</span>
+                                        <span class="feature">🎯 Targets your weak points</span>
                                     </div>
                                 </div>
                                 
@@ -1846,33 +1852,33 @@
                                         What starts as a small galley fire becomes a ship-threatening emergency. AI orchestrates realistic cascade failures, resource depletion, and crew coordination challenges...
                                     </div>
                                     <div class="dqn-features">
-                                        <span class="feature">Expert-level scenarios</span>
-                                        <span class="feature">Time pressure simulation</span>
-                                        <span class="feature">Team coordination required</span>
+                                        <span class="feature">🏆 Expert-level scenarios</span>
+                                        <span class="feature">⏱️ Time pressure simulation</span>
+                                        <span class="feature">🤝 Team coordination required</span>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="dqn-advantages">
-                                <h4>Why DQN Training Works Better</h4>
+                                <h4>🎯 Why DQN Training Works Better</h4>
                                 <div class="advantage-grid">
                                     <div class="advantage-point">
-                                        <div class="advantage-icon"> </div>
+                                        <div class="advantage-icon">🧠</div>
                                         <h5>Adaptive Intelligence</h5>
                                         <p>Traditional training uses fixed scenarios. Our DQN learns your patterns and creates challenges that push your exact skill gaps.</p>
                                     </div>
                                     <div class="advantage-point">
-                                        <div class="advantage-icon"></div>
+                                        <div class="advantage-icon">♾️</div>
                                         <h5>Infinite Scenarios</h5>
                                         <p>Never train on the same scenario twice. AI generates millions of realistic variations, preventing memorization and forcing true understanding.</p>
                                     </div>
                                     <div class="advantage-point">
-                                        <div class="advantage-icon"></div>
+                                        <div class="advantage-icon">📊</div>
                                         <h5>Performance Analytics</h5>
                                         <p>Get precise feedback on decision speed, accuracy, and pattern recognition. Know exactly where you excel and where you need work.</p>
                                     </div>
                                     <div class="advantage-point">
-                                        <div class="advantage-icon"></div>
+                                        <div class="advantage-icon">🚀</div>
                                         <h5>Accelerated Learning</h5>
                                         <p>Studies show DQN training achieves expert-level proficiency 3x faster<sup>2</sup> than traditional methods through targeted challenge optimization.</p>
                                     </div>
@@ -1881,7 +1887,7 @@
                         </div>
                         
                         <div class="dashboard-section">
-                            <h3>Evidence of Realism</h3>
+                            <h3>📊 Evidence of Realism</h3>
                             <div class="evidence-grid">
                                 <div class="evidence-card">
                                     <h4>Source Documentation</h4>
@@ -1907,7 +1913,7 @@
                         </div>
                         
                         <div class="dashboard-section">
-                            <h3> Sources & References</h3>
+                            <h3>📚 Sources & References</h3>
                             <div class="sources-disclaimer-grid">
                                 <div class="sources-section">
                                     <h4>Data Sources</h4>
@@ -1922,7 +1928,7 @@
                                 </div>
                                 
                                 <div class="disclaimer-section">
-                                    <h4>  Important Disclaimer</h4>
+                                    <h4>⚠️ Important Disclaimer</h4>
                                     <div class="disclaimer-box">
                                         <p><strong>This model was trained using only publicly available data.</strong></p>
                                         <p>The scenarios and statistics presented are based on publicly accessible reports, research papers, and safety documentation. Additional refinement is possible with specific operational data from your organization.</p>
@@ -2008,7 +2014,7 @@
                     timeline: [
                         { time: '00:00', event: 'High-pressure fuel line fails near hot surface', critical: true },
                         { time: '00:02', event: 'Fuel spray ignites instantly', critical: true },
-                        { time: '00:05', event: 'Temperature reaches 1200 locally', critical: false },
+                        { time: '00:05', event: 'Temperature reaches 1200°F locally', critical: false },
                         { time: '00:10', event: 'Vapor accumulation begins in overhead spaces', critical: true },
                         { time: '00:15', event: 'Critical decision window closes', critical: true },
                         { time: '00:20', event: 'Flashover or explosion likely if uncontrolled', critical: true }
@@ -2079,7 +2085,7 @@
                         <h4>Critical Failure Points</h4>
                         <div class="failures-list">
                             ${data.criticalFailures.map(failure => `
-                                <div class="failure-item"> ${failure}</div>
+                                <div class="failure-item">❌ ${failure}</div>
                             `).join('')}
                         </div>
                     </div>
@@ -2121,7 +2127,7 @@
             selectedAnswer = null;
             
             // Initialize AI-powered assessment
-            console.log(' Initializing AI-integrated DCA Assessment');
+            console.log('🤖 Initializing AI-integrated DCA Assessment');
             
             // Start feedback session
             if (window.startDCAFeedbackSession) {
@@ -2423,7 +2429,7 @@
                             "Deny - use PKP dry chemical on electrical fires only"
                         ],
                         correct: 1,
-                        aiExplanation: "DQN Tactical Analysis: Electrical fires require power isolation before water application. Mixed Class B/C fires need sequential suppression: secure power  foam for liquid  water for cooling. This prevents electrical hazards and re-ignition."
+                        aiExplanation: "DQN Tactical Analysis: Electrical fires require power isolation before water application. Mixed Class B/C fires need sequential suppression: secure power → foam for liquid → water for cooling. This prevents electrical hazards and re-ignition."
                     },
                     {
                         difficulty: 'medium',
@@ -2442,10 +2448,10 @@
                         difficulty: 'hard',
                         question: "Engine room fire, electrical involvement, flooding from ruptured fire main, and injured personnel in space. Prioritize actions:",
                         options: [
-                            "Personnel evacuation  flooding control  fire suppression  electrical isolation",
-                            "Electrical isolation  personnel evacuation  fire suppression  flooding control", 
-                            "Fire suppression  personnel evacuation  electrical isolation  flooding control",
-                            "Personnel evacuation  electrical isolation  flooding control  fire suppression"
+                            "Personnel evacuation → flooding control → fire suppression → electrical isolation",
+                            "Electrical isolation → personnel evacuation → fire suppression → flooding control", 
+                            "Fire suppression → personnel evacuation → electrical isolation → flooding control",
+                            "Personnel evacuation → electrical isolation → flooding control → fire suppression"
                         ],
                         correct: 0,
                         aiExplanation: "DQN Crisis Management: Life safety supersedes all other considerations. Personnel evacuation enables aggressive fire suppression. Flooding control prevents stability loss. Electrical isolation after personnel safety ensures no electrocution during rescue. This sequence aligns with Navy damage control priority matrix."
@@ -2581,35 +2587,35 @@
             content.innerHTML = `
                 <div class="ai-generation-interface">
                     <div class="ai-header">
-                        <h2> DQN AI Assessment Generator</h2>
+                        <h2>🤖 DQN AI Assessment Generator</h2>
                         <p>Our AI is analyzing your performance and generating a personalized fire scenario...</p>
                     </div>
                     
                     <div class="ai-generation-process">
                         <div class="generation-step active">
-                            <div class="step-icon"> </div>
+                            <div class="step-icon">🧠</div>
                             <div class="step-text">Analyzing performance patterns</div>
                             <div class="step-progress"></div>
                         </div>
                         <div class="generation-step">
-                            <div class="step-icon">
+                            <div class="step-icon">🔥</div>
                             <div class="step-text">Generating scenario parameters</div>
                             <div class="step-progress"></div>
                         </div>
                         <div class="generation-step">
-                            <div class="step-icon">
+                            <div class="step-icon">⚖️</div>
                             <div class="step-text">Adapting difficulty level</div>
                             <div class="step-progress"></div>
                         </div>
                         <div class="generation-step">
-                            <div class="step-icon">
+                            <div class="step-icon">🎯</div>
                             <div class="step-text">Finalizing challenge structure</div>
                             <div class="step-progress"></div>
                         </div>
                     </div>
                     
                     <div class="ai-insights-preview">
-                        <h3> AI Analysis Preview</h3>
+                        <h3>🔍 AI Analysis Preview</h3>
                         <div class="insight-grid">
                             <div class="insight-item">
                                 <strong>Performance Level:</strong> <span id="aiPerformanceLevel">Calculating...</span>
@@ -2683,7 +2689,7 @@
             content.innerHTML = `
                 <div class="dca-assessment-interface">
                     <div class="assessment-header">
-                        <h2> DCA Assessment: ${scenario.title}</h2>
+                        <h2>🔥 DCA Assessment: ${scenario.title}</h2>
                         <div class="assessment-meta">
                             <span class="difficulty-badge ${scenario.difficulty}">${scenario.difficulty.toUpperCase()}</span>
                             <span class="progress-indicator">Question 1 of ${scenario.challenges.length}</span>
@@ -2691,7 +2697,7 @@
                     </div>
                     
                     <div class="situation-report">
-                        <h3> Situation Report</h3>
+                        <h3>📋 Situation Report</h3>
                         <div class="sitrep-content">${scenario.context}</div>
                     </div>
                     
@@ -2728,7 +2734,7 @@
                 <div class="question-container">
                     <div class="question-header">
                         <h3>Question ${questionIndex + 1}</h3>
-                        ${question.timeLimit ? `<div class="time-limit"> ${question.timeLimit}s</div>` : ''}
+                        ${question.timeLimit ? `<div class="time-limit">⏱️ ${question.timeLimit}s</div>` : ''}
                     </div>
                     
                     <div class="question-text">
@@ -2772,7 +2778,7 @@
                 <div class="challenge-card">
                     <div class="challenge-header">
                         <h4>Phase ${index + 1}: ${challenge.phase.replace('_', ' ').toUpperCase()}</h4>
-                        ${challenge.timeLimit ? `<div class="time-limit"> ${challenge.timeLimit}s</div>` : ''}
+                        ${challenge.timeLimit ? `<div class="time-limit">⏱️ ${challenge.timeLimit}s</div>` : ''}
                     </div>
                     
                     <div class="challenge-question">
@@ -2791,7 +2797,7 @@
                     
                     <div class="challenge-actions">
                         <button class="submit-btn" onclick="submitAIResponse()" disabled>Submit Response</button>
-                        <button class="hint-btn" onclick="requestAIHint()"> Request AI Hint</button>
+                        <button class="hint-btn" onclick="requestAIHint()">🤖 Request AI Hint</button>
                     </div>
                 </div>
             `;
@@ -2803,7 +2809,7 @@
             content.innerHTML = `
                 <div class="fallback-scenario">
                     <div class="error-notice">
-                        <h3>  AI Generation Unavailable</h3>
+                        <h3>⚠️ AI Generation Unavailable</h3>
                         <p>Falling back to enhanced static scenario with military-style feedback.</p>
                     </div>
                     <!-- Enhanced static scenario content would go here -->
@@ -2931,7 +2937,7 @@
             content.innerHTML = `
                 <div class="assessment-completion">
                     <div class="completion-header">
-                        <h2> Assessment Complete</h2>
+                        <h2>🎖️ Assessment Complete</h2>
                         <div class="final-grade ${grade.toLowerCase().replace(' ', '-')}">${grade}</div>
                     </div>
                     
@@ -2950,10 +2956,10 @@
                     
                     <div class="completion-actions">
                         <button class="action-btn primary" onclick="generateDynamicScenario()">
-                             New Assessment
+                            🔥 New Assessment
                         </button>
                         <button class="action-btn secondary" onclick="returnToMenu()">
-                              Main Menu
+                            🏠 Main Menu
                         </button>
                     </div>
                 </div>
@@ -2997,12 +3003,12 @@
             
             if (isCorrect) {
                 feedback.primaryFeedback = `OUTSTANDING, ${performanceLevel} response executed. Your tactical decision demonstrates solid understanding of DCA principles and emergency response protocols.`;
-                feedback.tacticalAnalysis = ` CORRECT RESPONSE: Your selection shows proper prioritization of life safety, damage control procedures, and chain of command protocols. This aligns with Navy damage control doctrine.`;
+                feedback.tacticalAnalysis = `✅ CORRECT RESPONSE: Your selection shows proper prioritization of life safety, damage control procedures, and chain of command protocols. This aligns with Navy damage control doctrine.`;
                 feedback.nextActions = `CONTINUE TO NEXT PHASE: Maintain this decision-making tempo and situational awareness. Your performance indicates readiness for advanced scenarios.`;
                 feedback.commanderNote = `INSTRUCTOR NOTE: Strong performance. Consider this sailor for advanced DCA training opportunities.`;
             } else {
                 feedback.primaryFeedback = `NEGATIVE, shipmate. Your response does not align with established damage control procedures. This decision could result in loss of life, ship, or mission capability.`;
-                feedback.tacticalAnalysis = ` INCORRECT RESPONSE: The selected option violates fundamental DCA principles. In a real emergency, this choice would compromise crew safety and ship survivability.`;
+                feedback.tacticalAnalysis = `❌ INCORRECT RESPONSE: The selected option violates fundamental DCA principles. In a real emergency, this choice would compromise crew safety and ship survivability.`;
                 feedback.nextActions = `IMMEDIATE REMEDIAL ACTION REQUIRED: Review NSTM 079 Volume 2, damage control procedures. Report to DC Central for additional training before next evolution.`;
                 feedback.commanderNote = `INSTRUCTOR NOTE: Requires additional training on fundamental DC principles. Schedule one-on-one remediation.`;
             }
@@ -3024,7 +3030,7 @@
             feedbackPanel.innerHTML = `
                 <div class="military-feedback ${isCorrect ? 'satisfactory' : 'unsatisfactory'}">
                     <div class="feedback-header">
-                        <h3> DCA ASSESSMENT FEEDBACK</h3>
+                        <h3>🎖️ DCA ASSESSMENT FEEDBACK</h3>
                         <div class="grade-banner ${feedback.grade.toLowerCase()}">
                             ${feedback.grade} - ${feedback.timeAssessment}
                         </div>
@@ -3032,28 +3038,28 @@
                     
                     <div class="feedback-content">
                         <div class="feedback-section">
-                            <h4> PERFORMANCE ASSESSMENT</h4>
+                            <h4>📊 PERFORMANCE ASSESSMENT</h4>
                             <p><strong>Response Time:</strong> ${feedback.responseTime} seconds - ${feedback.timeAssessment}</p>
                             <p>${feedback.primaryFeedback}</p>
                         </div>
                         
                         <div class="feedback-section">
-                            <h4> TACTICAL ANALYSIS</h4>
+                            <h4>⚔️ TACTICAL ANALYSIS</h4>
                             <p>${feedback.tacticalAnalysis}</p>
                         </div>
                         
                         <div class="feedback-section">
-                            <h4> AI INSIGHT</h4>
+                            <h4>🤖 AI INSIGHT</h4>
                             <p>${feedback.aiInsight}</p>
                         </div>
                         
                         <div class="feedback-section">
-                            <h4> NEXT ACTIONS</h4>
+                            <h4>📋 NEXT ACTIONS</h4>
                             <p>${feedback.nextActions}</p>
                         </div>
                         
                         <div class="instructor-note">
-                            <h4> INSTRUCTOR EVALUATION</h4>
+                            <h4>👨‍✈️ INSTRUCTOR EVALUATION</h4>
                             <p><em>${feedback.commanderNote}</em></p>
                         </div>
                     </div>
@@ -3064,7 +3070,7 @@
                               'PROCEED TO NEXT PHASE' : 'COMPLETE SCENARIO ASSESSMENT'}
                         </button>
                         <button class="action-btn secondary" onclick="requestDetailedAnalysis()">
-                             REQUEST DETAILED AI ANALYSIS
+                            📊 REQUEST DETAILED AI ANALYSIS
                         </button>
                     </div>
                 </div>
@@ -3175,6 +3181,450 @@
             displayAIGeneratedScenario(selectedScenario);
         }
 
+    </script>
+</body>
+</html>
+            const question = assessmentQuestions[currentQuestionIndex];
+            const content = document.getElementById('assessmentContent');
+            
+            // Find the parent scenario for this question
+            const scenario = SCENARIO_ASSESSMENT.scenarios.find(s => 
+                s.questions.some(q => q.id === question.id)
+            );
+            
+            content.innerHTML = `
+                <div class="question-card">
+                    <div class="scenario-context">
+                        <h2 class="scenario-title">${scenario.title}</h2>
+                        <p class="scenario-description">${scenario.description}</p>
+                    </div>
+                    
+                    <div class="assessment-section">
+                        <h3 class="question-header">Question ${currentQuestionIndex + 1} of ${assessmentQuestions.length}</h3>
+                        <p class="question-text">${question.question}</p>
+                        
+                        <ul class="options-list">
+                            ${question.options.map((option, index) => `
+                                <li class="option-item${selectedAnswer === index ? ' selected' : ''}" 
+                                    onclick="selectAnswer(${index})">
+                                    ${option}
+                                </li>
+                            `).join('')}
+                        </ul>
+                        
+                        ${selectedAnswer !== null ? `
+                            <div class="ai-assessment">
+                                <h4>AI Assessment</h4>
+                                <p>${question.explanation}</p>
+                                <div class="assessment-metrics">
+                                    <div class="metric">
+                                        <span class="metric-label">Decision Confidence:</span>
+                                        <span class="metric-value">85%</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Safety Impact:</span>
+                                        <span class="metric-value">High</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Response Time:</span>
+                                        <span class="metric-value">Critical</span>
+                                    </div>
+                                </div>
+                                <p class="resources"><strong>Resources:</strong> ${question.resources}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(currentQuestionIndex + 1) / assessmentQuestions.length * 100}%"></div>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="previousQuestion()" 
+                                ${currentQuestionIndex === 0 ? 'disabled' : ''}>
+                            ← Previous
+                        </button>
+                        <button class="nav-btn" onclick="submitAnswer()" 
+                                ${selectedAnswer === null ? 'disabled' : ''}>
+                            ${currentQuestionIndex === assessmentQuestions.length - 1 ? 'Finish' : 'Next →'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to select an answer
+        function selectAnswer(index) {
+            selectedAnswer = index;
+            showCurrentQuestion();
+        }
+
+        // Function to show previous question
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                selectedAnswer = null;
+                showCurrentQuestion();
+            }
+        }
+
+        // Function to submit answer and move to next question
+        async function submitAnswer() {
+            const currentQuestion = assessmentQuestions[currentQuestionIndex];
+            const selectedOption = currentQuestion.options[selectedAnswer];
+            
+            try {
+                // Send to DQN API for evaluation
+                const response = await fetch('http://localhost:5000/evaluate_response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        scenario: currentQuestion.scenario,
+                        question: currentQuestion.question,
+                        selected_response: selectedOption,
+                        context: {
+                            phase: currentQuestion.scenario,
+                            question_type: currentQuestion.id
+                        }
+                    })
+                });
+
+                const aiEvaluation = await response.json();
+                
+                // Store AI feedback for this question
+                currentQuestion.aiFeedback = aiEvaluation.feedback;
+                currentQuestion.aiConfidence = aiEvaluation.confidence;
+                currentQuestion.aiRecommendation = aiEvaluation.recommendation;
+                
+                // Update score based on both correct answer and AI evaluation
+                if (selectedAnswer === currentQuestion.correct) {
+                    score++;
+                }
+
+            } catch (error) {
+                console.error('AI Evaluation Error:', error);
+                // Fallback to basic scoring if AI evaluation fails
+                if (selectedAnswer === currentQuestion.correct) {
+                    score++;
+                }
+            }
+
+            if (currentQuestionIndex === assessmentQuestions.length - 1) {
+                showResults();
+            } else {
+                currentQuestionIndex++;
+                selectedAnswer = null;
+                showCurrentQuestion();
+            }
+        }
+
+        // Function to get AI assessment
+        async function getAIAssessment(performance) {
+            const prompt = `As a Damage Control Assistant (DCA) training evaluator, analyze this performance:
+            Score: ${performance.score}%
+            Correct Answers: ${performance.correct} out of ${performance.questions}
+            Areas Tested: ${performance.areas.join(', ')}
+            
+            Provide a brief, professional assessment of their readiness and specific areas for improvement.`;
+
+            try {
+                const response = await fetch(MODEL_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${HF_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inputs: prompt })
+                });
+
+                const result = await response.json();
+                return result[0].generated_text || "AI assessment unavailable at this time.";
+            } catch (error) {
+                console.error('AI Assessment Error:', error);
+                return "AI assessment unavailable at this time.";
+            }
+        }
+
+        // Function to show results
+        async function showResults() {
+            const percentage = Math.round(score / assessmentQuestions.length * 100);
+            const content = document.getElementById('assessmentContent');
+            
+            try {
+                // Get final AI analysis from DQN
+                const response = await fetch('http://localhost:5000/analyze_performance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        score: percentage,
+                        questions: assessmentQuestions.map(q => ({
+                            scenario: q.scenario,
+                            question: q.question,
+                            selected_answer: q.options[selectedAnswer],
+                            correct: q.correct === selectedAnswer,
+                            ai_feedback: q.aiFeedback,
+                            ai_confidence: q.aiConfidence
+                        }))
+                    })
+                });
+
+                const aiAnalysis = await response.json();
+                
+                content.innerHTML = `
+                    <div class="results-card">
+                        <h2>Assessment Complete</h2>
+                        <div class="score-display">${percentage}%</div>
+                        <p>You answered ${score} out of ${assessmentQuestions.length} questions correctly</p>
+                        
+                        <div class="ai-feedback">
+                            <h3>AI Performance Analysis</h3>
+                            <p><strong>Overall Assessment:</strong> ${aiAnalysis.overall_assessment}</p>
+                            <p><strong>Decision Making Confidence:</strong> ${aiAnalysis.decision_confidence}%</p>
+                            <p><strong>Areas of Strength:</strong> ${aiAnalysis.strengths.join(', ')}</p>
+                            <p><strong>Areas for Improvement:</strong> ${aiAnalysis.improvement_areas.join(', ')}</p>
+                            <p><strong>Recommendations:</strong> ${aiAnalysis.recommendations}</p>
+                            
+                            <h4>Scenario-Specific Feedback:</h4>
+                            ${Object.entries(aiAnalysis.scenario_feedback).map(([scenario, feedback]) => `
+                                <div class="scenario-feedback">
+                                    <strong>${scenario}:</strong> ${feedback}
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="startAssessmentMode()">Try Again</button>
+                            <button class="nav-btn" onclick="showModeSelection()">Return to Menu</button>
+                        </div>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('AI Analysis Error:', error);
+                // Fallback to basic results if AI analysis fails
+                content.innerHTML = `
+                    <div class="results-card">
+                        <h2>Assessment Complete</h2>
+                        <div class="score-display">${percentage}%</div>
+                        <p>You answered ${score} out of ${assessmentQuestions.length} questions correctly</p>
+                        <p class="feedback-message">${getFeedbackMessage(percentage)}</p>
+                        <div class="nav-buttons">
+                            <button class="nav-btn" onclick="startAssessmentMode()">Try Again</button>
+                            <button class="nav-btn" onclick="showModeSelection()">Return to Menu</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Try to send feedback in the background
+            try {
+                if (window.completeDCAFeedbackSession) {
+                    window.completeDCAFeedbackSession({
+                        score: percentage,
+                        questions: assessmentQuestions.length,
+                        correct: score
+                    });
+                }
+            } catch (error) {
+                console.log('Feedback system not available:', error);
+            }
+        }
+        
+        // Helper function to get feedback message based on score
+        function getFeedbackMessage(percentage) {
+            if (percentage >= 90) {
+                return "Outstanding performance! You've demonstrated excellent understanding of DCA procedures and protocols.";
+            } else if (percentage >= 75) {
+                return "Great job! You show strong knowledge of damage control procedures with some room for refinement.";
+            } else if (percentage >= 60) {
+                return "Good effort! Consider reviewing the areas where you had difficulty to strengthen your knowledge.";
+            } else {
+                return "This is a good starting point. Focus on reviewing the core concepts and try again to improve your score.";
+            }
+        }
+
+        // Function to show help
+        function showHelp() {
+            alert('Help and instructions coming soon!');
+        }
+
+        // Initialize feedback system if available
+        window.addEventListener('load', function() {
+            if (window.dcaFeedback) {
+                window.dcaFeedback = new DCAFeedbackManager();
+                console.log('🔥 DCA Feedback system initialized');
+            }
+        });
+
+        // Initialize to mode selection on load
+        showModeSelection();
+    </script>
+
+    <!-- DCA Assessment Section -->
+    <div class="dca-assessment" id="dcaAssessment" style="display: none;">
+        <!-- Scenario Information -->
+        <div class="scenario-info">
+            <h2 class="scenario-title">Current Scenario</h2>
+            <p class="scenario-description" id="scenarioDescription">
+                Loading scenario...
+            </p>
+            <div class="scenario-details">
+                <div class="detail-item">
+                    <span class="detail-label">Location:</span>
+                    <span id="fireLocation">--</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time Elapsed:</span>
+                    <span id="timeElapsed">0:00</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Smoke Condition:</span>
+                    <span id="smokeCondition">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Container -->
+        <div class="question-container" id="questionContainer">
+            <h3 class="question-text" id="questionText">Loading question...</h3>
+            <div class="choices-container" id="choicesContainer">
+                <!-- Choices will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Consequence Display -->
+        <div id="consequenceContainer"></div>
+    </div>
+
+    <script>
+        // DCA Assessment Handler
+        class DCAAssessmentHandler {
+            constructor() {
+                this.currentState = null;
+                this.currentQuestion = null;
+                this.bindElements();
+                this.initialize();
+            }
+
+            bindElements() {
+                this.scenarioDescription = document.getElementById('scenarioDescription');
+                this.fireLocation = document.getElementById('fireLocation');
+                this.timeElapsed = document.getElementById('timeElapsed');
+                this.smokeCondition = document.getElementById('smokeCondition');
+                this.questionText = document.getElementById('questionText');
+                this.choicesContainer = document.getElementById('choicesContainer');
+                this.consequenceContainer = document.getElementById('consequenceContainer');
+            }
+
+            async initialize() {
+                // Initialize with first question
+                this.currentQuestion = 'initial_response';
+                this.currentState = {
+                    fire_location: 'Engine Room 2',
+                    smoke_condition: 'light',
+                    time_elapsed: 0,
+                    compartments_affected: ['Engine Room 2'],
+                    boundaries_set: false,
+                    investigators_deployed: false,
+                    fedfire_arrived: false
+                };
+
+                this.updateScenarioDisplay();
+                this.displayQuestion();
+            }
+
+            updateScenarioDisplay() {
+                this.scenarioDescription.textContent = 
+                    `Fire reported in ${this.currentState.fire_location}. 
+                     ${this.currentState.compartments_affected.length > 1 ? 
+                       'Multiple compartments affected.' : 'Single compartment affected.'}`;
+                this.fireLocation.textContent = this.currentState.fire_location;
+                this.timeElapsed.textContent = `${Math.floor(this.currentState.time_elapsed)}:00`;
+                this.smokeCondition.textContent = this.currentState.smoke_condition;
+            }
+
+            displayQuestion() {
+                const question = {
+                    text: "What is your initial response to the reported fire?",
+                    choices: [
+                        "A. Wait for FEDFIRE to arrive",
+                        "B. Deploy investigators immediately",
+                        "C. Evacuate the entire compartment",
+                        "D. Set fire boundaries and deploy investigators"
+                    ]
+                };
+
+                this.questionText.textContent = question.text;
+                this.choicesContainer.innerHTML = question.choices
+                    .map(choice => `
+                        <div class="choice-option">
+                            <input type="radio" name="response" value="${choice[0]}" id="choice${choice[0]}">
+                            <label for="choice${choice[0]}">${choice}</label>
+                        </div>
+                    `).join('');
+
+                // Add event listeners to choices
+                this.choicesContainer.querySelectorAll('input[type="radio"]')
+                    .forEach(input => {
+                        input.addEventListener('change', (e) => this.handleChoice(e.target.value));
+                    });
+            }
+
+            async handleChoice(choice) {
+                try {
+                    const response = await fetch('/api/dca/evaluate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            question_id: this.currentQuestion,
+                            choice: choice,
+                            current_state: this.currentState
+                        })
+                    });
+
+                    const evaluation = await response.json();
+                    this.showConsequences(evaluation);
+                    this.updateState(evaluation.new_state);
+                } catch (error) {
+                    console.error('Error evaluating choice:', error);
+                    // Fallback to basic feedback if API fails
+                    this.showConsequences({
+                        consequence: {
+                            explanation: "Unable to evaluate choice. Please try again.",
+                            time_penalty: 5
+                        },
+                        is_optimal: false
+                    });
+                }
+            }
+
+            showConsequences(evaluation) {
+                const messageClass = evaluation.is_optimal ? 'success' : 'warning';
+                this.consequenceContainer.innerHTML = `
+                    <div class="consequence-message ${messageClass}">
+                        <p><strong>Time Impact:</strong> +${evaluation.consequence.time_penalty} minutes</p>
+                        <p>${evaluation.consequence.explanation}</p>
+                    </div>
+                `;
+            }
+
+            updateState(newState) {
+                this.currentState = newState;
+                this.updateScenarioDisplay();
+            }
+        }
+
+        // Initialize when the page loads - DISABLED for mode selection
+        // window.addEventListener('load', () => {
+        //     window.dcaAssessment = new DCAAssessmentHandler();
+        // });
     </script>
 </body>
 </html>
