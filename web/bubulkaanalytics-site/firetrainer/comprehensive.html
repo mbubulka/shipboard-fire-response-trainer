@@ -2102,11 +2102,11 @@
     </div>
 
     <script>
-        // Global Configuration
-        const HF_API_KEY = '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';
+        // Global Configuration (API key removed for security)
+        const HF_API_KEY = ''; // Add your HF API key here for local testing
         const MODEL_URL = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1';
-        const AI_FEEDBACK_ENABLED = true;
-        const USE_MOCK_DATA = false;
+        const AI_FEEDBACK_ENABLED = false; // Disabled for deployment
+        const USE_MOCK_DATA = true; // Use mock data for deployment
 
         // Global State
         let currentMode = 'selection';
@@ -2276,7 +2276,7 @@
         }
 
         // Function to start scenario mode
-        function startScenarioMode() {
+        window.startScenarioMode = function() {
             console.log('startScenarioMode called');
             const modeSelection = document.getElementById('modeSelection');
             const assessmentContent = document.getElementById('assessmentContent');
@@ -2291,7 +2291,7 @@
         }
 
         // Function to start assessment mode
-        function startAssessmentMode() {
+        window.startAssessmentMode = function() {
             document.getElementById('modeSelection').style.display = 'none';
             document.getElementById('assessmentContent').classList.add('active');
             currentMode = 'assessment';
@@ -2318,7 +2318,7 @@
         }
 
         // Function to show DQN analysis interface
-        function showDQNAnalysisInterface() {
+        window.showDQNAnalysisInterface = function() {
             console.log('showDQNAnalysisInterface called');
             const content = document.getElementById('assessmentContent');
             console.log('assessmentContent element in showDQNAnalysisInterface:', content);
@@ -2582,7 +2582,7 @@
         }
 
         // Function to show scenario details
-        function showScenarioDetails(scenarioId) {
+        window.showScenarioDetails = function(scenarioId) {
             const scenarioData = {
                 'uss-bonhomme': {
                     title: 'USS Bonhomme Richard Fire Analysis',
@@ -2730,12 +2730,12 @@
         }
 
         // Function to hide scenario details
-        function hideScenarioDetails() {
+        window.hideScenarioDetails = function() {
             document.getElementById('scenarioDetails').style.display = 'none';
         }
 
         // Function to return to menu
-        function returnToMenu() {
+        window.returnToMenu = function() {
             document.getElementById('modeSelection').style.display = 'grid';
             document.getElementById('assessmentContent').classList.remove('active');
             currentMode = 'selection';
@@ -3824,6 +3824,16 @@
             `;
         }
 
+        // Move to previous question
+        window.previousQuestion = function() {
+            console.log('previousQuestion called');
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                selectedAnswer = null;
+                showQuestion();
+            }
+        }
+
         // Move to next question
         window.nextQuestion = function() {
             console.log('nextQuestion called');
@@ -4606,7 +4616,7 @@
         let answerStartTime = null;
 
         // Select answer
-        function selectAnswer(optionIndex) {
+        window.selectAnswer = function(optionIndex) {
             selectedAnswer = optionIndex;
             answerStartTime = answerStartTime || Date.now();
             
@@ -4622,7 +4632,7 @@
         }
 
         // Submit answer with simple feedback
-        function submitAnswer() {
+        window.submitAnswer = function() {
             if (selectedAnswer === null) return;
             
             const responseTime = Date.now() - answerStartTime;
