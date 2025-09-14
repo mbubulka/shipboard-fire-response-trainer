@@ -1422,6 +1422,7 @@
         let dqnQuestionGenerator = null; // Initialize after DQNQuestionGenerator class is defined
         let scenarioStartTime = null;
         let currentScenario = null;
+        let currentDQNQuestion = null; // Store current DQN question for assessment
 
         // Enhanced random scenario generation with realistic fire progression
         window.generateRandomScenario = function() {
@@ -2551,6 +2552,12 @@
         window.startQuiz = function() {
             document.querySelector('.assessment-header button').style.display = 'none';
             document.getElementById('quizArea').style.display = 'block';
+            
+            // Initialize a DQN scenario for the assessment if not already done
+            if (!currentScenario || !currentFireProgression) {
+                generateRandomScenario();
+            }
+            
             showQuestion();
         }
 
@@ -2615,20 +2622,39 @@
             ];
         }
 
-        // Show current question
+        // Show current question - now uses DQN dynamic questions
         function showQuestion() {
-            if (currentQuestionIndex >= assessmentQuestions.length) {
+            // Check if we should show final results
+            if (currentQuestionIndex >= 10) { // Limit to 10 DQN questions
                 showFinalResults();
                 return;
             }
 
-            const question = assessmentQuestions[currentQuestionIndex];
+            // Generate dynamic question based on current fire progression
+            if (!currentFireProgression || !dqnQuestionGenerator) {
+                console.error('DQN system not initialized');
+                return;
+            }
+
+            const question = dqnQuestionGenerator.generateDynamicQuestion(currentFireProgression, currentScenario);
+            currentDQNQuestion = question; // Store for use in selectAnswer
+            
+            // Advance fire progression slightly for next question
+            currentFireProgression.updateProgression(30); // 30 seconds advance
+            
             const quizArea = document.getElementById('quizArea');
             
             quizArea.innerHTML = `
                 <div class="question-container">
                     <div class="question-header">
-                        <h3>Question ${currentQuestionIndex + 1} of ${assessmentQuestions.length}</h3>
+                        <h3>🚨 Scenario: ${currentScenario.title}</h3>
+                        <p><strong>Location:</strong> ${currentScenario.location}</p>
+                        <div class="fire-status">
+                            <span>🔥 Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F</span>
+                            <span>💨 Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}%</span>
+                            <span>⏱️ Time: ${Math.floor(currentFireProgression.currentState.timeElapsed / 60)}:${String(Math.floor(currentFireProgression.currentState.timeElapsed % 60)).padStart(2, '0')}</span>
+                        </div>
+                        <h4>Question ${currentQuestionIndex + 1} of 10</h4>
                     </div>
                     
                     <div class="question-text">
@@ -2664,12 +2690,16 @@
 
         // Submit answer
         window.submitAnswer = function() {
-            if (selectedAnswer === null) return;
+            if (selectedAnswer === null || !currentDQNQuestion) return;
             
-            const question = assessmentQuestions[currentQuestionIndex];
-            const isCorrect = selectedAnswer === question.correct;
+            const question = currentDQNQuestion;
+            const isCorrect = selectedAnswer === question.correctIndex;
             
             if (isCorrect) score++;
+            
+            // Record performance in DQN system
+            const responseTime = 10; // You could implement actual timing
+            dqnQuestionGenerator.recordPerformance(responseTime, isCorrect, 'assessment');
             
             showAnswerFeedback(question, isCorrect);
         }
@@ -2682,11 +2712,12 @@
                 <div class="question-container">
                     <div class="feedback-result ${isCorrect ? 'correct' : 'incorrect'}">
                         <h3>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</h3>
+                        <p><strong>Scenario:</strong> ${currentScenario.title} - ${currentScenario.location}</p>
                     </div>
                     
                     <div class="correct-answer">
                         <h4>Correct Answer:</h4>
-                        <p><strong>${String.fromCharCode(65 + question.correct)}:</strong> ${question.options[question.correct]}</p>
+                        <p><strong>${String.fromCharCode(65 + question.correctIndex)}:</strong> ${question.options[question.correctIndex]}</p>
                     </div>
                     
                     <div class="explanation">
@@ -2694,9 +2725,16 @@
                         <p>${question.explanation}</p>
                     </div>
                     
+                    <div class="fire-progression-update">
+                        <h4>🔥 Fire Status Update:</h4>
+                        <p>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F | 
+                           Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}% | 
+                           Spread: ${Math.round(currentFireProgression.currentState.spreadRadius)} ft</p>
+                    </div>
+                    
                     <div class="question-controls">
                         <button onclick="nextQuestion()" class="assessment-btn primary">
-                            ${currentQuestionIndex < assessmentQuestions.length - 1 ? 'Next Question' : 'View Results'}
+                            ${currentQuestionIndex < 9 ? 'Next Question' : 'View Results'}
                         </button>
                     </div>
                 </div>
@@ -2721,7 +2759,8 @@
 
         // Show final results
         function showFinalResults() {
-            const percentage = Math.round((score / assessmentQuestions.length) * 100);
+            const totalQuestions = 10; // DQN assessment uses 10 questions
+            const percentage = Math.round((score / totalQuestions) * 100);
             const quizArea = document.getElementById('quizArea');
             
             let performanceLevel = '';
@@ -2730,21 +2769,42 @@
             else if (percentage >= 60) performanceLevel = 'Developing';
             else performanceLevel = 'Needs Improvement';
             
+            // Get DQN performance metrics
+            const dqnPerformance = dqnQuestionGenerator ? dqnQuestionGenerator.userPerformance : null;
+            
             quizArea.innerHTML = `
                 <div class="results-card">
-                    <h2>🎯 Assessment Complete!</h2>
+                    <h2>🎯 DQN Fire Response Assessment Complete!</h2>
+                    <div class="scenario-summary">
+                        <h3>📋 Scenario Completed: ${currentScenario.title}</h3>
+                        <p><strong>Location:</strong> ${currentScenario.location}</p>
+                        <p><strong>Fire Type:</strong> ${currentScenario.fireType}</p>
+                    </div>
+                    
                     <div class="score-display">${percentage}%</div>
                     <div class="score-breakdown">
-                        <p>${score} out of ${assessmentQuestions.length} correct</p>
+                        <p>${score} out of ${totalQuestions} correct</p>
                         <p><strong>Performance Level: ${performanceLevel}</strong></p>
+                        ${dqnPerformance ? `
+                            <p><strong>DQN Accuracy:</strong> ${(dqnPerformance.accuracy * 100).toFixed(1)}%</p>
+                            <p><strong>Average Decision Time:</strong> ${dqnPerformance.averageTime.toFixed(1)}s</p>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="fire-final-status">
+                        <h4>🔥 Final Fire Status:</h4>
+                        <p>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F | 
+                           Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}% | 
+                           Spread: ${Math.round(currentFireProgression.currentState.spreadRadius)} ft</p>
+                        <p><strong>Threat Level:</strong> ${currentFireProgression.getThreatLevel()}</p>
                     </div>
                     
                     <div class="feedback-message">
                         ${percentage >= 80 ? 
-                            'Excellent performance! You demonstrate strong understanding of fire response procedures and tactical decision-making.' :
+                            'Excellent performance! You demonstrate strong understanding of fire response procedures and tactical decision-making in realistic scenarios.' :
                             percentage >= 60 ?
-                            'Good foundation with room for improvement. Review fire classification and suppression procedures.' :
-                            'Additional training recommended. Focus on fire fundamentals and emergency response procedures.'
+                            'Good foundation with room for improvement. Review fire classification and suppression procedures in dynamic situations.' :
+                            'Additional training recommended. Focus on fire fundamentals and emergency response procedures under pressure.'
                         }
                     </div>
                     
