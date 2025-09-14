@@ -714,6 +714,243 @@
             margin: 10px 0;
         }
         
+        /* DQN Assessment Specific Styles */
+        .dqn-assessment-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .scenario-status {
+            background: rgba(52, 73, 94, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .state-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .state-item {
+            text-align: center;
+        }
+        
+        .state-label {
+            display: block;
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+        
+        .state-value {
+            display: block;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .dqn-live {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        
+        .situation-alert {
+            background: rgba(231, 76, 60, 0.15);
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .decision-prompt {
+            background: rgba(52, 152, 219, 0.15);
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .dqn-answer-option {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(52, 73, 94, 0.3);
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .dqn-answer-option:hover {
+            background: rgba(52, 73, 94, 0.5);
+            border-color: #e74c3c;
+            transform: translateY(-2px);
+        }
+        
+        .dqn-answer-option.selected {
+            background: rgba(231, 76, 60, 0.3);
+            border-color: #e74c3c;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .dqn-answer-option.selected .option-letter {
+            background: #e74c3c;
+        }
+        
+        .ai-notice {
+            background: rgba(155, 89, 182, 0.15);
+            border: 1px solid #9b59b6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            color: #9b59b6;
+        }
+        
+        /* DQN Feedback Styles */
+        .dqn-feedback-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .consequence-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .decision-outcome {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .state-changes {
+            background: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid #f39c12;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .state-update {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .progression-notice {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid #e74c3c;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .scenario-end {
+            background: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        /* DQN Final Results */
+        .dqn-final-results {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 40px;
+        }
+        
+        .final-outcome {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .final-outcome.success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 3px solid #27ae60;
+            color: #27ae60;
+        }
+        
+        .final-outcome.contained {
+            background: rgba(243, 156, 18, 0.2);
+            border: 3px solid #f39c12;
+            color: #f39c12;
+        }
+        
+        .final-outcome.casualties {
+            background: rgba(231, 76, 60, 0.2);
+            border: 3px solid #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .final-outcome.total-loss {
+            background: rgba(139, 0, 0, 0.2);
+            border: 3px solid #8b0000;
+            color: #8b0000;
+        }
+        
+        .scenario-summary, .tactical-analysis, .lessons-learned {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(52, 73, 94, 0.3);
+            border-radius: 5px;
+        }
+        
+        .metric-label {
+            font-weight: bold;
+        }
+        
+        .metric-value {
+            color: #3498db;
+        }
+        
         .dashboard-section {
             margin-bottom: 40px;
             background: rgba(0, 0, 0, 0.3);
@@ -2645,25 +2882,711 @@
             `;
         }
 
-        // Start DCA Assessment
+        // Start DCA Assessment with DQN Integration
         window.startAssessment = function() {
-            console.log('startAssessment called');
+            console.log('Starting DQN-integrated DCA Assessment');
+            
             // Hide the overview and show the quiz area
             document.querySelector('.assessment-dashboard').style.display = 'none';
             document.querySelector('.assessment-controls').style.display = 'none';
             document.getElementById('assessment-quiz-area').style.display = 'block';
             
-            // Initialize assessment variables
+            // Initialize DQN assessment variables
             currentQuestionIndex = 0;
             score = 0;
             selectedAnswer = null;
             
-            // Select pier fire specific questions from the question bank
-            assessmentQuestions = getPierFireQuestions();
-            console.log('Generated questions:', assessmentQuestions.length);
+            // Get user performance to determine starting scenario
+            const userPerformance = calculateUserPerformance();
             
-            // Show first question
-            showQuestion();
+            // DQN selects initial fire location based on user weaknesses and randomization
+            const initialScenario = selectInitialScenario(userPerformance);
+            
+            // Initialize dynamic scenario state
+            window.scenarioState = {
+                fireLocation: initialScenario.location,
+                fireSize: 'small',
+                fireType: initialScenario.type,
+                suppressionAttempts: [],
+                timeElapsed: 0,
+                crewSafety: 'safe',
+                vesselStatus: 'stable',
+                mistakes: [],
+                initialCause: initialScenario.cause
+            };
+            
+            // Start with dynamic DQN scenario generation
+            generateDQNAssessmentScenario();
+        }
+
+        // DQN-based initial scenario selection
+        function selectInitialScenario(userPerformance) {
+            // Define possible starting scenarios with DQN weighting
+            const scenarioPool = [
+                {
+                    location: 'engine_room',
+                    type: 'fuel_oil',
+                    cause: 'lube oil leak ignition',
+                    weight: 25,
+                    difficulty: 'medium',
+                    testAreas: ['fuel_suppression', 'confined_space']
+                },
+                {
+                    location: 'galley',
+                    type: 'cooking_oil',
+                    cause: 'deep fryer overheating',
+                    weight: 20,
+                    difficulty: 'easy',
+                    testAreas: ['class_k_suppression', 'ventilation']
+                },
+                {
+                    location: 'berthing',
+                    type: 'electrical',
+                    cause: 'overloaded outlet',
+                    weight: 15,
+                    difficulty: 'medium',
+                    testAreas: ['electrical_safety', 'evacuation']
+                },
+                {
+                    location: 'bridge',
+                    type: 'electrical',
+                    cause: 'navigation equipment malfunction',
+                    weight: 10,
+                    difficulty: 'hard',
+                    testAreas: ['critical_systems', 'electrical_safety']
+                },
+                {
+                    location: 'machinery_space',
+                    type: 'hydraulic_fluid',
+                    cause: 'high pressure line rupture',
+                    weight: 20,
+                    difficulty: 'hard',
+                    testAreas: ['high_pressure', 'confined_space']
+                },
+                {
+                    location: 'paint_locker',
+                    type: 'flammable_liquid',
+                    cause: 'solvent vapor ignition',
+                    weight: 10,
+                    difficulty: 'easy',
+                    testAreas: ['class_b_suppression', 'vapor_hazards']
+                }
+            ];
+
+            // DQN analysis: weight scenarios based on user's weak areas
+            let adjustedPool = scenarioPool.map(scenario => {
+                let adjustedWeight = scenario.weight;
+                
+                // Increase weight for scenarios that test user's weak areas
+                scenario.testAreas.forEach(area => {
+                    if (userPerformance.weaknessAreas.includes(area)) {
+                        adjustedWeight += 15; // DQN targets weaknesses
+                    }
+                });
+                
+                // Adjust for user difficulty preference
+                if (userPerformance.difficultyLevel === 'beginner' && scenario.difficulty === 'easy') {
+                    adjustedWeight += 10;
+                } else if (userPerformance.difficultyLevel === 'expert' && scenario.difficulty === 'hard') {
+                    adjustedWeight += 10;
+                }
+                
+                return { ...scenario, adjustedWeight };
+            });
+
+            // Weighted random selection (DQN-style)
+            const totalWeight = adjustedPool.reduce((sum, scenario) => sum + scenario.adjustedWeight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let scenario of adjustedPool) {
+                random -= scenario.adjustedWeight;
+                if (random <= 0) {
+                    console.log(`DQN Selected Initial Scenario: ${scenario.location} - ${scenario.type} (${scenario.cause})`);
+                    return scenario;
+                }
+            }
+            
+            // Fallback to first scenario if something goes wrong
+            return adjustedPool[0];
+        }
+
+        // Generate DQN-based assessment scenario that adapts to user decisions
+        function generateDQNAssessmentScenario() {
+            console.log('Generating DQN scenario, current state:', window.scenarioState);
+            
+            // Calculate user performance to influence AI decisions
+            const userPerformance = calculateUserPerformance();
+            
+            // Generate next scenario situation based on current state
+            const scenario = generateAdaptiveScenario(window.scenarioState, userPerformance);
+            
+            // Initialize current scenario in window for access
+            window.currentAIScenario = scenario;
+            
+            // Show the first dynamic question
+            showDQNQuestion(scenario);
+        }
+
+        // Generate adaptive scenario based on current fire state and user performance
+        function generateAdaptiveScenario(state, performance) {
+            let scenario = {
+                id: `dqn_assessment_${Date.now()}`,
+                currentState: { ...state },
+                questions: [],
+                consequences: {},
+                progressionRules: {}
+            };
+
+            // Dynamic scenario generation based on current location and state
+            if (state.fireSize === 'small') {
+                // First question - initial response based on fire location
+                scenario = generateInitialResponse(state, scenario);
+            } 
+            else if (state.fireSize === 'medium') {
+                // Second question - escalation management
+                scenario = generateEscalationResponse(state, scenario);
+            }
+            else if (state.fireLocation.includes('multiple') || state.fireLocation.includes('spreading')) {
+                // Third question - multi-area strategic response
+                scenario = generateStrategicResponse(state, scenario);
+            }
+
+            return scenario;
+        }
+
+        // Generate initial response questions based on fire location
+        function generateInitialResponse(state, scenario) {
+            switch(state.fireLocation) {
+                case 'engine_room':
+                    scenario.situation = `Engine room ${state.initialCause} has created a small ${state.fireType} fire near hot surfaces. Immediate action required.`;
+                    scenario.questions = [{
+                        question: "Your immediate priority action:",
+                        options: [
+                            "Use water fog to cool surrounding area",
+                            "Activate CO2 suppression system immediately", 
+                            "Attempt to stop fuel source at valve",
+                            "Evacuate space and call harbor fire dept"
+                        ],
+                        correct: 2,
+                        consequences: {
+                            0: { fireSize: 'medium', mistakes: ['water_on_oil'], crewSafety: 'injured' },
+                            1: { fireSize: 'small', timeElapsed: 5, suppressionAttempts: ['co2'] },
+                            2: { fireSize: 'contained', timeElapsed: 2, suppressionAttempts: ['source_control'] },
+                            3: { fireSize: 'large', fireLocation: 'engine_room_spreading', timeElapsed: 10 }
+                        },
+                        explanations: {
+                            0: "❌ Water on fuel fire causes dangerous spattering. Fire ESCALATED.",
+                            1: "⚠️ CO2 suppresses but doesn't stop fuel source. May reignite.",
+                            2: "✅ Correct! Source control is critical for fuel fires.",
+                            3: "❌ Delay allows uncontrolled growth and spread."
+                        }
+                    }];
+                    break;
+
+                case 'galley':
+                    scenario.situation = `Galley ${state.initialCause} has ignited cooking oil in deep fryer. Class K fire spreading to ventilation hood.`;
+                    scenario.questions = [{
+                        question: "Best suppression approach for this cooking fire:",
+                        options: [
+                            "Water spray to cool the oil",
+                            "CO2 to displace oxygen", 
+                            "Class K wet chemical suppression",
+                            "Foam blanket on burning oil"
+                        ],
+                        correct: 2,
+                        consequences: {
+                            0: { fireSize: 'large', mistakes: ['water_on_oil'], crewSafety: 'injured', fireLocation: 'galley_spreading' },
+                            1: { fireSize: 'medium', timeElapsed: 8, suppressionAttempts: ['co2'] },
+                            2: { fireSize: 'contained', timeElapsed: 3, suppressionAttempts: ['class_k'] },
+                            3: { fireSize: 'medium', timeElapsed: 6, suppressionAttempts: ['foam'] }
+                        },
+                        explanations: {
+                            0: "❌ Water on hot oil causes explosive spattering and burns!",
+                            1: "⚠️ CO2 helps but doesn't cool oil below auto-ignition temperature.",
+                            2: "✅ Perfect! Class K designed specifically for cooking oil fires.",
+                            3: "⚠️ Foam works partially but Class K is more effective."
+                        }
+                    }];
+                    break;
+
+                case 'berthing':
+                    scenario.situation = `Berthing area ${state.initialCause} has started an electrical fire. Smoke threatening sleeping crew members.`;
+                    scenario.questions = [{
+                        question: "Priority for electrical fire in occupied berthing:",
+                        options: [
+                            "Immediately evacuate all personnel",
+                            "Use water to cool electrical equipment", 
+                            "De-energize circuit then use CO2",
+                            "Use foam to smother electrical fire"
+                        ],
+                        correct: 2,
+                        consequences: {
+                            0: { fireSize: 'large', timeElapsed: 8, fireLocation: 'berthing_spreading' },
+                            1: { fireSize: 'medium', mistakes: ['water_on_electrical'], crewSafety: 'injured' },
+                            2: { fireSize: 'contained', timeElapsed: 4, suppressionAttempts: ['electrical_isolation', 'co2'] },
+                            3: { fireSize: 'medium', mistakes: ['wrong_agent'], timeElapsed: 6 }
+                        },
+                        explanations: {
+                            0: "❌ Evacuation important but fire spreads unchecked in delay.",
+                            1: "❌ Water conducts electricity - crew electrocution risk!",
+                            2: "✅ Perfect! Isolate power first, then CO2 suppression.",
+                            3: "❌ Foam conducts electricity and is ineffective."
+                        }
+                    }];
+                    break;
+
+                case 'bridge':
+                    scenario.situation = `Bridge ${state.initialCause} causing electrical fire in navigation equipment. Critical systems at risk.`;
+                    scenario.questions = [{
+                        question: "Bridge electrical fire threatens navigation systems:",
+                        options: [
+                            "Use water spray for rapid cooling",
+                            "Isolate affected systems and use CO2", 
+                            "Evacuate bridge immediately",
+                            "Use dry chemical extinguisher"
+                        ],
+                        correct: 1,
+                        consequences: {
+                            0: { fireSize: 'large', mistakes: ['water_on_electrical'], crewSafety: 'injured', vesselStatus: 'navigation_loss' },
+                            1: { fireSize: 'contained', timeElapsed: 3, suppressionAttempts: ['system_isolation', 'co2'] },
+                            2: { fireSize: 'large', timeElapsed: 10, vesselStatus: 'navigation_loss' },
+                            3: { fireSize: 'medium', timeElapsed: 5, suppressionAttempts: ['dry_chemical'] }
+                        },
+                        explanations: {
+                            0: "❌ Water damages electronics and creates electrocution risk!",
+                            1: "✅ Excellent! Protect systems while suppressing effectively.",
+                            2: "❌ Bridge abandonment leads to total navigation loss.",
+                            3: "⚠️ Dry chemical works but may damage sensitive electronics."
+                        }
+                    }];
+                    break;
+
+                case 'machinery_space':
+                    scenario.situation = `Machinery space ${state.initialCause} created high-pressure hydraulic fluid spray fire. Confined space with limited access.`;
+                    scenario.questions = [{
+                        question: "High-pressure hydraulic fire in confined machinery space:",
+                        options: [
+                            "Enter immediately with portable extinguisher",
+                            "Isolate pressure source then use CO2 flooding", 
+                            "Use water fog from outside space",
+                            "Wait for harbor fire department"
+                        ],
+                        correct: 1,
+                        consequences: {
+                            0: { fireSize: 'medium', crewSafety: 'injured', mistakes: ['personnel_exposure'] },
+                            1: { fireSize: 'contained', timeElapsed: 4, suppressionAttempts: ['pressure_isolation', 'co2_flood'] },
+                            2: { fireSize: 'large', mistakes: ['ineffective_suppression'], timeElapsed: 8 },
+                            3: { fireSize: 'large', timeElapsed: 15, fireLocation: 'machinery_spreading' }
+                        },
+                        explanations: {
+                            0: "❌ High-pressure spray causes severe burns. Personnel safety first!",
+                            1: "✅ Perfect! Stop pressure source, then flood confined space.",
+                            2: "❌ Water ineffective on pressurized hydraulic fluid.",
+                            3: "❌ Delay allows fire to spread throughout machinery space."
+                        }
+                    }];
+                    break;
+
+                case 'paint_locker':
+                    scenario.situation = `Paint locker ${state.initialCause} has ignited flammable solvents. Vapor explosion risk in enclosed space.`;
+                    scenario.questions = [{
+                        question: "Flammable liquid fire with vapor hazard:",
+                        options: [
+                            "Use water spray to cool containers",
+                            "Foam blanket to suppress vapors", 
+                            "CO2 to displace oxygen",
+                            "Dry chemical on liquid surface"
+                        ],
+                        correct: 1,
+                        consequences: {
+                            0: { fireSize: 'medium', timeElapsed: 6, mistakes: ['vapor_spread'] },
+                            1: { fireSize: 'contained', timeElapsed: 3, suppressionAttempts: ['foam_blanket'] },
+                            2: { fireSize: 'medium', timeElapsed: 5, suppressionAttempts: ['co2'] },
+                            3: { fireSize: 'large', mistakes: ['inadequate_suppression'], fireLocation: 'paint_spreading' }
+                        },
+                        explanations: {
+                            0: "⚠️ Water helps cool but doesn't suppress vapor generation.",
+                            1: "✅ Excellent! Foam suppresses fire and seals vapors.",
+                            2: "⚠️ CO2 works but doesn't prevent vapor reignition.",
+                            3: "❌ Dry chemical ineffective on liquid fuel fires."
+                        }
+                    }];
+                    break;
+
+                default:
+                    // Fallback to engine room if unknown location
+                    return generateInitialResponse({...state, fireLocation: 'engine_room'}, scenario);
+            }
+            
+            return scenario;
+        }
+                scenario.situation = "Fire has grown and spread to electrical panel. Smoke filling space. Oil leak continues feeding fire.";
+                scenario.questions = [{
+                    id: 2,
+                    question: "Fire has escalated due to previous action. Your next move:",
+                    options: [
+                        "Use foam suppression on oil and water on electrical",
+                        "Activate CO2 system and evacuate immediately",
+                        "Try to isolate electrical power first, then foam on oil",
+                        "Use dry chemical on everything"
+                    ],
+                    correct: 1,
+                    consequences: {
+                        0: { fireSize: 'large', crewSafety: 'injured', mistakes: ['wrong_agent_mix'] },
+                        1: { fireSize: 'small', fireLocation: 'engine_room', suppressionAttempts: ['co2_flood'] },
+                        2: { fireSize: 'contained', fireLocation: 'engine_room', suppressionAttempts: ['tactical_approach'] },
+                        3: { fireSize: 'large', fireLocation: 'multiple_compartments', crewSafety: 'injured' }
+                    },
+            return scenario;
+        }
+
+        // Generate escalation response for medium fires
+        function generateEscalationResponse(state, scenario) {
+            scenario.situation = `Fire has escalated to medium size. ${state.fireLocation.replace(/_/g, ' ')} now has multiple challenges requiring tactical decisions.`;
+            scenario.questions = [{
+                question: "Fire has escalated due to previous action. Your next move:",
+                options: [
+                    "Use multiple suppression agents simultaneously",
+                    "Activate flooding system and evacuate immediately",
+                    "Try systematic approach - isolate then suppress",
+                    "Call for immediate external assistance"
+                ],
+                correct: 2,
+                consequences: {
+                    0: { fireSize: 'large', crewSafety: 'injured', mistakes: ['agent_mixing'] },
+                    1: { fireSize: 'small', timeElapsed: 8, suppressionAttempts: ['system_flood'] },
+                    2: { fireSize: 'contained', timeElapsed: 6, suppressionAttempts: ['systematic'] },
+                    3: { fireSize: 'large', timeElapsed: 15, fireLocation: 'multiple_compartments' }
+                },
+                explanations: {
+                    0: "❌ Mixing suppression agents creates safety hazards and inefficiency.",
+                    1: "✅ Flooding systems are effective for escalated fires in most spaces.",
+                    2: "✅ Systematic approach shows professional fire management skills.",
+                    3: "❌ Delay while waiting for help allows uncontrolled spread."
+                }
+            }];
+            return scenario;
+        }
+
+        // Generate strategic response for multi-area fires
+        function generateStrategicResponse(state, scenario) {
+            scenario.situation = "Fire has spread to multiple compartments due to poor initial response. Strategic command decisions required.";
+            scenario.questions = [{
+                question: "Multi-compartment fire requires strategic decision:",
+                options: [
+                    "Split crew to fight all fires simultaneously",
+                    "Focus resources on preventing critical area spread",
+                    "Abandon vessel and let professionals handle",
+                    "Try to save areas with people first"
+                ],
+                correct: 1,
+                consequences: {
+                    0: { vesselStatus: 'critical', crewSafety: 'multiple_injured' },
+                    1: { vesselStatus: 'stable', fireLocation: 'contained_spread' },
+                    2: { vesselStatus: 'total_loss' },
+                    3: { vesselStatus: 'critical', crewSafety: 'casualties' }
+                },
+                explanations: {
+                    0: "❌ Dividing limited resources allows fire to overwhelm all positions.",
+                    1: "✅ Strategic thinking! Protecting critical areas prevents total loss.",
+                    2: "❌ Early abandonment leads to total vessel loss when fight was winnable.",
+                    3: "❌ Emotional decisions in fire command lead to casualties."
+                }
+            }];
+            return scenario;
+        }
+
+        // Show DQN-generated dynamic question
+        function showDQNQuestion(scenario) {
+            const question = scenario.questions[0]; // Current question
+            const quizArea = document.getElementById('assessment-quiz-area');
+            
+            // Show scenario state indicators
+            const stateDisplay = generateStateDisplay(window.scenarioState);
+            
+            quizArea.innerHTML = `
+                <div class="dqn-assessment-container">
+                    <div class="scenario-status">
+                        ${stateDisplay}
+                    </div>
+                    
+                    <div class="dynamic-scenario-header">
+                        <div class="scenario-badge dqn-live">DQN ADAPTIVE SCENARIO</div>
+                        <h3>🔥 Live Fire Progression</h3>
+                    </div>
+                    
+                    <div class="situation-display">
+                        <div class="situation-alert">
+                            <h4>🚨 CURRENT SITUATION:</h4>
+                            <p>${scenario.situation}</p>
+                        </div>
+                        
+                        <div class="decision-prompt">
+                            <h3>⚡ CRITICAL DECISION REQUIRED:</h3>
+                            <p>${question.question}</p>
+                        </div>
+                        
+                        <div class="answer-options">
+                            ${question.options.map((option, index) => `
+                                <button class="dqn-answer-option" onclick="selectDQNAnswer(${index})">
+                                    <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                                    <span class="option-text">${option}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="question-controls">
+                            <button id="submit-dqn-answer" onclick="processDQNAnswer()" class="assessment-btn primary" disabled>
+                                Execute Decision
+                            </button>
+                        </div>
+                        
+                        <div class="dqn-info">
+                            <div class="ai-notice">
+                                🧠 <strong>AI Notice:</strong> Your choice will determine fire progression, crew safety, and vessel status. 
+                                Poor decisions allow fire to spread realistically.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Select DQN answer
+        window.selectDQNAnswer = function(optionIndex) {
+            console.log('DQN answer selected:', optionIndex);
+            selectedAnswer = optionIndex;
+            
+            // Remove previous selection
+            document.querySelectorAll('.dqn-answer-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            document.querySelectorAll('.dqn-answer-option')[optionIndex].classList.add('selected');
+            
+            // Enable submit button
+            document.getElementById('submit-dqn-answer').disabled = false;
+        }
+
+        // Process DQN answer and update scenario state
+        window.processDQNAnswer = function() {
+            if (selectedAnswer === null) return;
+            
+            const scenario = window.currentAIScenario;
+            const question = scenario.questions[0];
+            const consequence = question.consequences[selectedAnswer];
+            const explanation = question.explanations[selectedAnswer];
+            const isCorrect = selectedAnswer === question.correct;
+            
+            if (isCorrect) score++;
+            
+            // Update scenario state based on consequences
+            Object.assign(window.scenarioState, consequence);
+            
+            // Show immediate consequences
+            showDQNFeedback(question, isCorrect, explanation, consequence);
+        }
+
+        // Show DQN feedback with consequences
+        function showDQNFeedback(question, isCorrect, explanation, consequence) {
+            const quizArea = document.getElementById('assessment-quiz-area');
+            
+            // Determine if scenario continues or ends
+            const shouldContinue = window.scenarioState.vesselStatus !== 'total_loss' && 
+                                  window.scenarioState.crewSafety !== 'casualties' &&
+                                  currentQuestionIndex < 2; // Max 3 questions for demo
+            
+            quizArea.innerHTML = `
+                <div class="dqn-feedback-container">
+                    <div class="consequence-header">
+                        <div class="feedback-result ${isCorrect ? 'correct' : 'incorrect'}">
+                            ${isCorrect ? '✅ TACTICAL SUCCESS' : '❌ TACTICAL FAILURE'}
+                        </div>
+                    </div>
+                    
+                    <div class="consequence-details">
+                        <div class="decision-outcome">
+                            <h4>📋 IMMEDIATE CONSEQUENCES:</h4>
+                            <p>${explanation}</p>
+                        </div>
+                        
+                        <div class="state-changes">
+                            <h4>🔄 SCENARIO STATE UPDATED:</h4>
+                            <div class="state-update">
+                                ${generateStateChangeDisplay(consequence)}
+                            </div>
+                        </div>
+                        
+                        ${shouldContinue ? `
+                            <div class="progression-notice">
+                                <h4>⚡ FIRE PROGRESSION CONTINUES:</h4>
+                                <p>Your decision has altered the scenario. The fire situation has evolved based on your tactical choice.</p>
+                            </div>
+                        ` : `
+                            <div class="scenario-end">
+                                <h4>🎯 SCENARIO CONCLUDED:</h4>
+                                <p>Scenario has reached a resolution point. Your decisions determined the outcome.</p>
+                            </div>
+                        `}
+                    </div>
+                    
+                    <div class="feedback-controls">
+                        ${shouldContinue ? 
+                            '<button onclick="continueDQNScenario()" class="assessment-btn primary">Continue Scenario</button>' :
+                            '<button onclick="showDQNResults()" class="assessment-btn primary">View Final Results</button>'
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate display showing what changed in scenario state
+        function generateStateChangeDisplay(consequence) {
+            let changes = [];
+            
+            if (consequence.fireSize) {
+                const color = consequence.fireSize === 'small' ? '#f39c12' : 
+                             consequence.fireSize === 'medium' ? '#e74c3c' : '#8b0000';
+                changes.push(`<span style="color: ${color}">🔥 Fire Size: ${consequence.fireSize.toUpperCase()}</span>`);
+            }
+            
+            if (consequence.fireLocation) {
+                changes.push(`📍 Location: ${consequence.fireLocation.replace(/_/g, ' ').toUpperCase()}`);
+            }
+            
+            if (consequence.crewSafety) {
+                const color = consequence.crewSafety === 'safe' ? '#27ae60' : '#e74c3c';
+                changes.push(`<span style="color: ${color}">👥 Crew: ${consequence.crewSafety.toUpperCase()}</span>`);
+            }
+            
+            if (consequence.timeElapsed) {
+                changes.push(`⏱️ Time: +${consequence.timeElapsed} minutes`);
+            }
+            
+            if (consequence.suppressionAttempts) {
+                changes.push(`🚿 Suppression: ${consequence.suppressionAttempts.join(', ')}`);
+            }
+            
+            return changes.join('<br>');
+        }
+
+        // Continue DQN scenario to next phase
+        window.continueDQNScenario = function() {
+            currentQuestionIndex++;
+            selectedAnswer = null;
+            
+            // Generate next scenario phase based on current state
+            generateDQNAssessmentScenario();
+        }
+
+        // Show final DQN results
+        window.showDQNResults = function() {
+            showDQNFinalResults();
+        }
+
+        // Generate visual display of current scenario state
+        function generateStateDisplay(state) {
+            const fireColor = state.fireSize === 'small' ? '#f39c12' : 
+                             state.fireSize === 'medium' ? '#e74c3c' : '#8b0000';
+                             
+            const safetyColor = state.crewSafety === 'safe' ? '#27ae60' : 
+                               state.crewSafety === 'injured' ? '#e74c3c' : '#8b0000';
+                               
+            return `
+                <div class="state-indicators">
+                    <div class="state-item">
+                        <span class="state-label">Fire Size:</span>
+                        <span class="state-value" style="color: ${fireColor}">⚫ ${state.fireSize.toUpperCase()}</span>
+                    </div>
+                    <div class="state-item">
+                        <span class="state-label">Location:</span>
+                        <span class="state-value">${state.fireLocation.replace(/_/g, ' ').toUpperCase()}</span>
+                    </div>
+                    <div class="state-item">
+                        <span class="state-label">Crew Safety:</span>
+                        <span class="state-value" style="color: ${safetyColor}">👥 ${state.crewSafety.toUpperCase()}</span>
+                    </div>
+                    <div class="state-item">
+                        <span class="state-label">Time:</span>
+                        <span class="state-value">⏱️ ${state.timeElapsed} min</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show final DQN assessment results
+        function showDQNFinalResults() {
+            const quizArea = document.getElementById('assessment-quiz-area');
+            
+            // Calculate outcome based on final scenario state
+            let outcomeClass = '';
+            let outcomeTitle = '';
+            let outcomeDescription = '';
+            
+            if (window.scenarioState.vesselStatus === 'total_loss') {
+                outcomeClass = 'total-loss';
+                outcomeTitle = '🚢 TOTAL VESSEL LOSS';
+                outcomeDescription = 'Poor tactical decisions led to uncontrolled fire spread and vessel loss. Critical review of fire suppression fundamentals needed.';
+            } else if (window.scenarioState.crewSafety === 'casualties') {
+                outcomeClass = 'casualties';
+                outcomeTitle = '💀 CREW CASUALTIES';
+                outcomeDescription = 'Tactical errors resulted in crew injuries or fatalities. Fire response priorities must focus on life safety first.';
+            } else if (window.scenarioState.fireSize === 'small' || window.scenarioState.fireLocation === 'contained') {
+                outcomeClass = 'success';
+                outcomeTitle = '✅ FIRE SUPPRESSED SUCCESSFULLY';
+                outcomeDescription = 'Excellent tactical decisions contained the fire with minimal damage. Professional-level response demonstrated.';
+            } else {
+                outcomeClass = 'contained';
+                outcomeTitle = '⚠️ FIRE CONTAINED WITH DAMAGE';
+                outcomeDescription = 'Fire was eventually controlled but poor initial decisions led to unnecessary escalation and damage.';
+            }
+            
+            quizArea.innerHTML = `
+                <div class="dqn-final-results">
+                    <div class="final-outcome ${outcomeClass}">
+                        <h2>${outcomeTitle}</h2>
+                        <p>${outcomeDescription}</p>
+                    </div>
+                    
+                    <div class="scenario-summary">
+                        <h3>📊 Final Scenario State</h3>
+                        ${generateStateDisplay(window.scenarioState)}
+                    </div>
+                    
+                    <div class="tactical-analysis">
+                        <h3>🎯 Tactical Performance Analysis</h3>
+                        <div class="performance-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Correct Decisions:</span>
+                                <span class="metric-value">${score}/${currentQuestionIndex + 1}</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Fire Progression:</span>
+                                <span class="metric-value">${window.scenarioState.fireSize} → ${window.scenarioState.fireLocation}</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Response Time:</span>
+                                <span class="metric-value">${window.scenarioState.timeElapsed} minutes</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lessons-learned">
+                        <h3>📚 Key Lessons</h3>
+                        <ul>
+                            <li><strong>Dynamic Scenarios:</strong> Fire behavior changed based on your decisions, not pre-scripted outcomes</li>
+                            <li><strong>Consequence Realism:</strong> Poor suppression choices realistically escalated fire size and spread</li>
+                            <li><strong>Tactical Thinking:</strong> Each decision influenced subsequent scenario complexity</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="results-controls">
+                        <button onclick="startAssessment()" class="assessment-btn secondary">Try Different Scenario</button>
+                        <button onclick="returnToMenu()" class="assessment-btn primary">Return to Menu</button>
+                    </div>
+                </div>
+            `;
         }
 
         // Get pier fire specific questions
