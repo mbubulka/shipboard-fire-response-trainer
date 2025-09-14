@@ -2048,7 +2048,12 @@
                     containmentBreach: false,
                     structuralDamage: 0, // 0-100 scale
                     toxicGases: 0, // 0-100 scale
-                    visibility: 100 // 0-100 scale (100 = clear)
+                    visibility: 100, // 0-100 scale (100 = clear)
+                    affectedCompartments: [location], // Track fire spread to compartments
+                    compartmentTemps: { [location]: initialConditions.temperature || 70 },
+                    ventilationSpread: false, // Smoke through HVAC
+                    adjacentHeatUp: {}, // Heat transfer to adjacent spaces
+                    fireloadBurnout: 0 // Percentage of combustible material consumed
                 };
                 this.physicsParams = this.getFirePhysics(fireType);
                 this.criticalEvents = [];
@@ -2134,9 +2139,13 @@
                 const spreadIncrease = this.physicsParams.spreadRate * minutes;
                 this.currentState.spreadRadius += spreadIncrease;
                 
-                // Smoke generation
+                // Check for compartment-to-compartment spread
+                this.checkCompartmentSpread(minutes);
+                
+                // Smoke generation and ventilation spread
                 const smokeIncrease = this.physicsParams.smokeGeneration * minutes;
                 this.currentState.smokeLevel = Math.min(100, this.currentState.smokeLevel + smokeIncrease);
+                this.checkVentilationSpread(minutes);
                 
                 // Oxygen depletion
                 const oxygenDecrease = this.physicsParams.oxygenConsumption * minutes;
@@ -2149,6 +2158,10 @@
                 this.currentState.toxicGases = Math.min(100, 
                     this.currentState.toxicGases + (this.physicsParams.toxicityFactor * minutes * 2));
                 
+                // Fireload burnout progression
+                this.currentState.fireloadBurnout = Math.min(100, 
+                    this.currentState.fireloadBurnout + (minutes * 2.5));
+                
                 // Critical event checks
                 this.checkCriticalEvents();
                 
@@ -2159,6 +2172,90 @@
                 });
                 
                 return this.currentState;
+            }
+            
+            checkCompartmentSpread(minutes) {
+                const currentTemp = this.currentState.temperature;
+                const spreadRadius = this.currentState.spreadRadius;
+                
+                // Define shipboard compartment layout (simplified)
+                const compartmentConnections = {
+                    'Galley': ['Mess Deck', 'Berthing', 'Corridor'],
+                    'Engine Room': ['Machinery Space', 'Fuel Storage', 'Corridor'],
+                    'Berthing': ['Galley', 'Head', 'Corridor'],
+                    'Bridge': ['Chart Room', 'Radio Room', 'Corridor'],
+                    'Mess Deck': ['Galley', 'Berthing', 'Corridor'],
+                    'Corridor': ['Galley', 'Engine Room', 'Berthing', 'Bridge', 'Mess Deck']
+                };
+                
+                const adjacentSpaces = compartmentConnections[this.location] || ['Adjacent Space'];
+                
+                // Fire spread conditions
+                if (spreadRadius > 15 && currentTemp > 800) {
+                    adjacentSpaces.forEach(space => {
+                        if (!this.currentState.affectedCompartments.includes(space)) {
+                            // Check if conditions allow spread
+                            const spreadProbability = this.calculateSpreadProbability(space, minutes);
+                            if (Math.random() < spreadProbability) {
+                                this.currentState.affectedCompartments.push(space);
+                                this.currentState.compartmentTemps[space] = 400; // Secondary ignition temp
+                                this.addCriticalEvent(`Fire spread to ${space}`, this.currentState.timeElapsed);
+                            }
+                        } else if (this.currentState.compartmentTemps[space]) {
+                            // Existing fire compartment - increase temperature
+                            this.currentState.compartmentTemps[space] += (this.physicsParams.tempRiseRate * minutes * 0.7);
+                        }
+                    });
+                }
+                
+                // Heat transfer to adjacent spaces (even without active fire)
+                adjacentSpaces.forEach(space => {
+                    if (!this.currentState.adjacentHeatUp[space]) {
+                        this.currentState.adjacentHeatUp[space] = 70; // Starting temp
+                    }
+                    if (currentTemp > 500) {
+                        const heatTransfer = Math.min(15, (currentTemp - 500) / 100); // Heat transfer rate
+                        this.currentState.adjacentHeatUp[space] += heatTransfer * minutes;
+                    }
+                });
+            }
+            
+            checkVentilationSpread(minutes) {
+                const smokeLevel = this.currentState.smokeLevel;
+                
+                // Smoke spreads through ventilation at 20% smoke level
+                if (smokeLevel > 20 && !this.currentState.ventilationSpread) {
+                    this.currentState.ventilationSpread = true;
+                    this.addCriticalEvent('Smoke spreading through ventilation system', this.currentState.timeElapsed);
+                    
+                    // Smoke affects multiple spaces through HVAC
+                    if (smokeLevel > 50) {
+                        // High smoke levels affect ship-wide visibility
+                        this.currentState.visibility = Math.max(10, this.currentState.visibility - 20);
+                        this.addCriticalEvent('Ship-wide smoke contamination via HVAC', this.currentState.timeElapsed);
+                    }
+                }
+            }
+            
+            calculateSpreadProbability(targetSpace, minutes) {
+                let baseProbability = 0.05 * minutes; // 5% per minute base chance
+                
+                // Increase probability based on fire conditions
+                if (this.currentState.temperature > 1000) baseProbability *= 2;
+                if (this.currentState.spreadRadius > 20) baseProbability *= 1.5;
+                if (this.fireType === 'fuel' || this.fireType === 'electrical') baseProbability *= 1.3;
+                
+                // Specific compartment vulnerabilities
+                const vulnerabilities = {
+                    'Berthing': 1.4, // High combustible load
+                    'Corridor': 1.2, // Rapid spread pathway
+                    'Fuel Storage': 1.8, // Extremely dangerous
+                    'Machinery Space': 1.3 // Oil and fuel present
+                };
+                
+                baseProbability *= (vulnerabilities[targetSpace] || 1.0);
+                
+                return Math.min(0.9, baseProbability); // Cap at 90% chance
             }
 
             checkCriticalEvents() {
@@ -2296,6 +2393,8 @@
                 };
                 this.difficultyLevel = 1; // 1-5 scale
                 this.questionTemplates = this.initializeQuestionTemplates();
+                this.recentlyUsedTemplates = []; // Track recently used templates
+                this.currentSessionQuestions = []; // Track questions in current session
             }
 
             initializeQuestionTemplates() {
@@ -2313,6 +2412,36 @@
                                 options: ["Safe to proceed", "SCBA recommended", "SCBA required", "Evacuate immediately"],
                                 correctIndex: null,
                                 timeLimit: 25
+                            },
+                            {
+                                template: "Smoke detectors activated in {location}. First assessment action?",
+                                options: ["Sound general alarm", "Investigate with team", "Activate suppression", "Evacuate compartment"],
+                                correctIndex: 1,
+                                timeLimit: 30
+                            },
+                            {
+                                template: "Small {fireType} fire detected. Immediate size-up priority?",
+                                options: ["Count personnel", "Identify fuel source", "Check wind direction", "All of the above"],
+                                correctIndex: 3,
+                                timeLimit: 25
+                            },
+                            {
+                                template: "Crew reports 'something burning' smell. Your response?",
+                                options: ["Ignore minor odors", "Send single person to check", "Dispatch investigation team", "Sound general alarm"],
+                                correctIndex: 2,
+                                timeLimit: 30
+                            },
+                            {
+                                template: "Fire confined to origin compartment. Assessment finding?",
+                                options: ["Fire is contained", "Situation under control", "Early stage - good suppression window", "Prepare for flashover"],
+                                correctIndex: 2,
+                                timeLimit: 25
+                            },
+                            {
+                                template: "Compartment temperature {temperature}°F. Heat condition assessment?",
+                                options: ["Normal conditions", "Elevated but safe", "Dangerous - SCBA required", "Flashover imminent"],
+                                correctIndex: null,
+                                timeLimit: 20
                             }
                         ],
                         medium: [
@@ -2327,6 +2456,36 @@
                                 options: ["Continue firefighting", "Improve ventilation", "Evacuate personnel", "Switch tactics"],
                                 correctIndex: null,
                                 timeLimit: 15
+                            },
+                            {
+                                template: "Fire behavior shows rapid temperature rise. Assessment conclusion?",
+                                options: ["Fire is under control", "Normal fire development", "Approaching flashover conditions", "Fire is decreasing"],
+                                correctIndex: 2,
+                                timeLimit: 20
+                            },
+                            {
+                                template: "Multiple compartments showing heat signatures. Spread pattern indicates?",
+                                options: ["Isolated incidents", "Ventilation system spread", "Electrical system failure", "Compartment bulkhead failure"],
+                                correctIndex: 1,
+                                timeLimit: 18
+                            },
+                            {
+                                template: "Oxygen level {oxygenLevel}% in adjacent spaces. Assessment?",
+                                options: ["Safe for operations", "Ventilation needed", "Dangerous - evacuate", "SCBA mandatory"],
+                                correctIndex: null,
+                                timeLimit: 15
+                            },
+                            {
+                                template: "Fire load assessment shows heavy materials. Prediction?",
+                                options: ["Quick suppression possible", "Extended firefight likely", "Self-extinguishing probable", "Minor material involvement"],
+                                correctIndex: 1,
+                                timeLimit: 20
+                            },
+                            {
+                                template: "Thermal imaging shows hot spots in overhead. Conclusion?",
+                                options: ["Fire is contained below", "Fire has entered void spaces", "Equipment overheating only", "False thermal reading"],
+                                correctIndex: 1,
+                                timeLimit: 18
                             }
                         ],
                         hard: [
@@ -2335,6 +2494,30 @@
                                 options: ["Continue suppression", "Evacuate compartment", "Emergency flooding", "Abandon ship prep"],
                                 correctIndex: null,
                                 timeLimit: 10
+                            },
+                            {
+                                template: "Backdraft conditions developing. Critical assessment factor?",
+                                options: ["Oxygen concentration", "Temperature differential", "Compartment pressurization", "All factors critical"],
+                                correctIndex: 3,
+                                timeLimit: 12
+                            },
+                            {
+                                template: "Structural compromise visible, fire spreading vertically. Assessment priority?",
+                                options: ["Continue suppression efforts", "Structural stability evaluation", "Immediate evacuation order", "Boundary cooling only"],
+                                correctIndex: 2,
+                                timeLimit: 10
+                            },
+                            {
+                                template: "Multiple fires, limited resources. Triage assessment criteria?",
+                                options: ["Largest fire first", "Easiest suppression first", "Life safety threats first", "Property protection first"],
+                                correctIndex: 2,
+                                timeLimit: 15
+                            },
+                            {
+                                template: "Fire behavior unpredictable, {visibility}% visibility. Assessment conclusion?",
+                                options: ["Conditions improving", "Standard firefight", "Extreme hazard conditions", "Suppression effective"],
+                                correctIndex: 2,
+                                timeLimit: 12
                             }
                         ]
                     },
@@ -2345,6 +2528,36 @@
                                 options: ["Water spray", "CO2", "Foam", "Dry chemical"],
                                 correctIndex: null,
                                 timeLimit: 25
+                            },
+                            {
+                                template: "Galley grease fire spreading. Immediate suppression choice?",
+                                options: ["Water fog application", "Class K wet chemical", "CO2 flooding", "Foam application"],
+                                correctIndex: 1,
+                                timeLimit: 20
+                            },
+                            {
+                                template: "Electrical equipment fire in IT spaces. Safe suppression method?",
+                                options: ["Water with additives", "CO2 displacement", "Foam concentrate", "Dry chemical powder"],
+                                correctIndex: 1,
+                                timeLimit: 25
+                            },
+                            {
+                                template: "Small diesel fuel spill ignited. Appropriate agent?",
+                                options: ["Straight water stream", "AFFF foam concentrate", "CO2 gas", "Dry chemical"],
+                                correctIndex: 1,
+                                timeLimit: 22
+                            },
+                            {
+                                template: "Textile fire in berthing area. Standard approach?",
+                                options: ["CO2 flooding", "Water fog pattern", "Foam application", "Dry chemical"],
+                                correctIndex: 1,
+                                timeLimit: 25
+                            },
+                            {
+                                template: "Initial suppression effective. Next action priority?",
+                                options: ["Increase agent flow", "Maintain current effort", "Check for extension", "Switch suppression method"],
+                                correctIndex: 2,
+                                timeLimit: 20
                             }
                         ],
                         medium: [
@@ -2353,6 +2566,36 @@
                                 options: ["Continue same agent", "Switch to {correctAgent}", "Evacuate area", "Emergency ventilation"],
                                 correctIndex: 1,
                                 timeLimit: 15
+                            },
+                            {
+                                template: "Suppression agent supply running low. Strategic decision?",
+                                options: ["Continue current rate", "Reduce application rate", "Switch to alternative agent", "Prepare for evacuation"],
+                                correctIndex: 2,
+                                timeLimit: 18
+                            },
+                            {
+                                template: "Fire knockdown achieved but reignition occurring. Response?",
+                                options: ["Increase suppression rate", "Change suppression agent", "Improve ventilation", "Check for hidden fire"],
+                                correctIndex: 3,
+                                timeLimit: 15
+                            },
+                            {
+                                template: "Multiple fire types in same space. Suppression priority?",
+                                options: ["Treat as single fire type", "Use universal agent", "Address most dangerous first", "Evacuate and flood"],
+                                correctIndex: 2,
+                                timeLimit: 18
+                            },
+                            {
+                                template: "Suppression creating excessive steam. Adjustment needed?",
+                                options: ["Continue water application", "Switch to fog pattern", "Reduce water pressure", "Stop water application"],
+                                correctIndex: 1,
+                                timeLimit: 15
+                            },
+                            {
+                                template: "Wind affecting suppression effectiveness. Tactical change?",
+                                options: ["Increase agent volume", "Reposition attack angle", "Wait for wind change", "Switch suppression method"],
+                                correctIndex: 1,
+                                timeLimit: 16
                             }
                         ],
                         hard: [
@@ -2361,6 +2604,69 @@
                                 options: ["Attack largest fire", "Protect critical systems", "Create firebreaks", "Coordinate evacuation"],
                                 correctIndex: 1,
                                 timeLimit: 12
+                            },
+                            {
+                                template: "Suppression system failure during critical phase. Emergency response?",
+                                options: ["Attempt manual repair", "Switch to portable systems", "Evacuate immediately", "Emergency flooding"],
+                                correctIndex: 1,
+                                timeLimit: 10
+                            },
+                            {
+                                template: "Toxic gas production from suppression reaction. Critical decision?",
+                                options: ["Continue suppression", "Change suppression agent", "Evacuate and ventilate", "Emergency SCBA protocol"],
+                                correctIndex: 2,
+                                timeLimit: 12
+                            },
+                            {
+                                template: "Structural collapse imminent, fire spreading. Final suppression effort?",
+                                options: ["Aggressive interior attack", "Defensive boundary cooling", "Emergency evacuation", "Flood compartment"],
+                                correctIndex: 2,
+                                timeLimit: 8
+                            },
+                            {
+                                template: "Multiple compartment involvement, limited water. Resource allocation?",
+                                options: ["Focus all water on main fire", "Distribute equally", "Protect escape routes", "Protect critical systems"],
+                                correctIndex: 3,
+                                timeLimit: 10
+                            }
+                        ]
+                    },
+                    // New category for tactical decisions
+                    tactical: {
+                        easy: [
+                            {
+                                template: "Fire team reports crew fatigue after {timeElapsed} minutes. Decision?",
+                                options: ["Continue current crew", "Rotate crew members", "Add additional personnel", "Take mandatory rest"],
+                                correctIndex: 1,
+                                timeLimit: 25
+                            },
+                            {
+                                template: "Ventilation improving visibility to {visibility}%. Tactical advantage?",
+                                options: ["No significant change", "Improved suppression capability", "Better crew safety", "All of the above"],
+                                correctIndex: 3,
+                                timeLimit: 20
+                            }
+                        ],
+                        medium: [
+                            {
+                                template: "Communications lost with interior crew. Priority action?",
+                                options: ["Continue operations", "Establish backup communication", "Evacuate interior crew", "Send runner for status"],
+                                correctIndex: 2,
+                                timeLimit: 15
+                            },
+                            {
+                                template: "Fire behavior indicating potential flashover. Crew positioning?",
+                                options: ["Maintain current positions", "Move to safer positions", "Evacuate compartment", "Increase suppression rate"],
+                                correctIndex: 2,
+                                timeLimit: 12
+                            }
+                        ],
+                        hard: [
+                            {
+                                template: "Command structure compromised, multiple emergencies. Leadership decision?",
+                                options: ["Maintain current command", "Delegate area commanders", "Central control only", "Abandon coordination"],
+                                correctIndex: 1,
+                                timeLimit: 10
                             }
                         ]
                     }
@@ -2373,10 +2679,17 @@
                 const threat = fireProgression.getThreatLevel();
                 const timeElapsed = Math.floor(state.timeElapsed / 60);
                 
-                // Select question type based on current situation
+                // Select question type based on fire development timeline
                 let questionType = 'assessment';
-                if (state.timeElapsed > 120) { // After 2 minutes, focus on suppression
-                    questionType = Math.random() > 0.4 ? 'suppression' : 'assessment';
+                if (timeElapsed < 5) {
+                    // First 5 minutes: Assessment and initial response
+                    questionType = Math.random() > 0.3 ? 'assessment' : 'tactical';
+                } else if (timeElapsed < 15) {
+                    // 5-15 minutes: Active suppression phase
+                    questionType = Math.random() > 0.6 ? 'suppression' : (Math.random() > 0.5 ? 'assessment' : 'tactical');
+                } else {
+                    // 15+ minutes: Critical decisions and emergency tactics
+                    questionType = Math.random() > 0.5 ? 'tactical' : 'suppression';
                 }
                 
                 const difficulty = this.calculateDynamicDifficulty(threat);
@@ -2402,7 +2715,34 @@
                 const difficultyMap = { 1: 'easy', 2: 'medium', 3: 'hard' };
                 const level = difficultyMap[difficulty] || 'easy';
                 const templates = this.questionTemplates[questionType][level];
-                return templates[Math.floor(Math.random() * templates.length)];
+                
+                // Filter out recently used templates to prevent immediate repeats
+                const availableTemplates = templates.filter(template => {
+                    const templateKey = `${questionType}-${level}-${template.template.substring(0, 20)}`;
+                    return !this.recentlyUsedTemplates.includes(templateKey);
+                });
+                
+                // If all templates have been used recently, reset the recent list but exclude last used
+                if (availableTemplates.length === 0) {
+                    console.log('All templates recently used, resetting with exclusion');
+                    const lastUsed = this.recentlyUsedTemplates[this.recentlyUsedTemplates.length - 1];
+                    this.recentlyUsedTemplates = [lastUsed]; // Keep only the last used
+                    return this.selectDynamicTemplate(questionType, difficulty); // Recursive call
+                }
+                
+                // Select random template from available ones
+                const selectedTemplate = availableTemplates[Math.floor(Math.random() * availableTemplates.length)];
+                
+                // Track this template as recently used
+                const templateKey = `${questionType}-${level}-${selectedTemplate.template.substring(0, 20)}`;
+                this.recentlyUsedTemplates.push(templateKey);
+                
+                // Keep recent list manageable (last 5 templates)
+                if (this.recentlyUsedTemplates.length > 5) {
+                    this.recentlyUsedTemplates.shift();
+                }
+                
+                return selectedTemplate;
             }
 
             populateDynamicTemplate(template, fireProgression, scenarioContext) {
@@ -2410,18 +2750,25 @@
                 let text = template.template;
                 
                 // Dynamic replacements based on actual fire state
+                const timeElapsed = Math.floor(state.timeElapsed / 60);
+                const currentPhase = this.getFirePhase(timeElapsed);
+                
                 const replacements = {
                     '{fireDescription}': this.getFireDescription(fireProgression.fireType, state),
                     '{temperature}': Math.round(state.temperature),
                     '{oxygenLevel}': Math.round(state.oxygenLevel),
                     '{spreadRadius}': Math.round(state.spreadRadius),
-                    '{timeElapsed}': Math.floor(state.timeElapsed / 60),
+                    '{timeElapsed}': timeElapsed,
                     '{visibility}': Math.round(state.visibility),
                     '{threatLevel}': fireProgression.getThreatLevel(),
                     '{timeToFlashover}': this.calculateTimeToFlashover(fireProgression),
                     '{fireType}': fireProgression.fireType,
                     '{wrongAgent}': this.getWrongAgent(fireProgression.fireType),
-                    '{correctAgent}': this.getCorrectAgent(fireProgression.fireType)
+                    '{correctAgent}': this.getCorrectAgent(fireProgression.fireType),
+                    '{currentPhase}': currentPhase,
+                    '{phaseDescription}': this.getPhaseDescription(currentPhase, fireProgression),
+                    '{affectedCompartments}': state.affectedCompartments.length,
+                    '{location}': fireProgression.location
                 };
                 
                 // Apply all replacements
@@ -2514,6 +2861,24 @@
 
             getCorrectAgent(fireType) {
                 return { 'electrical': 'CO2', 'fuel': 'foam', 'cooking': 'Class K', 'materials': 'water' }[fireType] || 'water';
+            }
+            
+            getFirePhase(timeElapsed) {
+                if (timeElapsed < 5) return 'INITIAL DETECTION';
+                if (timeElapsed < 15) return 'ACTIVE SUPPRESSION';
+                if (timeElapsed < 25) return 'EMERGENCY RESPONSE';
+                return 'CRITICAL OPERATIONS';
+            }
+            
+            getPhaseDescription(phase, fireProgression) {
+                const state = fireProgression.currentState;
+                const descriptions = {
+                    'INITIAL DETECTION': `Fire discovered in ${fireProgression.location}. Assessment and initial response window.`,
+                    'ACTIVE SUPPRESSION': `Fire established, spread radius ${Math.round(state.spreadRadius)}ft. Active firefighting phase.`,
+                    'EMERGENCY RESPONSE': `${state.affectedCompartments.length} compartments involved. Emergency tactics required.`,
+                    'CRITICAL OPERATIONS': `Extended firefight. Critical resource and safety decisions.`
+                };
+                return descriptions[phase] || 'Fire emergency in progress';
             }
 
             adjustTimeForPerformance(baseTime) {
@@ -2789,8 +3154,10 @@
             const question = dqnQuestionGenerator.generateDynamicQuestion(currentFireProgression, currentScenario);
             currentDQNQuestion = question; // Store for use in selectAnswer
             
-            // Advance fire progression slightly for next question
-            currentFireProgression.advance(30); // 30 seconds advance
+            // Advance fire progression realistically for next question
+            // 2-3 minutes per question for realistic fire development
+            const advanceTime = 120 + Math.random() * 60; // 2-3 minutes (120-180 seconds)
+            currentFireProgression.advance(advanceTime);
             
             const quizArea = document.getElementById('quizArea');
             
@@ -2798,11 +3165,13 @@
                 <div class="question-container">
                     <div class="question-header">
                         <h3>🚨 Scenario: ${currentScenario.title}</h3>
-                        <p><strong>Location:</strong> ${currentScenario.location}</p>
+                        <p><strong>Location:</strong> ${currentScenario.location} | <strong>Phase:</strong> ${dqnQuestionGenerator.getFirePhase(Math.floor(currentFireProgression.currentState.timeElapsed / 60))}</p>
                         <div class="fire-status">
                             <span>🔥 Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F</span>
                             <span>💨 Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}%</span>
                             <span>⏱️ Time: ${Math.floor(currentFireProgression.currentState.timeElapsed / 60)}:${String(Math.floor(currentFireProgression.currentState.timeElapsed % 60)).padStart(2, '0')}</span>
+                            <span>🏢 Affected: ${currentFireProgression.currentState.affectedCompartments.join(', ')}</span>
+                            ${currentFireProgression.currentState.ventilationSpread ? '<span>🌪️ HVAC Contaminated</span>' : ''}
                         </div>
                         <h4>Question ${currentQuestionIndex + 1} of 10</h4>
                     </div>
