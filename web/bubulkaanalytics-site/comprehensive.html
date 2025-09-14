@@ -4,7 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Shipboard Fire Response Training - Complete DCA Training System</title>
-    <script src="dca-feedback-integration.js"></script>
+    <!-- Embedded DCA Feedback Integration for Deployment -->
+    <script>
+        // Embedded DCA Feedback Integration System for deployment
+        class DCAFeedbackIntegration {
+            constructor() {
+                this.sessionId = 'dca_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                this.sessionData = {
+                    id: this.sessionId,
+                    startTime: Date.now(),
+                    responses: [],
+                    feedbackEnabled: true
+                };
+            }
+
+            async startDCAFeedbackSession(config) {
+                this.sessionData = { ...this.sessionData, ...config, startTime: Date.now() };
+                console.log('🔥 DCA Feedback Session Started:', this.sessionData.id);
+                return this.sessionData.id;
+            }
+
+            async submitDCAResponse(questionData, selectedResponse, responseTimeMs) {
+                const responseData = {
+                    sessionId: this.sessionData.id,
+                    timestamp: Date.now(),
+                    scenario: questionData.scenario,
+                    question: questionData.question,
+                    selectedResponse: selectedResponse,
+                    responseTimeMs: responseTimeMs,
+                    options: questionData.options,
+                    correctAnswer: questionData.correct
+                };
+                this.sessionData.responses.push(responseData);
+                console.log('🔥 DCA Response Submitted:', responseData);
+                return { success: true, evaluation: 'stored locally' };
+            }
+
+            async endDCASession() {
+                console.log('🔥 DCA Session Ended:', this.sessionData);
+                return this.sessionData;
+            }
+        }
+
+        // Initialize feedback integration
+        window.dcaFeedback = new DCAFeedbackIntegration();
+        window.startDCAFeedbackSession = window.dcaFeedback.startDCAFeedbackSession.bind(window.dcaFeedback);
+        console.log('🔥 DCA Feedback Integration Loaded (embedded for deployment)');
+    </script>
     <style>
         * {
             margin: 0;
@@ -1164,19 +1210,54 @@
 
         // Make functions globally accessible
         window.startScenarioMode = function() {
-            console.log('Starting Scenario Mode');
-            document.getElementById('modeSelection').style.display = 'none';
-            document.getElementById('assessmentContent').classList.add('active');
+            console.log('🎯 startScenarioMode function called');
+            console.log('Current mode before change:', currentMode);
+            
+            const modeSelection = document.getElementById('modeSelection');
+            const assessmentContent = document.getElementById('assessmentContent');
+            
+            console.log('modeSelection element:', modeSelection);
+            console.log('assessmentContent element:', assessmentContent);
+            
+            if (modeSelection) {
+                modeSelection.style.display = 'none';
+                console.log('Mode selection hidden');
+            }
+            
+            if (assessmentContent) {
+                assessmentContent.classList.add('active');
+                console.log('Assessment content activated');
+            }
+            
             currentMode = 'scenario';
+            console.log('Mode set to scenario');
             showScenarioInterface();
+            console.log('showScenarioInterface called');
         }
 
         window.startAssessmentMode = function() {
-            console.log('Starting Assessment Mode');
+            console.log('🎯 startAssessmentMode function called');
+            console.log('Current mode before change:', currentMode);
+            
             try {
-                document.getElementById('modeSelection').style.display = 'none';
-                document.getElementById('assessmentContent').classList.add('active');
+                const modeSelection = document.getElementById('modeSelection');
+                const assessmentContent = document.getElementById('assessmentContent');
+                
+                console.log('modeSelection element:', modeSelection);
+                console.log('assessmentContent element:', assessmentContent);
+                
+                if (modeSelection) {
+                    modeSelection.style.display = 'none';
+                    console.log('Mode selection hidden');
+                }
+                
+                if (assessmentContent) {
+                    assessmentContent.classList.add('active');
+                    console.log('Assessment content activated');
+                }
+                
                 currentMode = 'assessment';
+                console.log('Mode set to assessment');
                 console.log('About to call initializeAssessment');
                 initializeAssessment();
                 console.log('Assessment initialized successfully');
@@ -2846,7 +2927,7 @@
                     
                     <div class="feedback-message">
                         ${percentage >= 80 ? 
-                            ''Excellent performance! You demonstrate strong understanding of fire response procedures and tactical decision-making in realistic scenarios.' :
+                            'Excellent performance! You demonstrate strong understanding of fire response procedures and tactical decision-making in realistic scenarios.' :
                             percentage >= 60 ?
                             'Good foundation with room for improvement. Review fire classification and suppression procedures in dynamic situations.' :
                             'Additional training recommended. Focus on fire fundamentals and emergency response procedures under pressure.'
