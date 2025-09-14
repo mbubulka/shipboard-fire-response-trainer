@@ -1150,20 +1150,6 @@
     </div>
 
     <script>
-        // Debug: Check if script is loading
-        console.log('🔧 Main script is loading...');
-        
-        // Debug: Test basic JavaScript functionality
-        try {
-            window.testScriptLoading = function() {
-                console.log('✅ JavaScript execution is working');
-                return true;
-            };
-            console.log('✅ Function assignment is working');
-        } catch (error) {
-            console.error('❌ Basic JavaScript error:', error);
-        }
-        
         // Global Configuration (API keys removed for security)
         const HF_API_KEY = ''; // Add your API key for local testing
         const AI_FEEDBACK_ENABLED = false; // Disabled for deployment
@@ -1186,7 +1172,7 @@
         }
 
         window.startAssessmentMode = function() {
-            console.log('🎯 Starting Assessment Mode function called');
+            console.log('Starting Assessment Mode');
             try {
                 document.getElementById('modeSelection').style.display = 'none';
                 document.getElementById('assessmentContent').classList.add('active');
@@ -2860,7 +2846,7 @@
                     
                     <div class="feedback-message">
                         ${percentage >= 80 ? 
-                            'Excellent performance! You demonstrate strong understanding of fire response procedures and tactical decision-making in realistic scenarios.' :
+                            ''Excellent performance! You demonstrate strong understanding of fire response procedures and tactical decision-making in realistic scenarios.' :
                             percentage >= 60 ?
                             'Good foundation with room for improvement. Review fire classification and suppression procedures in dynamic situations.' :
                             'Additional training recommended. Focus on fire fundamentals and emergency response procedures under pressure.'
@@ -2881,18 +2867,6 @@
         } else {
             console.log('Running in standalone mode');
         }
-        
-        // Debug: Verify critical functions are loaded
-        console.log('🔧 Verifying function availability...');
-        const criticalFunctions = ['startAssessmentMode', 'startScenarioMode', 'returnToMenu'];
-        criticalFunctions.forEach(funcName => {
-            if (typeof window[funcName] === 'function') {
-                console.log(`✅ ${funcName} is available`);
-            } else {
-                console.error(`❌ ${funcName} is NOT available`);
-            }
-        });
-        console.log('🔧 Script loading completed');
     </script>
 </body>
 </html>
