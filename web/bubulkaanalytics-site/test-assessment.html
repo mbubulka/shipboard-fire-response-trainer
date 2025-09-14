@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Function Test</title>
+</head>
+<body>
+    <h1>Testing Assessment Function</h1>
+    <button onclick="testStartAssessmentMode()">Test startAssessmentMode</button>
+    <div id="result"></div>
+
+    <script>
+        // Test if the function loads correctly
+        window.startAssessmentMode = function() {
+            console.log('Starting Assessment Mode');
+            document.getElementById('result').innerHTML = '<p>✅ startAssessmentMode function is working!</p>';
+            alert('startAssessmentMode function executed successfully!');
+        };
+
+        window.testStartAssessmentMode = function() {
+            try {
+                if (typeof startAssessmentMode === 'function') {
+                    document.getElementById('result').innerHTML = '<p>✅ Function is defined and callable</p>';
+                    startAssessmentMode();
+                } else {
+                    document.getElementById('result').innerHTML = '<p>❌ Function is not defined</p>';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p>❌ Error: ' + error.message + '</p>';
+                console.error('Error:', error);
+            }
+        };
+
+        // Test on load
+        window.addEventListener('load', function() {
+            console.log('Page loaded, testing function availability...');
+            if (typeof startAssessmentMode === 'function') {
+                console.log('✅ startAssessmentMode is available');
+            } else {
+                console.log('❌ startAssessmentMode is NOT available');
+            }
+        });
+    </script>
+</body>
+</html>
