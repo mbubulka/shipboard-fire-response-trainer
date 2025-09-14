@@ -2555,7 +2555,52 @@
             
             // Initialize a DQN scenario for the assessment if not already done
             if (!currentScenario || !currentFireProgression) {
-                generateRandomScenario();
+                // Initialize fire progression based on realistic parameters
+                const scenarios = [
+                    {
+                        title: "Engine Room Fuel Fire",
+                        location: "Main Engine Room",
+                        fireType: "fuel",
+                        initialConditions: { temperature: 90, oxygen: 21 },
+                        criticalSystems: ["main propulsion", "electrical generation", "fuel systems"],
+                        description: "High-pressure fuel line ruptures near hot manifold during normal operations."
+                    },
+                    {
+                        title: "Galley Deep Fryer Fire", 
+                        location: "Main Galley",
+                        fireType: "cooking",
+                        initialConditions: { temperature: 120, oxygen: 20 },
+                        criticalSystems: ["food service", "ventilation", "adjacent berthing"],
+                        description: "Deep fryer oil overheats during meal preparation and ignites."
+                    },
+                    {
+                        title: "Bridge Electronics Fire",
+                        location: "Ship's Bridge", 
+                        fireType: "electrical",
+                        initialConditions: { temperature: 75, oxygen: 21 },
+                        criticalSystems: ["navigation", "communications", "ship control"],
+                        description: "Navigation console sparks and ignites during night watch."
+                    },
+                    {
+                        title: "Berthing Materials Fire",
+                        location: "Forward Berthing",
+                        fireType: "materials", 
+                        initialConditions: { temperature: 80, oxygen: 20 },
+                        criticalSystems: ["crew safety", "structural integrity", "escape routes"],
+                        description: "Bedding and personal effects ignite from electrical fault."
+                    }
+                ];
+                
+                currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+                
+                // Initialize fire progression with realistic physics
+                currentFireProgression = new FireProgression(
+                    currentScenario.fireType,
+                    currentScenario.location, 
+                    currentScenario.initialConditions
+                );
+                
+                scenarioStartTime = Date.now();
             }
             
             showQuestion();
