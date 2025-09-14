@@ -2,7 +2,7 @@
 """
 NFPA 1001 Training Data Processor
 Extracts and processes NFPA 1001 firefighter qualification standards
-for integration into CVN Fire Response Training System
+for integration into Marine Fire Response Training System
 """
 
 import json
@@ -60,10 +60,10 @@ class NFPATrainingProcessor:
                 ]
             },
             "marine_firefighting": {
-                "description": "Shipboard and marine fire response (CVN specific)",
+                "description": "Shipboard and marine fire response systems",
                 "topics": [
                     "Ship systems and layout",
-                    "Naval fire suppression systems",
+                    "Marine fire suppression systems",
                     "Compartment firefighting",
                     "Damage control procedures",
                     "Aviation fuel fire response"
@@ -131,14 +131,14 @@ class NFPATrainingProcessor:
             }
         ])
         
-        # CVN-Specific Marine Firefighting Scenarios
+        # Marine Firefighting Scenarios
         scenarios.extend([
             {
                 "id": "nfpa_marine_001",
-                "title": "AIRCRAFT HANGAR FIRE - CVN OPERATIONS",
+                "title": "AIRCRAFT HANGAR FIRE - MARINE OPERATIONS",
                 "category": "marine_firefighting", 
-                "nfpa_reference": "NFPA 1001 + Naval Fire Fighting Standards",
-                "description": "Class B fire involving JP-5 aviation fuel in aircraft hangar bay. Aircraft and personnel at risk.",
+                "nfpa_reference": "NFPA 1001 + Marine Fire Fighting Standards",
+                "description": "Class B fire involving aviation fuel in aircraft hangar bay. Aircraft and personnel at risk.",
                 "learning_objectives": [
                     "Apply marine firefighting principles per NFPA 1001",
                     "Demonstrate AFFF system operation",
@@ -146,8 +146,8 @@ class NFPATrainingProcessor:
                     "Coordinate with damage control teams"
                 ],
                 "scenario_details": {
-                    "location": "CVN Aircraft Hangar Bay",
-                    "conditions": "JP-5 fuel fire, heavy smoke, confined space",
+                    "location": "Marine Aircraft Hangar Bay",
+                    "conditions": "Aviation fuel fire, heavy smoke, confined space",
                     "resources": "Ship's fire party, damage control teams, flight deck crew",
                     "special_considerations": "Sea state, aircraft movement limitations"
                 },
@@ -221,8 +221,8 @@ class NFPATrainingProcessor:
             },
             {
                 "category": "marine_ops",
-                "prompt": "As a naval fire instructor combining NFPA 1001 principles with shipboard operations, explain the unique considerations for firefighting aboard naval vessels.",
-                "context": "Naval firefighting applies NFPA 1001 fundamentals adapted for marine environment and ship systems."
+                "prompt": "As a marine fire instructor combining NFPA 1001 principles with shipboard operations, explain the unique considerations for firefighting aboard marine vessels.",
+                "context": "Marine firefighting applies NFPA 1001 fundamentals adapted for marine environment and ship systems."
             }
         ]
         
