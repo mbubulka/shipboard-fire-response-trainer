@@ -2685,7 +2685,7 @@
             currentDQNQuestion = question; // Store for use in selectAnswer
             
             // Advance fire progression slightly for next question
-            currentFireProgression.updateProgression(30); // 30 seconds advance
+            currentFireProgression.advance(30); // 30 seconds advance
             
             const quizArea = document.getElementById('quizArea');
             
