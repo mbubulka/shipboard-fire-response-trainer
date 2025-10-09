@@ -1,0 +1,17 @@
+# This file disables automatic R package workflows
+# This repository is primarily for web content, not R packages
+
+name: Disable Auto Workflows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Info
+        run: |
+          echo "This repository contains web applications and static sites."
+          echo "R-related workflows have been disabled."
+          echo "Only static site deployment is active."
