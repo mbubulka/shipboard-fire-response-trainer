@@ -311,7 +311,7 @@
     </div>
 
     <!-- Tab Navigation -->
-    <div class="dashboard-container">
+    <div class="container-fluid">
         <div class="tab-navigation" style="margin-bottom: 20px;">
             <button class="tab-button active" onclick="showTab('conditions')" id="conditions-tab">
                 <i class="fas fa-tachometer-alt"></i> Current Conditions
@@ -323,9 +323,6 @@
                 <i class="fas fa-book-open"></i> Methodology
             </button>
         </div>
-    </div>
-
-    <div class="dashboard-container">
         <!-- Tab 1: Current Conditions -->
         <div id="conditions-content" class="tab-content active">
             <!-- Key metrics row - EXACT from Shiny -->
@@ -529,27 +526,39 @@
             </div>
         </div>
     </div>
+    </div> <!-- Close container-fluid -->
 
     <script>
         // Tab functionality
         function showTab(tabId) {
+            console.log('showTab called with:', tabId);
+            
             // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
+            console.log('Found tab contents:', contents.length);
             contents.forEach(content => {
                 content.style.display = 'none';
+                content.classList.remove('active');
             });
             
             // Remove active class from all buttons
             const buttons = document.querySelectorAll('.tab-button');
+            console.log('Found tab buttons:', buttons.length);
             buttons.forEach(button => {
                 button.classList.remove('active');
             });
             
             // Show selected tab
-            document.getElementById(tabId + '-content').style.display = 'block';
+            const targetTab = document.getElementById(tabId + '-content');
+            console.log('Target tab element:', targetTab);
+            if (targetTab) {
+                targetTab.style.display = 'block';
+                targetTab.classList.add('active');
+            }
             
             // Add active class to clicked button
             const activeButton = document.querySelector(`[onclick="showTab('${tabId}')"]`);
+            console.log('Active button:', activeButton);
             if (activeButton) {
                 activeButton.classList.add('active');
             }
