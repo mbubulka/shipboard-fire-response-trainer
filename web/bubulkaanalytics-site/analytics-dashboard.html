@@ -223,7 +223,7 @@
                     id="potomac-iframe"
                     src="https://mbubulka.github.io/homework-0/app/potomac_dashboard_professional_static.html"
                     width="100%" 
-                    height="800px" 
+                    height="1200px" 
                     frameborder="0"
                     style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 </iframe>
@@ -292,8 +292,32 @@
             if (event.data.type === 'iframe-height' && event.data.source === 'potomac-dashboard') {
                 const iframe = document.getElementById('potomac-iframe');
                 if (iframe) {
-                    iframe.style.height = event.data.height + 'px';
+                    // Add some padding to ensure full content is visible
+                    iframe.style.height = (event.data.height + 50) + 'px';
+                    console.log('Iframe resized to:', event.data.height + 50, 'px');
                 }
+            }
+        });
+
+        // Fallback iframe resizing in case postMessage doesn't work
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('potomac-iframe');
+            if (iframe) {
+                iframe.onload = function() {
+                    // Give iframe time to fully load then adjust size
+                    setTimeout(function() {
+                        try {
+                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                            const height = iframeDoc.body.scrollHeight;
+                            if (height > 800) {
+                                iframe.style.height = (height + 50) + 'px';
+                                console.log('Iframe auto-resized to:', height + 50, 'px');
+                            }
+                        } catch (e) {
+                            console.log('Cross-origin iframe - using fixed height');
+                        }
+                    }, 2000);
+                };
             }
         });
 
