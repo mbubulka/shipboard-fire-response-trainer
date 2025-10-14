@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advanced AI & Data Solutions - Interactive training systems and analytics dashboards by Michael Bubulka">
+    <meta name="keywords" content="AI, Data Analytics, Fire Safety Training, Machine Learning, Data Visualization">
+    <meta name="author" content="Michael Bubulka">
     <title>Bubulka Analytics - AI & Data Solutions</title>
     <style>
+        :root {
+            --primary-blue: #2980b9;
+            --accent-blue: #6bb6ff;
+            --dark-blue: #3742fa;
+            --accent-gold: #ffd700;
+            --success-green: #28a745;
+            --neutral-gray: #6c757d;
+            
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-hover: rgba(255, 255, 255, 0.15);
+            
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.3);
+            --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.2);
+            
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -13,10 +35,16 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
+            background: linear-gradient(
+                135deg, 
+                var(--primary-blue) 0%, 
+                var(--accent-blue) 50%, 
+                var(--dark-blue) 100%
+            );
             color: white;
             min-height: 100vh;
             padding: 40px 20px;
+            line-height: 1.6;
         }
         
         .container {
@@ -53,40 +81,56 @@
         }
         
         .header h1 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 700;
         }
         
         .header p {
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 3vw, 1.4rem);
             opacity: 0.9;
             margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
             margin-top: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .project-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(8px);
+            transition: var(--transition);
             text-decoration: none;
             color: white;
             display: block;
+            position: relative;
+            overflow: hidden;
         }
         
-        .project-card:hover {
+        .project-card:hover,
+        .project-card:focus {
             transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            background: var(--glass-hover);
+            box-shadow: var(--shadow-heavy);
+            outline: none;
+        }
+        
+        .project-card:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 4px;
         }
         
         .project-icon {
@@ -98,7 +142,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #ffd700;
+            color: var(--accent-gold);
         }
         
         .project-description {
@@ -116,11 +160,11 @@
         }
         
         .status-live {
-            background: #28a745;
+            background: var(--success-green);
         }
         
         .status-coming {
-            background: #6c757d;
+            background: var(--neutral-gray);
         }
         
         .footer {
@@ -139,32 +183,89 @@
             display: inline-flex;
             align-items: center;
             padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
             border-radius: 25px;
             color: white;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
         }
         
-        .social-link:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .social-link:hover,
+        .social-link:focus {
+            background: var(--glass-hover);
             border-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-light);
+            outline: none;
+        }
+        
+        .social-link:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
         }
         
         .social-link i {
             margin-right: 8px;
             font-size: 1.1rem;
         }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .project-card {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .project-card {
+                border: 1px solid #ccc;
+                background: white;
+                color: black;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <header class="header">
             <div class="profile-section">
                 <img src="Michael_9028-Bkgd-square.jpg" alt="Michael Bubulka - Analytics Professional" class="profile-image">
                 <h1>📊 Bubulka Analytics</h1>
@@ -172,50 +273,52 @@
             <p>Advanced AI & Data Solutions</p>
             <p>Transforming data into intelligent insights for modern challenges</p>
             
-            <div class="social-links">
-                <a href="https://github.com/mbubulka" class="social-link" target="_blank">
-                    <span>⚡</span> GitHub
+            <nav class="social-links" aria-label="Social media links">
+                <a href="https://github.com/mbubulka" class="social-link" target="_blank" rel="noopener" aria-label="Visit Michael's GitHub profile">
+                    <span aria-hidden="true">⚡</span> GitHub
                 </a>
-                <a href="https://www.linkedin.com/in/michael-bubulka" class="social-link" target="_blank">
-                    <span>💼</span> LinkedIn
+                <a href="https://www.linkedin.com/in/michael-bubulka" class="social-link" target="_blank" rel="noopener" aria-label="Visit Michael's LinkedIn profile">
+                    <span aria-hidden="true">💼</span> LinkedIn
                 </a>
-                <a href="https://www.datacamp.com/portfolio/mikebubulka" class="social-link" target="_blank">
-                    <span>📊</span> DataCamp
+                <a href="https://www.datacamp.com/portfolio/mikebubulka" class="social-link" target="_blank" rel="noopener" aria-label="Visit Michael's DataCamp portfolio">
+                    <span aria-hidden="true">📊</span> DataCamp
                 </a>
-            </div>
-        </div>
+            </nav>
+        </header>
         
-        <h2 style="margin-bottom: 30px; font-size: 2rem;">Featured Projects</h2>
-        
-        <div class="projects-grid">
-            <a href="firetrainer/comprehensive.html" class="project-card">
-                <div class="project-icon">🔥</div>
-                <div class="project-title">Shipboard Fire Response Training</div>
-                <div class="project-description">
-                    Comprehensive DCA training system with AI-powered scenario analysis, multiple-choice assessments, 
-                    and real-time feedback using DQN + Mistral-7B AI integration.
-                </div>
-                <span class="status-badge status-live">LIVE DEMO</span>
-            </a>
+        <main>
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Featured Projects</h2>
             
-            <a href="analytics-dashboard.html" class="project-card">
-                <div class="project-icon">📊</div>
-                <div class="project-title">Analytics Dashboard</div>
-                <div class="project-description">
-                    Interactive data visualization platform featuring river safety analytics, predictive forecasting, and business intelligence insights.
+            <section class="projects-grid" aria-label="Featured projects">
+                <a href="firetrainer/comprehensive.html" class="project-card" aria-describedby="fire-training-desc">
+                    <div class="project-icon" aria-hidden="true">🔥</div>
+                    <h3 class="project-title">Shipboard Fire Response Training</h3>
+                    <p class="project-description" id="fire-training-desc">
+                        Comprehensive DCA training system with AI-powered scenario analysis, multiple-choice assessments, 
+                        and real-time feedback using DQN + Mistral-7B AI integration.
+                    </p>
+                    <span class="status-badge status-live">LIVE DEMO</span>
+                </a>
+                
+                <a href="analytics-dashboard.html" class="project-card" aria-describedby="analytics-desc">
+                    <div class="project-icon" aria-hidden="true">📊</div>
+                    <h3 class="project-title">Analytics Dashboard</h3>
+                    <p class="project-description" id="analytics-desc">
+                        Interactive data visualization platform featuring river safety analytics, predictive forecasting, and business intelligence insights.
+                    </p>
+                    <span class="status-badge status-live">LIVE DEMO</span>
+                </a>
+                
+                <div class="project-card" style="opacity: 0.7;" role="article" aria-describedby="ml-projects-desc">
+                    <div class="project-icon" aria-hidden="true">🤖</div>
+                    <h3 class="project-title">ML Projects</h3>
+                    <p class="project-description" id="ml-projects-desc">
+                        Collection of machine learning solutions for predictive analytics and automation.
+                    </p>
+                    <span class="status-badge status-coming">COMING SOON</span>
                 </div>
-                <span class="status-badge status-live">LIVE DEMO</span>
-            </a>
-            
-            <a href="#" class="project-card" style="opacity: 0.7;">
-                <div class="project-icon">🤖</div>
-                <div class="project-title">ML Projects</div>
-                <div class="project-description">
-                    Collection of machine learning solutions for predictive analytics and automation.
-                </div>
-                <span class="status-badge status-coming">COMING SOON</span>
-            </a>
-        </div>
+            </section>
+        </main>
         
         <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 15px; margin: 40px 0 20px 0; border-radius: 5px; max-width: 800px; margin-left: auto; margin-right: auto;">
             <p style="font-size: 0.9rem; opacity: 0.9; margin: 0; text-align: center;">
@@ -223,9 +326,9 @@
             </p>
         </div>
         
-        <div class="footer">
+        <footer class="footer">
             <p>© 2025 Bubulka Analytics. Advanced AI and data solutions.</p>
-        </div>
+        </footer>
     </div>
 </body>
 </html>
