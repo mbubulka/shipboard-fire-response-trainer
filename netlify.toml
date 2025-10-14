@@ -1,5 +1,6 @@
 [build]
-  publish = "web/bubulkaanalytics-site"
+  base = "web/bubulkaanalytics-site"
+  publish = "."
   command = ""
 
 [build.environment]
