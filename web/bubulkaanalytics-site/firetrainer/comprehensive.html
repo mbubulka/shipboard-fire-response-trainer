@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
         <title>Shipboard Fire Response Training - Complete DCA Training System</title>
     <!-- Embedded DCA Feedback Integration for Deployment -->
     <script>
@@ -20,7 +23,7 @@
 
             async startDCAFeedbackSession(config) {
                 this.sessionData = { ...this.sessionData, ...config, startTime: Date.now() };
-                console.log('🔥 DCA Feedback Session Started:', this.sessionData.id);
+                console.log('DCA Feedback Session Started:', this.sessionData.id);
                 return this.sessionData.id;
             }
 
@@ -36,12 +39,12 @@
                     correctAnswer: questionData.correct
                 };
                 this.sessionData.responses.push(responseData);
-                console.log('🔥 DCA Response Submitted:', responseData);
+                console.log('DCA Response Submitted:', responseData);
                 return { success: true, evaluation: 'stored locally' };
             }
 
             async endDCASession() {
-                console.log('🔥 DCA Session Ended:', this.sessionData);
+                console.log('DCA Session Ended:', this.sessionData);
                 return this.sessionData;
             }
         }
@@ -49,7 +52,7 @@
         // Initialize feedback integration
         window.dcaFeedback = new DCAFeedbackIntegration();
         window.startDCAFeedbackSession = window.dcaFeedback.startDCAFeedbackSession.bind(window.dcaFeedback);
-        console.log('🔥 DCA Feedback Integration Loaded (embedded for deployment)');
+        console.log('DCA Feedback Integration Loaded (embedded for deployment)');
     </script>
     <style>
         * {
@@ -60,7 +63,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -187,7 +190,7 @@
             font-size: 1.8rem;
             margin-bottom: 15px;
             text-align: center;
-            color: #ffd700;
+            color: #4a9fd8;
         }
         
         .mode-description {
@@ -208,7 +211,7 @@
         }
         
         .mode-features li::before {
-            content: "✓";
+            content: "•";
             position: absolute;
             left: 0;
         }
@@ -836,7 +839,7 @@
         }
         
         .evidence-list li::before {
-            content: "✓";
+            content: "•";
             position: absolute;
             left: 0;
             color: #27ae60;
@@ -1150,7 +1153,7 @@
                     <span style="margin-right: 8px;">←</span> Back to Portfolio
                 </a>
             </div>
-                        <h1>🔥 Shipboard Fire Response Training</h1>
+                        <h1>Shipboard Fire Response Training</h1>
             <p><strong>When Seconds Count, Training Saves Lives</strong></p>
             <div class="mission-critical-info">
                 <p><strong>Why This Matters:</strong> Ship fires claim lives and vessels because traditional training can't replicate the chaos, time pressure, and complex decision-making of real emergencies. This AI-powered system bridges that gap.</p>
@@ -1358,7 +1361,7 @@
                                     <div class="scenario-stats">
                                         <span class="stat">78% Class B</span>
                                         <span class="stat">15 sec decision</span>
-                                        <span class="stat">🔥 1200°F temp</span>
+                                        <span class="stat">1200°F temp</span>
                                     </div>
                                 </div>
                                 
@@ -1389,7 +1392,7 @@
                                     <p>Maritime fire incidents like the USS Bonhomme Richard (2020) demonstrate the importance of rapid response. Our scenarios help practice decision-making under time constraints based on documented case studies.</p>
                                 </div>
                                 <div class="reality-point">
-                                    <div class="point-icon">⚠️</div>
+                                    <div class="point-icon">!</div>
                                     <h4>Environmental Factors</h4>
                                     <p>Emergency responses involve multiple stressors including visibility, communication challenges, and coordination complexity. Training scenarios incorporate these realistic elements.</p>
                                 </div>
@@ -1747,7 +1750,7 @@
             questionArea.innerHTML = `
                 <div class="dynamic-question-panel">
                     <div class="question-header">
-                        <h4>🔥 Critical Decision Required</h4>
+                        <h4>Critical Decision Required</h4>
                         <div class="time-pressure">
                             <span id="questionTimer">${questionData.timeLimit}</span> seconds remaining
                         </div>
@@ -3164,14 +3167,14 @@
             quizArea.innerHTML = `
                 <div class="question-container">
                     <div class="question-header">
-                        <h3>🚨 Scenario: ${currentScenario.title}</h3>
+                        <h3>Scenario: ${currentScenario.title}</h3>
                         <p><strong>Location:</strong> ${currentScenario.location} | <strong>Phase:</strong> ${dqnQuestionGenerator.getFirePhase(Math.floor(currentFireProgression.currentState.timeElapsed / 60))}</p>
                         <div class="fire-status">
-                            <span>🔥 Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F</span>
-                            <span>💨 Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}%</span>
-                            <span>⏱️ Time: ${Math.floor(currentFireProgression.currentState.timeElapsed / 60)}:${String(Math.floor(currentFireProgression.currentState.timeElapsed % 60)).padStart(2, '0')}</span>
-                            <span>🏢 Affected: ${currentFireProgression.currentState.affectedCompartments.join(', ')}</span>
-                            ${currentFireProgression.currentState.ventilationSpread ? '<span>🌪️ HVAC Contaminated</span>' : ''}
+                            <span>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F</span>
+                            <span>Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}%</span>
+                            <span>Time: ${Math.floor(currentFireProgression.currentState.timeElapsed / 60)}:${String(Math.floor(currentFireProgression.currentState.timeElapsed % 60)).padStart(2, '0')}</span>
+                            <span>Affected: ${currentFireProgression.currentState.affectedCompartments.join(', ')}</span>
+                            ${currentFireProgression.currentState.ventilationSpread ? '<span>HVAC Contaminated</span>' : ''}
                         </div>
                         <h4>Question ${currentQuestionIndex + 1} of 10</h4>
                     </div>
@@ -3245,7 +3248,7 @@
                     </div>
                     
                     <div class="fire-progression-update">
-                        <h4>🔥 Fire Status Update:</h4>
+                        <h4>Fire Status Update:</h4>
                         <p>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F | 
                            Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}% | 
                            Spread: ${Math.round(currentFireProgression.currentState.spreadRadius)} ft</p>
@@ -3311,7 +3314,7 @@
                     </div>
                     
                     <div class="fire-final-status">
-                        <h4>🔥 Final Fire Status:</h4>
+                        <h4>Final Fire Status:</h4>
                         <p>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F | 
                            Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}% | 
                            Spread: ${Math.round(currentFireProgression.currentState.spreadRadius)} ft</p>
