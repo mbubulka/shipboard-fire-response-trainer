@@ -200,9 +200,38 @@
         }
 
         .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            display: block;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-icon.geographic {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .feature-icon.filter {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .feature-icon.chart {
+            background: linear-gradient(135deg, #fd7e14, #e55a4e);
+        }
+
+        .feature-icon.details {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .feature-title {
@@ -416,7 +445,7 @@
             <h2 class="section-title">Dashboard Features</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <span class="feature-icon">🗺️</span>
+                    <div class="feature-icon geographic">M</div>
                     <h3 class="feature-title">Interactive Geographic Analysis</h3>
                     <p class="feature-description">
                         Explore state-level education costs with dynamic U.S. map visualization 
@@ -425,7 +454,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <span class="feature-icon">🔍</span>
+                    <div class="feature-icon filter">F</div>
                     <h3 class="feature-title">Advanced Filtering</h3>
                     <p class="feature-description">
                         Filter by institution type, geographic region, and cost ranges with 
@@ -434,7 +463,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <span class="feature-icon">📊</span>
+                    <div class="feature-icon chart">T</div>
                     <h3 class="feature-title">Trend Analysis</h3>
                     <p class="feature-description">
                         Track 4-year cost changes (2020-2024) and identify institutional 
@@ -443,7 +472,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <span class="feature-icon">🎯</span>
+                    <div class="feature-icon details">D</div>
                     <h3 class="feature-title">Institution Details</h3>
                     <p class="feature-description">
                         Detailed tooltips with tuition, fees, enrollment data, and 
@@ -454,7 +483,7 @@
         </section>
         <!-- Technical Implementation Section -->
         <section class="tech-section">
-            <h2 class="tech-title">🛠️ Technical Implementation</h2>
+            <h2 class="tech-title">Technical Implementation</h2>
             <div class="tech-grid">
                 <span class="tech-tag">Tableau Public</span>
                 <span class="tech-tag">IPEDS Dataset</span>
@@ -471,11 +500,11 @@
         <section class="links-section">
             <a href="https://public.tableau.com/shared/5H2Q36NJ2?:display_count=n&:origin=viz_share_link" 
                class="link-button" target="_blank">
-                📊 View Full Dashboard
+                View Full Dashboard
             </a>
             <a href="https://github.com/mbubulka/ipeds-education-cost-analysis" 
                class="link-button secondary" target="_blank">
-                💻 GitHub Repository
+                GitHub Repository
             </a>
         </section>
     </main>
