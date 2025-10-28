@@ -455,6 +455,12 @@
                             Explore the full <a href="../integrated-analytics.html" style="color: #4caf50;">cross-platform analytics suite</a>.
                         </p>
                     </div>
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                        <p style="margin: 0; font-size: 0.9rem;">
+                            <strong>🎯 State Selection:</strong> Use the <strong>State slicer</strong> in the dashboard above to filter to your selected state. 
+                            Power BI Public requires manual filtering within the dashboard.
+                        </p>
+                    </div>
                     <p style="text-align: center; margin-bottom: 1rem;">
                         <strong>💡 Interactive Dashboard:</strong> Use filters and click on visualizations to explore the data. 
                         The dashboard updates in real-time based on your selections.
@@ -576,7 +582,7 @@
                 `;
                 focusBanner.innerHTML = `
                     🎖️ <strong>Military ROI Focus: ${stateName} (${selectedState.toUpperCase()})</strong> 
-                    - Dashboard configured for ${stateName} GI Bill analysis and cost optimization
+                    - Use the State slicer in the dashboard below to filter to ${stateName} institutions
                 `;
                 
                 // Insert at top of body
@@ -610,8 +616,10 @@
                     `;
                     stateGuidance.innerHTML = `
                         <p style="margin: 0; color: var(--text-primary);">
-                            <strong>💡 ${stateName} Analysis Tips:</strong> Use the state filter in the dashboard above to focus on ${stateName} institutions. 
-                            Compare in-state vs. out-of-state costs and evaluate GI Bill benefit optimization for ${stateName} military families.
+                            <strong>🎯 ${stateName} Analysis Instructions:</strong> 
+                            <br>1. Locate the <strong>State slicer</strong> in the dashboard above
+                            <br>2. Select <strong>"${stateName}"</strong> to filter all visualizations
+                            <br>3. Compare in-state vs. out-of-state costs for ${stateName} military families
                         </p>
                     `;
                     dashboardInfo.parentNode.insertBefore(stateGuidance, dashboardInfo);
