@@ -453,6 +453,26 @@
                 vizElement.parentNode.insertBefore(scriptElement, vizElement);
             </script>
             </div>
+            
+            <!-- Dashboard Instructions -->
+            <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        <strong>Public Dashboard:</strong> This interactive dashboard is publicly accessible - no sign-in required! 
+                        Explore geographic cost patterns across all U.S. states.
+                    </p>
+                </div>
+                <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        <strong>State Selection:</strong> Use the <strong>State filter</strong> in the dashboard above to focus on your selected state. 
+                        Tableau Public requires manual filtering within the dashboard.
+                    </p>
+                </div>
+                <p style="text-align: center; margin-bottom: 1rem;">
+                    <strong>Interactive Features:</strong> Click on map regions, use filters, and hover over data points to explore. 
+                    The dashboard updates in real-time based on your selections.
+                </p>
+            </div>
         </section>
 
         <!-- Features Section -->
@@ -561,8 +581,8 @@
                     box-shadow: var(--shadow-md);
                 `;
                 focusBanner.innerHTML = `
-                    🎯 <strong>Focused Analysis: ${stateName} (${selectedState.toUpperCase()})</strong> 
-                    - Use filters in the dashboard to explore specific ${stateName} institutions
+                    <strong>Geographic Focus: ${stateName} (${selectedState.toUpperCase()})</strong> 
+                    - Use the State filter in the dashboard below to focus on ${stateName} institutions
                 `;
                 
                 // Insert at top of body
