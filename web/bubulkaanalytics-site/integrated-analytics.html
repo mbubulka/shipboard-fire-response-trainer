@@ -778,7 +778,7 @@
             <div class="architecture-grid">
                 <div class="architecture-card">
                     <h3 class="architecture-title">
-                        <span class="architecture-icon">🔗</span>
+                        <span class="architecture-icon"></span>
                         Cross-Platform Integration
                     </h3>
                     <p>
@@ -789,7 +789,7 @@
 
                 <div class="architecture-card">
                     <h3 class="architecture-title">
-                        <span class="architecture-icon">⚡</span>
+                        <span class="architecture-icon"></span>
                         Constraint Optimization
                     </h3>
                     <p>
@@ -800,7 +800,7 @@
 
                 <div class="architecture-card">
                     <h3 class="architecture-title">
-                        <span class="architecture-icon">🎯</span>
+                        <span class="architecture-icon"></span>
                         Optimal Tool Selection
                     </h3>
                     <p>
@@ -811,7 +811,7 @@
 
                 <div class="architecture-card">
                     <h3 class="architecture-title">
-                        <span class="architecture-icon">📊</span>
+                        <span class="architecture-icon"></span>
                         Comprehensive Dataset
                     </h3>
                     <p>
@@ -831,13 +831,13 @@
             </p>
             <div class="cta-buttons">
                 <a href="tableau-dashboard.html" class="cta-button" id="ctaTableauButton">
-                    <span id="ctaTableauText">🗺️ Start with Tableau</span>
+                    <span id="ctaTableauText">Start with Tableau</span>
                 </a>
                 <a href="powerbi-dashboard.html" class="cta-button" id="ctaPowerbiButton">
-                    <span id="ctaPowerbiText">🎖️ Military Analysis (Power BI)</span>
+                    <span id="ctaPowerbiText">Military Analysis (Power BI)</span>
                 </a>
                 <a href="https://github.com/mbubulka/ipeds-education-cost-analysis" class="cta-button" target="_blank">
-                    📋 View Source Code
+                    View Source Code
                 </a>
             </div>
         </section>
@@ -906,8 +906,8 @@
                 // Update button text
                 tableauButtonText.textContent = `Analyze ${stateName} Geography →`;
                 powerbiButtonText.textContent = `${stateName} Military ROI →`;
-                ctaTableauText.innerHTML = `🗺️ ${stateName} Analysis (Tableau)`;
-                ctaPowerbiText.innerHTML = `🎖️ ${stateName} Military ROI (Power BI)`;
+                ctaTableauText.innerHTML = `${stateName} Analysis (Tableau)`;
+                ctaPowerbiText.innerHTML = `${stateName} Military ROI (Power BI)`;
             } else {
                 // Reset to default
                 tableauButton.href = baseTableauUrl;
@@ -918,8 +918,8 @@
                 // Reset button text
                 tableauButtonText.textContent = 'Start Geographic Analysis →';
                 powerbiButtonText.textContent = 'Analyze Military ROI →';
-                ctaTableauText.innerHTML = '🗺️ Start with Tableau';
-                ctaPowerbiText.innerHTML = '🎖️ Military Analysis (Power BI)';
+                ctaTableauText.innerHTML = 'Start with Tableau';
+                ctaPowerbiText.innerHTML = 'Military Analysis (Power BI)';
             }
 
             // Update quick state button active states
