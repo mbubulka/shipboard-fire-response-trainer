@@ -412,69 +412,46 @@
         <!-- Dashboard Section -->
         <section class="dashboard-section">
             <div class="dashboard-wrapper">
-            <!-- Tableau Dashboard with JavaScript API for Auto-Filtering -->
-            <div id='tableauViz' style='width: 100%; height: 600px;'></div>
-            
-            <script type='text/javascript' src='https://public.tableau.com/javascripts/api/viz_v1.js'></script>
+            <!-- Tableau Public Dashboard -->
+            <div class='tableauPlaceholder' id='viz1761522588562' style='position: relative'>
+                <noscript>
+                    <a href='#'>
+                        <img alt='US Higher Education Cost Analysis' 
+                             src='https://public.tableau.com/static/images/5H/5H2Q36NJ2/1_rss.png' 
+                             style='border: none' />
+                    </a>
+                </noscript>
+                <object class='tableauViz' style='display:none;'>
+                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                    <param name='embed_code_version' value='3' />
+                    <param name='path' value='shared&#47;5H2Q36NJ2' />
+                    <param name='toolbar' value='yes' />
+                    <param name='static_image' value='https://public.tableau.com/static/images/5H/5H2Q36NJ2/1.png' />
+                    <param name='animate_transition' value='yes' />
+                    <param name='display_static_image' value='yes' />
+                    <param name='display_spinner' value='yes' />
+                    <param name='display_overlay' value='yes' />
+                    <param name='display_count' value='yes' />
+                    <param name='language' value='en-US' />
+                    <param name='filter' value='publish=yes' />
+                </object>
+            </div>
             <script type='text/javascript'>
-                let viz;
-                let workbook;
-                let activeSheet;
-                
-                function initViz() {
-                    const containerDiv = document.getElementById('tableauViz');
-                    const url = 'https://public.tableau.com/views/shared/5H2Q36NJ2';
-                    
-                    const options = {
-                        width: '100%',
-                        height: '600px',
-                        hideTabs: false,
-                        hideToolbar: false,
-                        onFirstInteractive: function () {
-                            console.log("Tableau dashboard loaded successfully");
-                            workbook = viz.getWorkbook();
-                            activeSheet = workbook.getActiveSheet();
-                            
-                            // Check for state parameter and auto-filter
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const selectedState = urlParams.get('state');
-                            
-                            if (selectedState && selectedState.trim() !== '') {
-                                applyStateFilter(selectedState.toUpperCase());
-                            }
-                        }
-                    };
-                    
-                    viz = new tableau.Viz(containerDiv, url, options);
+                var divElement = document.getElementById('viz1761522588562');
+                var vizElement = divElement.getElementsByTagName('object')[0];
+                if (divElement.offsetWidth > 800) {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+                } else if (divElement.offsetWidth > 500) {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+                } else {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = '777px';
                 }
-                
-                function applyStateFilter(stateCode) {
-                    if (!activeSheet) {
-                        console.log("Active sheet not ready for filtering");
-                        return;
-                    }
-                    
-                    try {
-                        // Apply filter to State field
-                        activeSheet.applyFilterAsync("State", stateCode, tableau.FilterUpdateType.REPLACE)
-                            .then(function() {
-                                console.log(`Successfully filtered to ${stateCode}`);
-                            })
-                            .catch(function(error) {
-                                console.log("Filter failed, trying alternative field names:", error);
-                                // Try alternative field names if "State" doesn't work
-                                return activeSheet.applyFilterAsync("State Code", stateCode, tableau.FilterUpdateType.REPLACE);
-                            })
-                            .catch(function(error) {
-                                console.log("All filter attempts failed:", error);
-                            });
-                    } catch (error) {
-                        console.log("Error applying filter:", error);
-                    }
-                }
-                
-                // Initialize when page loads
-                document.addEventListener('DOMContentLoaded', initViz);
+                var scriptElement = document.createElement('script');
+                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                vizElement.parentNode.insertBefore(scriptElement, vizElement);
             </script>
             </div>
             
@@ -486,10 +463,10 @@
                         Explore geographic cost patterns across all U.S. states.
                     </p>
                 </div>
-                <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
                     <p style="margin: 0; font-size: 0.9rem;">
-                        <strong>Auto-Filtering:</strong> If you selected a state on the previous page, the dashboard will automatically filter to that state when it loads. 
-                        You can also manually adjust filters within the dashboard.
+                        <strong>Interactive Filtering:</strong> Use the <strong>State filter</strong> in the dashboard above to focus your analysis. 
+                        This gives you full control to explore individual states or compare multiple states as needed.
                     </p>
                 </div>
                 <p style="text-align: center; margin-bottom: 1rem;">
@@ -605,8 +582,8 @@
                     box-shadow: var(--shadow-md);
                 `;
                 focusBanner.innerHTML = `
-                    <strong>Geographic Focus: ${stateName} (${selectedState.toUpperCase()})</strong> 
-                    - Use the State filter in the dashboard below to focus on ${stateName} institutions
+                    <strong>Geographic Analysis: ${stateName} (${selectedState.toUpperCase()})</strong> 
+                    - Ready to explore ${stateName} education costs and geographic patterns
                 `;
                 
                 // Insert at top of body
