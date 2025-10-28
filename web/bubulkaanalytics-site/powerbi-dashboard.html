@@ -537,5 +537,87 @@
             </a>
         </section>
     </main>
+
+    <script>
+        // Handle state parameter from integrated analytics page
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedState = urlParams.get('state');
+        
+        if (selectedState) {
+            // State name mapping
+            const stateNames = {
+                'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+                'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
+                'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+                'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+                'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi', 'MO': 'Missouri',
+                'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey',
+                'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+                'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+                'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+                'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+            };
+            
+            const stateName = stateNames[selectedState.toUpperCase()];
+            
+            if (stateName) {
+                // Add state focus banner
+                const focusBanner = document.createElement('div');
+                focusBanner.style.cssText = `
+                    background: linear-gradient(135deg, #f2c811, #e6b800);
+                    color: var(--primary);
+                    padding: 1rem 2rem;
+                    text-align: center;
+                    font-weight: 600;
+                    position: sticky;
+                    top: 0;
+                    z-index: 100;
+                    box-shadow: var(--shadow-md);
+                `;
+                focusBanner.innerHTML = `
+                    🎖️ <strong>Military ROI Focus: ${stateName} (${selectedState.toUpperCase()})</strong> 
+                    - Dashboard configured for ${stateName} GI Bill analysis and cost optimization
+                `;
+                
+                // Insert at top of body
+                document.body.insertBefore(focusBanner, document.body.firstChild);
+                
+                // Update the "Previous Step" link to maintain state
+                const previousStepLink = document.querySelector('a[href*="tableau-dashboard.html"]');
+                if (previousStepLink) {
+                    previousStepLink.href = `tableau-dashboard.html?state=${selectedState.toUpperCase()}`;
+                    previousStepLink.innerHTML = `
+                        ← Back to ${stateName} Geographic Analysis
+                    `;
+                }
+                
+                // Update page title
+                const titleElement = document.querySelector('.project-title');
+                if (titleElement) {
+                    titleElement.textContent = `${stateName} GI Bill ROI Analysis`;
+                }
+
+                // Add state-specific guidance in the dashboard instructions
+                const dashboardInfo = document.querySelector('.dashboard-section').nextElementSibling;
+                if (dashboardInfo) {
+                    const stateGuidance = document.createElement('div');
+                    stateGuidance.style.cssText = `
+                        background: #fff3cd;
+                        border: 1px solid #ffeaa7;
+                        border-radius: 8px;
+                        padding: 1.5rem;
+                        margin: 1rem 0;
+                    `;
+                    stateGuidance.innerHTML = `
+                        <p style="margin: 0; color: var(--text-primary);">
+                            <strong>💡 ${stateName} Analysis Tips:</strong> Use the state filter in the dashboard above to focus on ${stateName} institutions. 
+                            Compare in-state vs. out-of-state costs and evaluate GI Bill benefit optimization for ${stateName} military families.
+                        </p>
+                    `;
+                    dashboardInfo.parentNode.insertBefore(stateGuidance, dashboardInfo);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
