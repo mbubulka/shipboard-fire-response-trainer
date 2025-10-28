@@ -54,11 +54,3 @@ temp/
 config/secrets/
 .env.*
 api_keys.txt
-
-# Development backups and archives
-archive/
-dev-backup/
-**/dev-backup/
-**/archive/
-**/*-backup/
-test-*.html

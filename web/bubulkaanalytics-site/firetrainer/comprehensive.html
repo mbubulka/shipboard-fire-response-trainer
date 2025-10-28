@@ -1,12 +1,8 @@
-<!-- Force rebuild: 534663832 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
         <title>Shipboard Fire Response Training - Complete DCA Training System</title>
     <!-- Embedded DCA Feedback Integration for Deployment -->
     <script>
@@ -24,7 +20,7 @@
 
             async startDCAFeedbackSession(config) {
                 this.sessionData = { ...this.sessionData, ...config, startTime: Date.now() };
-                console.log('DCA Feedback Session Started:', this.sessionData.id);
+                console.log('🔥 DCA Feedback Session Started:', this.sessionData.id);
                 return this.sessionData.id;
             }
 
@@ -40,12 +36,12 @@
                     correctAnswer: questionData.correct
                 };
                 this.sessionData.responses.push(responseData);
-                console.log('DCA Response Submitted:', responseData);
+                console.log('🔥 DCA Response Submitted:', responseData);
                 return { success: true, evaluation: 'stored locally' };
             }
 
             async endDCASession() {
-                console.log('DCA Session Ended:', this.sessionData);
+                console.log('🔥 DCA Session Ended:', this.sessionData);
                 return this.sessionData;
             }
         }
@@ -53,7 +49,7 @@
         // Initialize feedback integration
         window.dcaFeedback = new DCAFeedbackIntegration();
         window.startDCAFeedbackSession = window.dcaFeedback.startDCAFeedbackSession.bind(window.dcaFeedback);
-        console.log('DCA Feedback Integration Loaded (embedded for deployment)');
+        console.log('🔥 DCA Feedback Integration Loaded (embedded for deployment)');
     </script>
     <style>
         * {
@@ -64,7 +60,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);
+            background: linear-gradient(135deg, #2980b9 0%, #6bb6ff 50%, #3742fa 100%);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -181,11 +177,17 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
         
+        .mode-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
         .mode-title {
             font-size: 1.8rem;
             margin-bottom: 15px;
             text-align: center;
-            color: #4a9fd8;
+            color: #ffd700;
         }
         
         .mode-description {
@@ -206,7 +208,7 @@
         }
         
         .mode-features li::before {
-            content: "•";
+            content: "✓";
             position: absolute;
             left: 0;
         }
@@ -424,10 +426,9 @@
             line-height: 1.6;
             margin-bottom: 25px;
             padding: 15px;
-            background: rgba(74, 159, 216, 0.15);
+            background: rgba(255, 193, 7, 0.1);
             border-radius: 8px;
-            border-left: 4px solid #4a9fd8;
-            color: #e8e8e8;
+            border-left: 4px solid #ffc107;
         }
         
         .scenario-showcase {
@@ -437,24 +438,24 @@
         }
         
         .scenario-reality-card {
-            background: rgba(26, 58, 82, 0.1);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 15px;
             padding: 25px;
-            border: 2px solid rgba(26, 58, 82, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .scenario-reality-card:hover {
-            background: rgba(26, 58, 82, 0.2);
-            border-color: rgba(26, 58, 82, 0.6);
+            background: rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(26, 58, 82, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
         
         .incident-badge {
             display: inline-block;
-            background: linear-gradient(45deg, #0073b8, #005a96);
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
             color: white;
             padding: 4px 12px;
             border-radius: 15px;
@@ -465,14 +466,14 @@
         
         .scenario-reality-card h4 {
             font-size: 1.3rem;
-            color: #0073b8;
+            color: #ff6b6b;
             margin-bottom: 5px;
         }
         
         .incident-date {
             font-size: 0.9rem;
             opacity: 0.8;
-            color: #4a9fd8;
+            color: #ffd700;
         }
         
         .scenario-preview {
@@ -656,7 +657,7 @@
         }
         
         .analysis-header h2 {
-            color: #ffffff;
+            color: #ff6b6b;
             font-size: 2.5rem;
             margin-bottom: 15px;
         }
@@ -665,19 +666,19 @@
             font-size: 1.2rem;
             line-height: 1.6;
             margin-bottom: 25px;
-            color: #e8e8e8;
+            color: #ddd;
         }
         
         .dashboard-section {
-            background: rgba(45, 90, 123, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
         
         .dashboard-section h3 {
-            color: #4a9fd8;
+            color: #4ecdc4;
             font-size: 1.8rem;
             margin-bottom: 20px;
         }
@@ -691,10 +692,10 @@
         }
         
         .dqn-scenario-card {
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(46, 204, 113, 0.15));
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.15), rgba(244, 67, 54, 0.15));
             border-radius: 15px;
             padding: 25px;
-            border: 2px solid rgba(52, 152, 219, 0.4);
+            border: 2px solid rgba(255, 87, 34, 0.4);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -707,7 +708,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #3498db, #2ecc71, #1abc9c);
+            background: linear-gradient(90deg, #ff5722, #ff9800, #ffc107);
             background-size: 200% 100%;
             animation: shimmer 3s ease-in-out infinite;
         }
@@ -719,12 +720,12 @@
         
         .dqn-scenario-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(52, 152, 219, 0.7);
-            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.3);
+            border-color: rgba(255, 87, 34, 0.7);
+            box-shadow: 0 15px 30px rgba(255, 87, 34, 0.3);
         }
         
         .dqn-badge {
-            background: linear-gradient(135deg, #3498db, #2ecc71);
+            background: linear-gradient(135deg, #ff5722, #ff9800);
             color: white;
             padding: 5px 12px;
             border-radius: 20px;
@@ -735,7 +736,7 @@
         }
         
         .scenario-difficulty {
-            color: #7fb3d3;
+            color: #ffab91;
             font-size: 0.9rem;
             font-style: italic;
             margin-top: 5px;
@@ -749,24 +750,24 @@
         }
         
         .feature {
-            background: rgba(52, 152, 219, 0.2);
+            background: rgba(255, 87, 34, 0.2);
             padding: 5px 12px;
             border-radius: 15px;
             font-size: 0.85rem;
             font-weight: bold;
-            border: 1px solid rgba(52, 152, 219, 0.5);
+            border: 1px solid rgba(255, 87, 34, 0.5);
         }
         
         .dqn-advantages {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 25px;
-            border: 2px solid rgba(52, 152, 219, 0.2);
+            border: 2px solid rgba(255, 87, 34, 0.2);
             margin-top: 20px;
         }
         
         .dqn-advantages h4 {
-            color: #5dade2;
+            color: #ff7043;
             margin-bottom: 20px;
             font-size: 1.3rem;
         }
@@ -778,10 +779,10 @@
         }
         
         .advantage-point {
-            background: rgba(52, 152, 219, 0.1);
+            background: rgba(255, 87, 34, 0.1);
             border-radius: 10px;
             padding: 20px;
-            border: 1px solid rgba(52, 152, 219, 0.3);
+            border: 1px solid rgba(255, 87, 34, 0.3);
             text-align: center;
         }
         
@@ -791,7 +792,7 @@
         }
         
         .advantage-point h5 {
-            color: #85c1e9;
+            color: #ffab91;
             margin-bottom: 10px;
             font-size: 1.1rem;
         }
@@ -835,7 +836,7 @@
         }
         
         .evidence-list li::before {
-            content: "•";
+            content: "✓";
             position: absolute;
             left: 0;
             color: #27ae60;
@@ -1146,10 +1147,10 @@
                     backdrop-filter: blur(10px);
                     font-size: 0.9rem;
                 ">
-                    Back to Portfolio
+                    <span style="margin-right: 8px;">←</span> Back to Portfolio
                 </a>
             </div>
-                        <h1>Shipboard Fire Response Training</h1>
+                        <h1>🔥 Shipboard Fire Response Training</h1>
             <p><strong>When Seconds Count, Training Saves Lives</strong></p>
             <div class="mission-critical-info">
                 <p><strong>Why This Matters:</strong> Ship fires claim lives and vessels because traditional training can't replicate the chaos, time pressure, and complex decision-making of real emergencies. This AI-powered system bridges that gap.</p>
@@ -1181,25 +1182,27 @@
 
         <div id="modeSelection" class="training-modes">
             <div class="mode-card" onclick="startScenarioMode()">
+                <div class="mode-icon">🔍</div>
                 <div class="mode-title">Scenario Analysis</div>
                 <div class="mode-description">
-                    <strong>Educational Fire Response Scenarios</strong><br>
-                    Experience realistic training scenarios based on documented maritime incidents: electrical fires in engine rooms, galley compartment fires, fuel leaks in confined spaces. The system uses established fire behavior patterns to present decision points based on your responses.
+                    <strong>Predict Fire Outcomes Before They Happen</strong><br>
+                    Experience realistic training scenarios based on documented case studies: electrical fires in engine rooms, galley blazes spreading to berthing, fuel leaks igniting in confined spaces. Our AI uses maritime safety patterns to predict what happens next based on your decisions.
                 </div>
                 <ul class="mode-features">
-                    <li>Case-based scenario training</li>
-                    <li>Fire progression modeling</li>
-                    <li>Decision analysis and scoring</li>
-                    <li>Risk-free experiential learning</li>
+                    <li>Educational case-based scenarios</li>
+                    <li>AI predicts fire spread patterns</li>
+                    <li>Decision confidence scoring</li>
+                    <li>Learn from mistakes without casualties</li>
                 </ul>
-                <div class="mode-badge">AI-Enhanced Training</div>
+                <div class="mode-badge">AI + Real Incidents</div>
             </div>
 
             <div class="mode-card" onclick="startAssessmentMode()">
+                <div class="mode-icon">📋</div>
                 <div class="mode-title">DCA Assessment</div>
                 <div class="mode-description">
-                    <strong>Operational Readiness Evaluation</strong><br>
-                    Execute critical decision-making under realistic time constraints. Identify fire classifications, select appropriate suppression methods, and coordinate team responses. This AI-powered assessment evaluates your performance in high-pressure operational scenarios.
+                    <strong>Test Your Skills Under Pressure</strong><br>
+                    When smoke fills the compartment and seconds matter, can you identify the fire class, select the right suppression agent, and coordinate your team? This AI-powered assessment puts you in command during critical moments that separate competent sailors from heroes.
                 </div>
                 <ul class="mode-features">
                     <li>Military-grade scenario realism</li>
@@ -1231,7 +1234,7 @@
 
         // Make functions globally accessible
         window.startScenarioMode = function() {
-            console.log('startScenarioMode function called');
+            console.log('🎯 startScenarioMode function called');
             console.log('Current mode before change:', currentMode);
             
             const modeSelection = document.getElementById('modeSelection');
@@ -1257,7 +1260,7 @@
         }
 
         window.startAssessmentMode = function() {
-            console.log('startAssessmentMode function called');
+            console.log('🎯 startAssessmentMode function called');
             console.log('Current mode before change:', currentMode);
             
             try {
@@ -1300,14 +1303,14 @@
             content.innerHTML = `
                 <div class="dqn-analysis-interface">
                     <div class="analysis-header">
-                        <h2>Fire Scenario Reality Check</h2>
+                        <h2>� Fire Scenario Reality Check</h2>
                         <p>Our AI training scenarios are based on maritime safety documentation and educational case studies. These scenarios represent common shipboard emergency patterns documented in public safety reports.</p>
                         <button onclick="returnToMenu()" class="scenario-btn secondary">Back to Menu</button>
                     </div>
                     
                     <div class="analysis-dashboard">
                         <div class="dashboard-section">
-                            <h3>Fire Scenarios Based on Real Events</h3>
+                            <h3>🚨 Fire Scenarios Inspired by Real Events</h3>
                             <p class="section-intro">These training scenarios are inspired by documented shipboard fire incidents and are designed for educational purposes based on publicly available incident reports.</p>
                             
                             <div class="scenario-showcase">
@@ -1355,7 +1358,7 @@
                                     <div class="scenario-stats">
                                         <span class="stat">78% Class B</span>
                                         <span class="stat">15 sec decision</span>
-                                        <span class="stat">1200°F temp</span>
+                                        <span class="stat">🔥 1200°F temp</span>
                                     </div>
                                 </div>
                                 
@@ -1378,7 +1381,7 @@
                         </div>
                         
                         <div class="dashboard-section">
-                            <h3>Why These Scenarios Matter</h3>
+                            <h3>⚡ Why These Scenarios Matter</h3>
                             <div class="reality-check-grid">
                                 <div class="reality-point">
                                     <div class="point-icon">⏰</div>
@@ -1386,7 +1389,7 @@
                                     <p>Maritime fire incidents like the USS Bonhomme Richard (2020) demonstrate the importance of rapid response. Our scenarios help practice decision-making under time constraints based on documented case studies.</p>
                                 </div>
                                 <div class="reality-point">
-                                    <div class="point-icon">!</div>
+                                    <div class="point-icon">⚠️</div>
                                     <h4>Environmental Factors</h4>
                                     <p>Emergency responses involve multiple stressors including visibility, communication challenges, and coordination complexity. Training scenarios incorporate these realistic elements.</p>
                                 </div>
@@ -1396,6 +1399,7 @@
                                     <p>Historical maritime incidents provide valuable lessons. Training scenarios are based on documented cases to help develop improved response procedures and decision-making skills.</p>
                                 </div>
                                 <div class="reality-point">
+                                    <div class="point-icon">🔍</div>
                                     <h4>Pattern Recognition</h4>
                                     <p>Our AI identifies common failure patterns documented in maritime safety reports. Training data shows 67% of failures involve wrong suppression agent choice - a critical decision point in emergency response.</p>
                                 </div>
@@ -1403,7 +1407,7 @@
                         </div>
                         
                         <div class="dashboard-section">
-                            <h3>DQN Training Scenarios</h3>
+                            <h3>🚀 Our DQN Training Scenarios</h3>
                             <p style="margin-bottom: 20px; color: #b0bec5;">These AI-generated scenarios combine real incident patterns with adaptive difficulty to create the ultimate training experience.</p>
                             <div class="dqn-scenarios-grid">
                                 <div class="dqn-scenario-card">
@@ -1416,9 +1420,9 @@
                                         Primary fire in main engine lube oil system triggers secondary electrical fire. AI adjusts smoke density, crew availability, and system failures based on your decision speed and accuracy...
                                     </div>
                                     <div class="dqn-features">
-                                        <span class="feature">AI adapts to your skill</span>
-                                        <span class="feature">Real-time difficulty scaling</span>
-                                        <span class="feature">Performance-based progression</span>
+                                        <span class="feature">🧠 AI adapts to your skill</span>
+                                        <span class="feature">📈 Real-time difficulty scaling</span>
+                                        <span class="feature">🎯 Performance-based progression</span>
                                     </div>
                                 </div>
                                 
@@ -1432,9 +1436,9 @@
                                         Electrical fire disables primary navigation systems during storm conditions. AI creates unique combinations of failures you've never seen, testing true understanding...
                                     </div>
                                     <div class="dqn-features">
-                                        <span class="feature">Infinite scenario variations</span>
-                                        <span class="feature">Never repeats exactly</span>
-                                        <span class="feature">Targets your weak points</span>
+                                        <span class="feature">♾️ Infinite scenario variations</span>
+                                        <span class="feature">🔄 Never repeats exactly</span>
+                                        <span class="feature">🎯 Targets your weak points</span>
                                     </div>
                                 </div>
                                 
@@ -1448,9 +1452,9 @@
                                         What starts as a small galley fire becomes a ship-threatening emergency. AI orchestrates realistic cascade failures, resource depletion, and crew coordination challenges...
                                     </div>
                                     <div class="dqn-features">
-                                        <span class="feature">Expert-level scenarios</span>
-                                        <span class="feature">Time pressure simulation</span>
-                                        <span class="feature">Team coordination required</span>
+                                        <span class="feature">👑 Expert-level scenarios</span>
+                                        <span class="feature">⏱️ Time pressure simulation</span>
+                                        <span class="feature">👥 Team coordination required</span>
                                     </div>
                                 </div>
                             </div>
@@ -1459,18 +1463,22 @@
                                 <h4>Why DQN Training Works Better</h4>
                                 <div class="advantage-grid">
                                     <div class="advantage-point">
+                                        <div class="advantage-icon">🧠</div>
                                         <h5>Adaptive Intelligence</h5>
                                         <p>Traditional training uses fixed scenarios. Our DQN learns your patterns and creates challenges that push your exact skill gaps.</p>
                                     </div>
                                     <div class="advantage-point">
+                                        <div class="advantage-icon">♾️</div>
                                         <h5>Infinite Scenarios</h5>
                                         <p>Never train on the same scenario twice. AI generates millions of realistic variations, preventing memorization and forcing true understanding.</p>
                                     </div>
                                     <div class="advantage-point">
+                                        <div class="advantage-icon">📊</div>
                                         <h5>Performance Analytics</h5>
                                         <p>Get precise feedback on decision speed, accuracy, and pattern recognition. Know exactly where you excel and where you need work.</p>
                                     </div>
                                     <div class="advantage-point">
+                                        <div class="advantage-icon">⚡</div>
                                         <h5>Accelerated Learning</h5>
                                         <p>Studies show DQN training achieves expert-level proficiency 3x faster than traditional methods through targeted challenge optimization.</p>
                                     </div>
@@ -1479,7 +1487,7 @@
                         </div>
                         
                         <div class="dashboard-section">
-                            <h3>Evidence of Realism</h3>
+                            <h3>📋 Evidence of Realism</h3>
                             <div class="evidence-grid">
                                 <div class="evidence-card">
                                     <h4>Source Documentation</h4>
@@ -1585,7 +1593,7 @@
             display.innerHTML = `
                 <div class="dqn-scenario-display">
                     <div class="scenario-header">
-                        <h3>${scenario.title}</h3>
+                        <h3>🚨 ${scenario.title}</h3>
                         <div class="threat-level-indicator ${currentFireProgression.getThreatLevel().toLowerCase()}">
                             ${currentFireProgression.getThreatLevel()} THREAT
                         </div>
@@ -1739,7 +1747,7 @@
             questionArea.innerHTML = `
                 <div class="dynamic-question-panel">
                     <div class="question-header">
-                        <h4>Critical Decision Required</h4>
+                        <h4>🔥 Critical Decision Required</h4>
                         <div class="time-pressure">
                             <span id="questionTimer">${questionData.timeLimit}</span> seconds remaining
                         </div>
@@ -2909,7 +2917,7 @@
             display.innerHTML = `
                 <div class="scenario-display">
                     <div class="scenario-context">
-                        <h3>${scenario.title}</h3>
+                        <h3>🚨 ${scenario.title}</h3>
                         <div class="scenario-details">
                             <div class="detail-item">
                                 <span class="detail-label">Location:</span>
@@ -2924,7 +2932,7 @@
                     </div>
                     
                     <div class="response-options">
-                        <h4>${scenario.initialDecision}</h4>
+                        <h4>⚡ ${scenario.initialDecision}</h4>
                         <div class="options-grid">
                             ${scenario.options.map((option, index) => `
                                 <div class="response-option" onclick="selectScenarioAnswer(${index})">
@@ -2997,7 +3005,7 @@
             content.innerHTML = `
                 <div class="assessment-interface">
                     <div class="assessment-header">
-                        <h2>DCA Fire Response Assessment</h2>
+                        <h2>📋 DCA Fire Response Assessment</h2>
                         <p>Test your knowledge with realistic fire emergency scenarios. Each question is based on standard maritime safety procedures and educational case studies.</p>
                         <button onclick="returnToMenu()" class="assessment-btn secondary">Back to Menu</button>
                         <button onclick="startQuiz()" class="assessment-btn primary">Begin Assessment</button>
@@ -3156,14 +3164,14 @@
             quizArea.innerHTML = `
                 <div class="question-container">
                     <div class="question-header">
-                        <h3>Scenario: ${currentScenario.title}</h3>
+                        <h3>🚨 Scenario: ${currentScenario.title}</h3>
                         <p><strong>Location:</strong> ${currentScenario.location} | <strong>Phase:</strong> ${dqnQuestionGenerator.getFirePhase(Math.floor(currentFireProgression.currentState.timeElapsed / 60))}</p>
                         <div class="fire-status">
-                            <span>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F</span>
-                            <span>Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}%</span>
-                            <span>Time: ${Math.floor(currentFireProgression.currentState.timeElapsed / 60)}:${String(Math.floor(currentFireProgression.currentState.timeElapsed % 60)).padStart(2, '0')}</span>
-                            <span>Affected: ${currentFireProgression.currentState.affectedCompartments.join(', ')}</span>
-                            ${currentFireProgression.currentState.ventilationSpread ? '<span>HVAC Contaminated</span>' : ''}
+                            <span>🔥 Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F</span>
+                            <span>💨 Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}%</span>
+                            <span>⏱️ Time: ${Math.floor(currentFireProgression.currentState.timeElapsed / 60)}:${String(Math.floor(currentFireProgression.currentState.timeElapsed % 60)).padStart(2, '0')}</span>
+                            <span>🏢 Affected: ${currentFireProgression.currentState.affectedCompartments.join(', ')}</span>
+                            ${currentFireProgression.currentState.ventilationSpread ? '<span>🌪️ HVAC Contaminated</span>' : ''}
                         </div>
                         <h4>Question ${currentQuestionIndex + 1} of 10</h4>
                     </div>
@@ -3237,7 +3245,7 @@
                     </div>
                     
                     <div class="fire-progression-update">
-                        <h4>Fire Status Update:</h4>
+                        <h4>🔥 Fire Status Update:</h4>
                         <p>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F | 
                            Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}% | 
                            Spread: ${Math.round(currentFireProgression.currentState.spreadRadius)} ft</p>
@@ -3285,9 +3293,9 @@
             
             quizArea.innerHTML = `
                 <div class="results-card">
-                    <h2>DQN Fire Response Assessment Complete!</h2>
+                    <h2>🎯 DQN Fire Response Assessment Complete!</h2>
                     <div class="scenario-summary">
-                        <h3>Scenario Completed: ${currentScenario.title}</h3>
+                        <h3>📋 Scenario Completed: ${currentScenario.title}</h3>
                         <p><strong>Location:</strong> ${currentScenario.location}</p>
                         <p><strong>Fire Type:</strong> ${currentScenario.fireType}</p>
                     </div>
@@ -3303,7 +3311,7 @@
                     </div>
                     
                     <div class="fire-final-status">
-                        <h4>Final Fire Status:</h4>
+                        <h4>🔥 Final Fire Status:</h4>
                         <p>Temperature: ${Math.round(currentFireProgression.currentState.temperature)}°F | 
                            Oxygen: ${Math.round(currentFireProgression.currentState.oxygenLevel)}% | 
                            Spread: ${Math.round(currentFireProgression.currentState.spreadRadius)} ft</p>
