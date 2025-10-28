@@ -568,14 +568,15 @@
                 // Insert at top of body
                 document.body.insertBefore(focusBanner, document.body.firstChild);
                 
-                // Update the "Next Step" link to maintain state
-                const nextStepLink = document.querySelector('a[href*="powerbi-dashboard.html"]');
-                if (nextStepLink) {
-                    nextStepLink.href = `powerbi-dashboard.html?state=${selectedState.toUpperCase()}`;
-                    nextStepLink.innerHTML = `
-                        Continue to ${stateName} Military ROI Analysis →
-                    `;
-                }
+                // Update ALL Power BI links to maintain state
+                const powerBILinks = document.querySelectorAll('a[href*="powerbi-dashboard.html"]');
+                powerBILinks.forEach(link => {
+                    link.href = `powerbi-dashboard.html?state=${selectedState.toUpperCase()}`;
+                    // Update text if it contains "Continue" or "Power BI"
+                    if (link.textContent.includes('Continue') || link.textContent.includes('Power BI')) {
+                        link.innerHTML = `Continue to ${stateName} Military ROI Analysis →`;
+                    }
+                });
                 
                 // Update page title
                 const titleElement = document.querySelector('.project-title');
