@@ -1,0 +1,20 @@
+# Netlify Redirects Configuration
+# This file handles URL rewrites and external redirects
+
+# Catch-all for SPA (Single Page Application) behavior
+/*  /index.html  200
+
+# Project pages - ensure they serve their own index
+/projects/military-salary-estimator/*  /projects/military-salary-estimator/index.html  200
+
+# Convenience redirects to GitHub
+/github/salary-estimator  https://github.com/yourusername/military-salary-estimator  301
+/salary-estimator-repo  https://github.com/yourusername/military-salary-estimator  301
+/military-salary-repo  https://github.com/yourusername/military-salary-estimator  301
+
+# Direct to GitHub raw content
+/salary-estimator/readme  https://raw.githubusercontent.com/yourusername/military-salary-estimator/main/README.md  301
+/salary-estimator/license  https://raw.githubusercontent.com/yourusername/military-salary-estimator/main/LICENSE  301
+
+# Health check
+/health  /  200

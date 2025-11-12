@@ -1,0 +1,97 @@
+# Netlify Configuration for bubulkaanalytics.com
+# Place this file in the root of the bubulkaanalytics-site directory
+
+[build]
+  # Static site - no build required
+  command = "echo 'Static site ready for deployment'"
+  publish = "."
+
+[build.environment]
+  # Node version (optional, for any JS processing)
+  NODE_VERSION = "18"
+
+# Context settings for different environments
+[context.production]
+  command = "echo 'Production build'"
+
+[context.deploy-preview]
+  command = "echo 'Deploy preview ready'"
+
+[context.branch-deploy]
+  command = "echo 'Branch deploy ready'"
+
+# Redirect rules for single-page application behavior
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Project-specific redirects
+[[redirects]]
+  from = "/projects/military-salary-estimator/*"
+  to = "/projects/military-salary-estimator/index.html"
+  status = 200
+
+# External redirects for convenience
+[[redirects]]
+  from = "/salary-estimator"
+  to = "https://github.com/yourusername/military-salary-estimator"
+  status = 301
+
+[[redirects]]
+  from = "/salary-estimator-repo"
+  to = "https://github.com/yourusername/military-salary-estimator"
+  status = 301
+
+[[redirects]]
+  from = "/military-salary"
+  to = "/projects/military-salary-estimator/"
+  status = 301
+
+# Cache headers for static assets
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+
+# Long-term cache for versioned assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files - shorter cache
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# JSON files
+[[headers]]
+  for = "*.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Images
+[[headers]]
+  for = "*.{jpg,jpeg,png,gif,webp,svg}"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+# CSS and JS
+[[headers]]
+  for = "*.{css,js}"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; font-src 'self' cdnjs.cloudflare.com"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
