@@ -12,6 +12,15 @@
     <meta name="keywords" content="Data Science, AI, Machine Learning, Analytics, Python, R, Data Visualization">
     <meta name="author" content="Michael Bubulka">
     <title>Michael Bubulka - Data Science & AI Portfolio</title>
+    <script>
+        // Force page reload when navigating back to prevent stale cache
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                console.log('Page restored from cache, reloading...');
+                window.location.reload(true);
+            }
+        });
+    </script>
     <style>
         :root {
             --primary: #1a3a52;
@@ -757,8 +766,8 @@
                             <span class="tech-tag">SHAP/LIME</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://mbubulka.shinyapps.io/military-salary/" class="project-link">View Dashboard</a>
-                            <a href="https://github.com/mbubulka" class="project-link">View Code</a>
+                            <a href="https://github.com/mbubulka/military-salary-estimator" class="project-link">View Code</a>
+                            <a href="https://github.com/mbubulka" class="project-link">GitHub Profile</a>
                         </div>
                     </div>
                 </div>
