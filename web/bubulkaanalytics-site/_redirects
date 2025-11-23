@@ -1,6 +1,9 @@
 # Netlify Redirects Configuration
 # This file handles URL rewrites and external redirects
 
+# Dashboard redirects - route old URL to new real-time dashboard
+/potomac_dashboard  /potomac_dashboard_hybrid.html  200
+
 # Catch-all for SPA (Single Page Application) behavior
 /*  /index.html  200
 
