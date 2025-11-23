@@ -577,19 +577,19 @@
         showLoading();
         
         try {
-            // Try direct USGS API first
-            let littleFallsData = await fetchUSGSDataDirect('01646500', 7);
+            // Try Netlify function first (more reliable from browser due to CORS)
+            let littleFallsData = await fetchUSGSDataViaNetlify('01646500', 7);
             
             if (!littleFallsData) {
-                // Fall back to Netlify function
-                littleFallsData = await fetchUSGSDataViaNetlify('01646500', 7);
+                // Fall back to direct USGS API (may fail due to CORS, but worth trying)
+                littleFallsData = await fetchUSGSDataDirect('01646500', 7);
                 if (littleFallsData) {
-                    dashboardData.dataSource = 'netlify';
-                    document.getElementById('flowSource').textContent = 'Via Netlify Proxy';
+                    dashboardData.dataSource = 'direct';
+                    document.getElementById('flowSource').textContent = 'USGS Direct';
                 }
             } else {
-                dashboardData.dataSource = 'direct';
-                document.getElementById('flowSource').textContent = 'USGS Direct';
+                dashboardData.dataSource = 'netlify';
+                document.getElementById('flowSource').textContent = 'Via Netlify Proxy';
             }
 
             if (!littleFallsData) {
