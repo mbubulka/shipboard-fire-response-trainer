@@ -2,12 +2,13 @@
 # Place this file in the root of the bubulkaanalytics-site directory
 
 [build]
-  # Static site - no build required
-  command = "echo 'Static site ready for deployment'"
+  # Static site with Netlify Functions
+  command = "echo 'Static site with functions ready for deployment'"
   publish = "."
+  functions = "netlify/functions"
 
 [build.environment]
-  # Node version (optional, for any JS processing)
+  # Node version (required for Netlify Functions)
   NODE_VERSION = "18"
 
 # Context settings for different environments
