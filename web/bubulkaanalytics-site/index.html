@@ -1,16 +1,26 @@
-<!-- Updated: 2025-10-17 18:06:09 -->
+<!-- Updated: 2025-11-23 v4 All 4 Projects Deploy -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta name="build-timestamp" content="2025-11-23-14h35m-military-fix">
     <meta name="description" content="Michael Bubulka - Data Scientist & AI specialist. Military professional transitioning to advanced analytics and machine learning.">
     <meta name="keywords" content="Data Science, AI, Machine Learning, Analytics, Python, R, Data Visualization">
     <meta name="author" content="Michael Bubulka">
     <title>Michael Bubulka - Data Science & AI Portfolio</title>
+    <script>
+        // Force page reload when navigating back to prevent stale cache
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                console.log('Page restored from cache, reloading...');
+                window.location.reload(true);
+            }
+        });
+    </script>
     <style>
         :root {
             --primary: #1a3a52;
@@ -374,19 +384,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .live-badge {
-            display: inline-block;
-            background-color: #28a745;
-            color: white;
-            padding: 0.35rem 0.75rem;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-
         .project-card.coming-soon .project-description {
             color: #888;
         }
@@ -523,18 +520,10 @@
         /* Footer */
         footer {
             background-color: var(--primary);
-            color: #ffffff !important;
+            color: rgba(255, 255, 255, 0.8);
             text-align: center;
             padding: 2rem;
             font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        footer p {
-            margin: 0;
-            color: #ffffff !important;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            font-weight: 600;
         }
 
         /* Responsive Design */
@@ -676,10 +665,6 @@
                             <span class="skill-tag">Python</span>
                             <span class="skill-tag">R</span>
                             <span class="skill-tag">SQL</span>
-                            <span class="skill-tag">Tableau</span>
-                            <span class="skill-tag">Power BI</span>
-                            <span class="skill-tag">Excel</span>
-                            <span class="skill-tag">Azure</span>
                             <span class="skill-tag">Git</span>
                         </div>
                     </div>
@@ -731,9 +716,6 @@
                         <h3>Fire Response Trainer</h3>
                     </div>
                     <div class="project-body">
-                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px;">
-                            <strong>Problem:</strong> Navy sailors need realistic fire response training, but traditional methods are costly, dangerous, and don't adapt to individual learning needs.
-                        </div>
                         <p class="project-description">Interactive training system with AI-powered quiz engine for shipboard fire response scenarios. Leverages machine learning to adapt question difficulty based on user performance.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Python</span>
@@ -742,23 +724,20 @@
                             <span class="tech-tag">Decision Trees</span>
                         </div>
                         <div class="project-links">
-                            <a href="firetrainer/comprehensive.html" class="project-link">Launch System</a>
+                            <a href="/projects/fire-trainer" class="project-link">Launch System</a>
                             <a href="https://github.com/mbubulka" class="project-link">View Code</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 2: Potomac Predictor -->
+                <!-- Project 2: River Flow Predictor (Shiny) -->
                 <div class="project-card">
                     <div class="project-header">
                         <p class="project-type">Predictive Analytics</p>
                         <h3>River Flow Predictor</h3>
                     </div>
                     <div class="project-body">
-                        <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px;">
-                            <strong>Problem:</strong> Recreational boaters and residents need accurate water level predictions for the Potomac River, but current methods lack real-time precision.
-                        </div>
-                        <p class="project-description">Advanced hydrological predictive model correlating upstream flow data to estimate water levels. Demonstrates time-series analysis, statistical validation, and real-world data integration.</p>
+                        <p class="project-description">Advanced hydrological predictive model built with R Shiny correlating upstream flow data to estimate water levels. Demonstrates time-series analysis, statistical validation, real-world data integration, and interactive dashboard design.</p>
                         <div class="project-tech">
                             <span class="tech-tag">R</span>
                             <span class="tech-tag">Shiny</span>
@@ -766,37 +745,55 @@
                             <span class="tech-tag">USGS Data</span>
                         </div>
                         <div class="project-links">
-                            <a href="potomac_dashboard.html" class="project-link">View Dashboard</a>
+                            <a href="/projects/river-flow" class="project-link">View Dashboard</a>
+                            <a href="https://github.com/mbubulka/Data-Science-Homework" class="project-link">View Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Military Salary Estimator (Shiny) -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <p class="project-type">Predictive Modeling</p>
+                        <h3>Military Salary Estimator</h3>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description">Generalized Linear Model (GLM) built with R Shiny predicting military compensation based on rank, service branch, experience, and education. Achieves 96% accuracy with SHAP/LIME explainability for transparent predictions. Live on shinyapps.io.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">R</span>
+                            <span class="tech-tag">Shiny</span>
+                            <span class="tech-tag">GLM Regression</span>
+                            <span class="tech-tag">SHAP/LIME</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://mbubulka.shinyapps.io/military-salary/" class="project-link">View Dashboard</a>
                             <a href="https://github.com/mbubulka" class="project-link">View Code</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 3: Integrated Analytics Suite -->
+                <!-- Project 4: VA Education IPEDS Dashboard -->
                 <div class="project-card">
                     <div class="project-header">
-                        <span class="live-badge">Integrated Suite</span>
-                        <p class="project-type">Cross-Platform Analytics</p>
-                        <h3>College Cost Analysis Suite</h3>
+                        <p class="project-type">Business Intelligence</p>
+                        <h3>VA Education IPEDS Dashboard</h3>
                     </div>
                     <div class="project-body">
-                        <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px;">
-                            <strong>Problem:</strong> Military families struggle to navigate 15,000+ colleges and optimize limited GI Bill benefits across complex cost structures and geographic constraints.
-                        </div>
-                        <p class="project-description">Dual-platform analytics solution: Tableau for geographic exploration and cost discovery, Power BI for military-focused ROI analysis. Seamless integration demonstrates advanced solution architecture across 6,163+ colleges and universities using federal education data.</p>
+                        <p class="project-description">Integrated Tableau and Power BI analytics suite analyzing higher education costs and GI Bill ROI using IPEDS institutional data (2020-2024). Demonstrates cross-platform solution architecture for education analytics.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">Tableau + Power BI</span>
-                            <span class="tech-tag">Cross-Platform Integration</span>
-                            <span class="tech-tag">Federal Education Data</span>
-                            <span class="tech-tag">Military Analytics</span>
+                            <span class="tech-tag">Tableau</span>
+                            <span class="tech-tag">Power BI</span>
+                            <span class="tech-tag">IPEDS Data</span>
+                            <span class="tech-tag">Data Integration</span>
                         </div>
                         <div class="project-links">
-                            <a href="integrated-analytics.html" class="project-link">View Integration</a>
-                            <a href="tableau-dashboard.html" class="project-link">Tableau</a>
-                            <a href="powerbi-dashboard.html" class="project-link">Power BI</a>
+                            <a href="/projects/va-education" class="project-link">View Dashboard</a>
+                            <a href="https://github.com/mbubulka" class="project-link">View Code</a>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </section>
