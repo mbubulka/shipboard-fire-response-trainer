@@ -1,23 +1,30 @@
 # Netlify Redirects Configuration
 # This file handles URL rewrites and external redirects
 
-# Dashboard redirects - route old URL to new real-time dashboard
+# ============================================
+# PROJECT REDIRECTS (Semantic URLs)
+# ============================================
+# These semantic URLs allow the portfolio to reference projects
+# without changing when the underlying files move or are renamed
+
+# River Flow Predictor
+/projects/river-flow  /potomac_dashboard_hybrid.html  200
+/projects/river-flow/dashboard  /potomac_dashboard_hybrid.html  200
+
+# Fire Response Trainer
+/projects/fire-trainer  /firetrainer/comprehensive.html  200
+
+# Military Salary Estimator
+/projects/military-salary  /projects/military-salary-estimator/index.html  200
+
+# VA Education IPEDS Dashboard
+/projects/va-education  /integrated-analytics.html  200
+
+# Legacy URL compatibility - maintain old links for backward compatibility
 /potomac_dashboard  /potomac_dashboard_hybrid.html  200
 
+# ============================================
+# DEFAULT ROUTING
+# ============================================
 # Catch-all for SPA (Single Page Application) behavior
 /*  /index.html  200
-
-# Project pages - ensure they serve their own index
-/projects/military-salary-estimator/*  /projects/military-salary-estimator/index.html  200
-
-# Convenience redirects to GitHub
-/github/salary-estimator  https://github.com/yourusername/military-salary-estimator  301
-/salary-estimator-repo  https://github.com/yourusername/military-salary-estimator  301
-/military-salary-repo  https://github.com/yourusername/military-salary-estimator  301
-
-# Direct to GitHub raw content
-/salary-estimator/readme  https://raw.githubusercontent.com/yourusername/military-salary-estimator/main/README.md  301
-/salary-estimator/license  https://raw.githubusercontent.com/yourusername/military-salary-estimator/main/LICENSE  301
-
-# Health check
-/health  /  200
