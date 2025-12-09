@@ -1,8 +1,9 @@
 # Netlify Configuration for bubulkaanalytics.com
-# Place this file in the root of the bubulkaanalytics-site directory
+# Deploys the bubulkaanalytics-site from fire-simulator-web directory
 
 [build]
   # Static site with Netlify Functions
+  base = "fire-simulator-web/bubulkaanalytics-site"
   command = "echo 'Static site with functions ready for deployment'"
   publish = "."
   functions = "netlify/functions"
