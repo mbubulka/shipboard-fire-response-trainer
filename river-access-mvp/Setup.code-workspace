@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../../Setup"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../Kayking Project"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"powershell.cwd": "Project SQL"
+	}
+}

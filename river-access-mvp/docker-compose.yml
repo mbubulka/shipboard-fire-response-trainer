@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: river_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: river_root_pass
+      MYSQL_DATABASE: river_access
+      MYSQL_USER: river_user
+      MYSQL_PASSWORD: river_pass
+    ports:
+      - "3312:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - river_network
+
+  python-api:
+    build:
+      context: ./python-api
+      dockerfile: Dockerfile
+    container_name: river_python_api
+    ports:
+      - "8005:8000"
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_URL=mysql+pymysql://river_user:river_pass@mysql:3306/river_access
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./python-api:/app
+    networks:
+      - river_network
+    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+
+  streamlit:
+    build:
+      context: ./streamlit-app
+      dockerfile: Dockerfile
+    container_name: river_streamlit
+    ports:
+      - "8506:8501"
+    depends_on:
+      - python-api
+    environment:
+      - API_URL=http://python-api:8000
+    volumes:
+      - ./streamlit-app:/app
+    networks:
+      - river_network
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+
+  usgs-scheduler:
+    build:
+      context: ./python-api
+      dockerfile: Dockerfile
+    container_name: river_usgs_scheduler
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_URL=mysql+pymysql://river_user:river_pass@mysql:3306/river_access
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./python-api:/app
+    networks:
+      - river_network
+    command: python scheduler.py
+
+  weather-scheduler:
+    build:
+      context: ./python-api
+      dockerfile: Dockerfile
+    container_name: river_weather_scheduler
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_URL=mysql+pymysql://river_user:river_pass@mysql:3306/river_access
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./python-api:/app
+    networks:
+      - river_network
+    command: python weather_scheduler.py
+
+volumes:
+  mysql_data:
+
+networks:
+  river_network:
+    driver: bridge
