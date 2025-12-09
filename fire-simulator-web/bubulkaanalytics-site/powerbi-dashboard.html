@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive Power BI dashboard analyzing higher education costs and GI Bill ROI using IPEDS data (2020-2024).">
+    <meta name="keywords" content="Power BI, Data Visualization, Higher Education, IPEDS, GI Bill, ROI Analysis, Interactive Dashboard">
+    <meta name="author" content="Michael Bubulka">
+    <title>GI Bill ROI Analysis - Michael Bubulka Portfolio</title>
+    <style>
+        :root {
+            --primary: #1a3a52;
+            --secondary: #2d5a7b;
+            --accent: #0073b8;
+            --accent-light: #4a9fd8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-light: #7a7a7a;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --border: #e0e0e0;
+            --success: #2d7a3e;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            line-height: 1.6;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .project-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-description {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* Dashboard Container */
+        .dashboard-section {
+            margin: 3rem 0;
+        }
+
+        .dashboard-wrapper {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        .powerbi-embed {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 8px;
+            background: var(--bg-light);
+        }
+
+        .embed-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border: 2px dashed var(--border);
+        }
+
+        .embed-placeholder h3 {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .embed-placeholder p {
+            color: var(--text-light);
+            text-align: center;
+            max-width: 500px;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-icon.military {
+            background: linear-gradient(135deg, #dc3545, #bd2130);
+        }
+
+        .feature-icon.roi {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+        }
+
+        .feature-icon.trends {
+            background: linear-gradient(135deg, #fd7e14, #e55a4e);
+        }
+
+        .feature-icon.comparison {
+            background: linear-gradient(135deg, #6f42c1, #5a32a3);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Technical Implementation Section */
+        .tech-section {
+            background-color: var(--bg-light);
+            padding: 3rem 2rem;
+            margin: 4rem -2rem;
+            border-radius: 12px;
+        }
+
+        .tech-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .tech-tag {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tech-tag:hover {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Links Section */
+        .links-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            margin: 0.5rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .link-button:hover {
+            background-color: var(--accent-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .link-button.secondary {
+            background-color: var(--bg-white);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .link-button.secondary:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .dashboard-wrapper {
+                padding: 1rem;
+            }
+
+            .powerbi-embed {
+                height: 600px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tech-section {
+                margin: 3rem -1rem;
+                padding: 2rem 1rem;
+            }
+
+            .link-button {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-title {
+                font-size: 1.75rem;
+            }
+
+            .powerbi-embed {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav>
+            <div class="nav-brand">Michael Bubulka</div>
+            <a href="index.html" class="back-button">
+                ← Back to Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="project-header">
+            <h1 class="project-title">GI Bill ROI Analysis</h1>
+            <p class="project-subtitle">Interactive Power BI Dashboard - Military Decision Support</p>
+            <p class="project-description">
+                <strong>Step 2 of 2-Platform Analysis:</strong> A comprehensive decision support tool for military families analyzing the return on investment 
+                of education benefits. This Power BI dashboard uses advanced calculations and specialized military analytics 
+                to help veterans and service members make informed decisions about their GI Bill benefits across 6,163+ colleges and universities nationwide.
+            </p>
+            
+            <!-- Cross-Platform Integration Notice -->
+            <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid #d63384; border-radius: 12px; padding: 1.5rem; margin: 2rem auto; max-width: 700px;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">Integrated Analytics Workflow</h3>
+                <p style="margin-bottom: 1rem; text-align: center;">
+                    <strong>Geographic Discovery (Tableau)</strong> → <strong>Military ROI Analysis (Power BI)</strong><br>
+                    <em>Start with regional exploration, then dive into specialized military cost calculations</em>
+                </p>
+                <div style="text-align: center;">
+                    <a href="tableau-dashboard.html" class="back-button" style="background: linear-gradient(135deg, var(--accent), var(--accent-light)); margin: 0.5rem;">
+                        ← Start with Geographic Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section class="dashboard-section">
+            <div class="dashboard-wrapper">
+                <!-- Embedded Power BI Dashboard - Public Version -->
+                <iframe 
+                    title="College Cost Analysis - GI Bill ROI Dashboard" 
+                    width="100%" 
+                    height="600" 
+                    src="https://app.powerbi.com/view?r=eyJrIjoiZGNlMTcxNzMtNTVhZC00NjNjLTkyNDEtNzRlODNiMGFmY2FkIiwidCI6ImI4MGM1NGU5LTU0MzYtNDE5OS04N2IwLTdiZDJkNzA0MDA2YyIsImMiOjF9" 
+                    frameborder="0" 
+                    allowFullScreen="true"
+                    style="border-radius: 8px; box-shadow: var(--shadow-md);">
+                </iframe>
+                
+                <!-- Dashboard Usage Instructions -->
+                <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                    <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                        <p style="margin: 0; font-size: 0.9rem;">
+                            <strong>Public Dashboard:</strong> This interactive dashboard is publicly accessible - no sign-in required! 
+                            Explore the full <a href="../integrated-analytics.html" style="color: #4caf50;">cross-platform analytics suite</a>.
+                        </p>
+                    </div>
+                    <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                        <p style="margin: 0; font-size: 0.9rem;">
+                            <strong>Interactive Analysis:</strong> Use the <strong>State slicer</strong> in the dashboard above to focus your military ROI analysis. 
+                            This allows you to compare multiple states or dive deep into specific state scenarios.
+                        </p>
+                    </div>
+                    <p style="text-align: center; margin-bottom: 1rem;">
+                        <strong>Interactive Dashboard:</strong> Use filters and click on visualizations to explore the data. 
+                        The dashboard updates in real-time based on your selections.
+                    </p>
+                    <div style="text-align: center;">
+                        <a href="https://app.powerbi.com/view?r=eyJrIjoiZGNlMTcxNzMtNTVhZC00NjNjLTkyNDEtNzRlODNiMGZmY2FkIiwidCI6ImI4MGM1NGU5LTU0MzYtNDE5OS04N2IwLTdiZDJkNzA0MDA2YyIsImMiOjF9" 
+                           class="link-button secondary" target="_blank">
+                            Open in Full Screen →
+                        </a>
+                    </div>
+                    
+                    <!-- Financial Disclaimer -->
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+                        <h4 style="color: #856404; margin: 0 0 1rem 0; font-size: 1rem;">
+                            Important Disclaimer
+                        </h4>
+                        <p style="margin: 0; font-size: 0.9rem; color: #856404; line-height: 1.5;">
+                            <strong>This dashboard is for educational and informational purposes only.</strong> 
+                            The analysis, calculations, and recommendations provided are not certified financial advice. 
+                            Individual circumstances vary significantly, and actual costs, benefits, and outcomes may differ. 
+                            Always consult with qualified financial advisors, education counselors, or military education benefits specialists 
+                            before making education investment decisions. GI Bill benefits and eligibility requirements are subject to change.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Dashboard Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon military"></div>
+                    <h3 class="feature-title">Military-Focused Analysis</h3>
+                    <p class="feature-description">
+                        Specialized calculations for GI Bill benefits, military family scenarios, 
+                        and veteran-specific cost considerations.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon roi"></div>
+                    <h3 class="feature-title">ROI Calculations</h3>
+                    <p class="feature-description">
+                        Advanced DAX measures calculating return on investment, 
+                        comparing education costs against potential career outcomes.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon trends"></div>
+                    <h3 class="feature-title">Trend Analysis</h3>
+                    <p class="feature-description">
+                        Historical cost trends (2020-2024) with projections 
+                        to help plan future education investments.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon comparison"></div>
+                    <h3 class="feature-title">Institution Comparison</h3>
+                    <p class="feature-description">
+                        Side-by-side comparison of institutions with military-friendly 
+                        ratings and benefit optimization recommendations.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Implementation Section -->
+        <section class="tech-section">
+            <h2 class="tech-title">Technical Implementation</h2>
+            <div class="tech-grid">
+                <span class="tech-tag">Power BI Desktop</span>
+                <span class="tech-tag">Power BI Service</span>
+                <span class="tech-tag">Federal Education Data</span>
+                <span class="tech-tag">DAX Calculations</span>
+                <span class="tech-tag">Military Analytics</span>
+                <span class="tech-tag">ROI Modeling</span>
+                <span class="tech-tag">6,163+ Institutions</span>
+                <span class="tech-tag">Interactive Visualizations</span>
+            </div>
+        </section>
+
+        <!-- External Links Section -->
+        <section class="links-section">
+            <a href="https://app.powerbi.com/links/dFkXixQBDl?ctid=b80c54e9-5436-4199-87b0-7bd2d704006c&pbi_source=linkShare" class="link-button" target="_blank">
+                View Full Dashboard
+            </a>
+            <a href="https://github.com/mbubulka/ipeds-education-cost-analysis" 
+               class="link-button secondary" target="_blank">
+                GitHub Repository
+            </a>
+        </section>
+    </main>
+
+    <script>
+        // Handle state parameter from integrated analytics page
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedState = urlParams.get('state');
+        
+        if (selectedState) {
+            // State name mapping
+            const stateNames = {
+                'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+                'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
+                'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+                'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+                'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi', 'MO': 'Missouri',
+                'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey',
+                'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+                'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+                'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+                'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+            };
+            
+            const stateName = stateNames[selectedState.toUpperCase()];
+            
+            if (stateName) {
+                // Add state focus banner
+                const focusBanner = document.createElement('div');
+                focusBanner.style.cssText = `
+                    background: linear-gradient(135deg, #f2c811, #e6b800);
+                    color: var(--primary);
+                    padding: 1rem 2rem;
+                    text-align: center;
+                    font-weight: 600;
+                    position: sticky;
+                    top: 0;
+                    z-index: 100;
+                    box-shadow: var(--shadow-md);
+                `;
+                focusBanner.innerHTML = `
+                    <strong>Military ROI Analysis: ${stateName} (${selectedState.toUpperCase()})</strong> 
+                    - Ready to analyze GI Bill benefits and cost optimization for ${stateName} military families
+                `;
+                
+                // Insert at top of body
+                document.body.insertBefore(focusBanner, document.body.firstChild);
+                
+                // Update the "Previous Step" link to maintain state
+                const previousStepLink = document.querySelector('a[href*="tableau-dashboard.html"]');
+                if (previousStepLink) {
+                    previousStepLink.href = `tableau-dashboard.html?state=${selectedState.toUpperCase()}`;
+                    previousStepLink.innerHTML = `
+                        ← Back to ${stateName} Geographic Analysis
+                    `;
+                }
+                
+                // Update page title
+                const titleElement = document.querySelector('.project-title');
+                if (titleElement) {
+                    titleElement.textContent = `${stateName} GI Bill ROI Analysis`;
+                }
+
+                // Add state-specific guidance in the dashboard instructions
+                const dashboardInfo = document.querySelector('.dashboard-section').nextElementSibling;
+                if (dashboardInfo) {
+                    const stateGuidance = document.createElement('div');
+                    stateGuidance.style.cssText = `
+                        background: #fff3cd;
+                        border: 1px solid #ffeaa7;
+                        border-radius: 8px;
+                        padding: 1.5rem;
+                        margin: 1rem 0;
+                    `;
+                    stateGuidance.innerHTML = `
+                        <p style="margin: 0; color: var(--text-primary);">
+                            <strong>${stateName} Analysis Instructions:</strong> 
+                            <br>1. Locate the <strong>State slicer</strong> in the dashboard above
+                            <br>2. Select <strong>"${stateName}"</strong> to filter all visualizations
+                            <br>3. Compare in-state vs. out-of-state costs for ${stateName} military families
+                        </p>
+                    `;
+                    dashboardInfo.parentNode.insertBefore(stateGuidance, dashboardInfo);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

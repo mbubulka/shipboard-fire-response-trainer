@@ -1,0 +1,30 @@
+# Netlify Redirects Configuration
+# This file handles URL rewrites and external redirects
+
+# ============================================
+# PROJECT REDIRECTS (Semantic URLs)
+# ============================================
+# These semantic URLs allow the portfolio to reference projects
+# without changing when the underlying files move or are renamed
+
+# River Flow Predictor
+/projects/river-flow  /potomac_dashboard_hybrid.html  200
+/projects/river-flow/dashboard  /potomac_dashboard_hybrid.html  200
+
+# Fire Response Trainer
+/projects/fire-trainer  /firetrainer/comprehensive.html  200
+
+# Military Salary Estimator
+/projects/military-salary  /projects/military-salary-estimator/index.html  200
+
+# VA Education IPEDS Dashboard
+/projects/va-education  /integrated-analytics.html  200
+
+# Legacy URL compatibility - maintain old links for backward compatibility
+/potomac_dashboard  /potomac_dashboard_hybrid.html  200
+
+# ============================================
+# DEFAULT ROUTING
+# ============================================
+# Catch-all for SPA (Single Page Application) behavior
+/*  /index.html  200

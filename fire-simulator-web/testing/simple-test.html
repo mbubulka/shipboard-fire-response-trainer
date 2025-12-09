@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple DCA Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { background: #f0f0f0; padding: 20px; margin: 10px 0; border-radius: 5px; }
+        .options { margin: 10px 0; }
+        .option { margin: 5px 0; padding: 10px; background: #e0e0e0; cursor: pointer; border-radius: 3px; }
+        .option:hover { background: #d0d0d0; }
+        .option.selected { background: #4CAF50; color: white; }
+        .button { background: #008CBA; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 3px; }
+        .button:disabled { background: #cccccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <h1>Simple DCA Fire Response Test</h1>
+    
+    <div class="question">
+        <h3>Sample Question:</h3>
+        <p>You discover a small fire in the galley involving cooking oil. What is your first action?</p>
+        
+        <div class="options">
+            <div class="option" onclick="selectOption(0)">A) Use water to extinguish the fire</div>
+            <div class="option" onclick="selectOption(1)">B) Turn off heat source and use Class K extinguisher</div>
+            <div class="option" onclick="selectOption(2)">C) Use CO2 extinguisher</div>
+            <div class="option" onclick="selectOption(3)">D) Evacuate the area immediately</div>
+        </div>
+        
+        <button class="button" id="submitBtn" onclick="submitAnswer()" disabled>Submit Answer</button>
+    </div>
+    
+    <div id="result" style="margin-top: 20px; padding: 10px; background: #e8f5e8; border-radius: 5px; display: none;">
+        <h4>Result:</h4>
+        <p id="resultText"></p>
+    </div>
+
+    <script>
+        let selectedAnswer = null;
+        
+        function selectOption(index) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            
+            selectedAnswer = index;
+            document.getElementById('submitBtn').disabled = false;
+        }
+        
+        function submitAnswer() {
+            const correctAnswer = 1; // Option B is correct
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('resultText');
+            
+            if (selectedAnswer === correctAnswer) {
+                resultText.innerHTML = "✅ <strong>Correct!</strong> For Class K fires (cooking oils), you should turn off the heat source first and use a Class K extinguisher designed for cooking oils.";
+            } else {
+                resultText.innerHTML = "❌ <strong>Incorrect.</strong> For Class K fires involving cooking oils, you should turn off the heat source and use a Class K extinguisher. Water would spread the oil fire.";
+            }
+            
+            resultDiv.style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+        }
+    </script>
+</body>
+</html>

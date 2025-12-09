@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Integrated Tableau and Power BI analytics suite for IPEDS education cost analysis - demonstrating cross-platform solution architecture.">
+    <meta name="keywords" content="Tableau, Power BI, Cross-Platform Integration, IPEDS, Education Analytics, Solution Architecture">
+    <meta name="author" content="Michael Bubulka">
+    <title>Integrated Analytics Suite - Michael Bubulka Portfolio</title>
+    <style>
+        :root {
+            --primary: #1a3a52;
+            --secondary: #2d5a7b;
+            --accent: #0073b8;
+            --accent-light: #4a9fd8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-light: #7a7a7a;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --border: #e0e0e0;
+            --success: #2d7a3e;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, var(--bg-light), #e8f4f8);
+            padding: 4rem 2rem;
+            margin: -3rem -2rem 4rem -2rem;
+            border-radius: 0 0 24px 24px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-description {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* Platform Cards */
+        .platforms-section {
+            margin: 4rem 0;
+        }
+
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .platform-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        .platform-card.powerbi::before {
+            background: linear-gradient(90deg, #d63384, #e91e63);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .platform-icon.tableau {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        }
+
+        .platform-icon.powerbi {
+            background: linear-gradient(135deg, #d63384, #e91e63);
+        }
+
+        .platform-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .platform-purpose {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .platform-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .platform-features li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .platform-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .platform-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .platform-button.powerbi {
+            background: linear-gradient(135deg, #d63384, #e91e63);
+        }
+
+        .platform-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Integration Flow */
+        .integration-section {
+            background: var(--bg-light);
+            padding: 4rem 2rem;
+            margin: 4rem -2rem;
+            border-radius: 16px;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .flow-step {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+            margin: 0 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Technical Architecture */
+        .architecture-section {
+            margin: 4rem 0;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .architecture-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .architecture-title {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .architecture-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 2rem;
+            margin: 4rem -2rem 0;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .cta-description {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 1;
+            color: white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* State Selector Styles */
+        .quick-state-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .quick-state-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.7);
+            transform: translateY(-1px);
+        }
+
+        .quick-state-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-diagram {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav>
+            <div class="nav-brand">Michael Bubulka</div>
+            <a href="index.html" class="back-button">
+                ← Back to Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Integrated Analytics Suite</h1>
+            <p class="hero-subtitle">Cross-Platform Education Cost Analysis</p>
+            <p class="hero-description">
+                A sophisticated dual-platform analytics solution demonstrating advanced solution architecture. 
+                Combining Tableau's superior geographic visualization capabilities with Power BI's advanced 
+                financial modeling to create a professional analytical workflow for U.S. college cost analysis.
+            </p>
+        </section>
+
+        <!-- Problem Statement Section -->
+        <section style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 3rem 2rem; margin: 3rem -2rem; border-radius: 12px;">
+            <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem;">
+                The Challenge We're Solving
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                <!-- Military Family Challenge -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; border-left: 5px solid #dc3545; box-shadow: var(--shadow-sm);">
+                    <h3 style="color: #dc3545; margin-bottom: 1rem; display: flex; align-items: center;">
+                        Military Family Dilemma
+                    </h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>Service members and their families face complex education decisions:</strong>
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; margin-left: 1rem;">
+                        <li>Multiple GI Bill benefit options with different coverage rates</li>
+                        <li>15,000+ colleges with varying costs and outcomes</li>
+                        <li>Geographic constraints due to military assignments</li>
+                        <li>Need to maximize limited education benefits</li>
+                        <li>Complex cost-benefit calculations for family planning</li>
+                    </ul>
+                </div>
+
+                <!-- Data Complexity Challenge -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; border-left: 5px solid #fd7e14; box-shadow: var(--shadow-sm);">
+                    <h3 style="color: #fd7e14; margin-bottom: 1rem; display: flex; align-items: center;">
+                        Data Complexity Problem
+                    </h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>Federal education data presents massive analytical challenges:</strong>
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; margin-left: 1rem;">
+                        <li><strong>6,163+ institutions</strong> across all 50 states</li>
+                        <li><strong>22,000+ cost scenarios</strong> (in-state, out-state, programs)</li>
+                        <li>Multiple funding sources and benefit calculations</li>
+                        <li>Geographic cost variations requiring spatial analysis</li>
+                        <li>ROI modeling across different family situations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Solution Approach -->
+            <div style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 2rem; border-radius: 12px; text-align: center;">
+                <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">
+                    Our Integrated Solution Approach
+                </h3>
+                <p style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 1rem;">
+                    <strong>Deploy specialized analytics platforms for different aspects of the problem:</strong>
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <strong>Geographic Discovery</strong><br>
+                        Tableau's superior mapping reveals regional cost patterns and opportunities
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <strong>Financial Optimization</strong><br>
+                        Power BI's advanced DAX calculations model GI Bill ROI scenarios
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <strong>Professional Integration</strong><br>
+                        Cross-platform workflow leveraging each platform's native strengths
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financial Disclaimer Section -->
+        <section style="background: #fff3cd; border: 2px solid #ffeaa7; border-radius: 12px; padding: 2rem; margin: 3rem 0;">
+            <h2 style="color: #856404; margin: 0 0 1rem 0; font-size: 1.3rem; text-align: center;">
+                Important Financial Disclaimer
+            </h2>
+            <div style="color: #856404; font-size: 0.95rem; line-height: 1.6; max-width: 900px; margin: 0 auto;">
+                <p style="margin-bottom: 1rem;">
+                    <strong>This analytics suite is for educational and informational purposes only.</strong> 
+                    All analysis, calculations, cost projections, and recommendations provided through these dashboards 
+                    are not certified financial advice and should not be considered as such.
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Individual circumstances vary significantly.</strong> Actual education costs, GI Bill benefits, 
+                    financial aid availability, and career outcomes may differ substantially from projections shown. 
+                    Military education benefits, eligibility requirements, and institutional costs are subject to change.
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Data Sources & Assumptions:</strong> Analysis based on 2023 Federal Education cost data, 
+                    $28,563 annual GI Bill coverage (2024-25 rates), 100% Post-9/11 GI Bill eligibility, 
+                    tuition & fees only (excludes housing/books), 5% education cost inflation, 3.2% GI Bill growth, 
+                    and 36-month benefit limits. Verify current rates at va.gov before decisions.
+                </p>
+                <p style="margin: 0; text-align: center; font-weight: 600;">
+                    Always consult with qualified financial advisors, certified education counselors, 
+                    or military education benefits specialists before making education investment decisions.
+                </p>
+            </div>
+        </section>
+
+        <!-- User Journey Section -->
+        <section style="text-align: center; margin: 3rem 0;">
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">Choose Your Analysis Path</h2>
+            <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto 2rem; line-height: 1.7;">
+                <strong>New to college cost analysis?</strong> Start with <span style="color: #e97627; font-weight: 600;">Geographic Discovery</span> in Tableau to explore regional patterns.<br>
+                <strong>Ready for detailed planning?</strong> Use the state context to jump to <span style="color: #f2c811; font-weight: 600;">Financial Optimization</span> in Power BI for GI Bill ROI calculations.<br>
+                <strong>Want the full experience?</strong> Follow the <span style="color: var(--accent); font-weight: 600;">Professional Dual-Platform Workflow</span> below.
+            </p>
+        </section>
+
+        <!-- Interactive State Selector Section -->
+        <section style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 3rem 2rem; margin: 3rem -2rem; border-radius: 12px;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="margin-bottom: 1rem; font-size: 1.8rem;">
+                    Step 1: Select Your Focus State
+                </h2>
+                <p style="font-size: 1.1rem; line-height: 1.6; max-width: 600px; margin: 0 auto; color: white; opacity: 1;">
+                    <strong>Professional State Context:</strong> Your state selection provides context guidance 
+                    for focused analysis using each platform's native filtering capabilities.
+                </p>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 2rem; backdrop-filter: blur(10px);">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <!-- State Selector -->
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <label for="stateSelector" style="font-weight: 600; font-size: 1.1rem;">
+                            Choose State for Analysis:
+                        </label>
+                        <select id="stateSelector" style="
+                            padding: 0.75rem 1rem; 
+                            border-radius: 8px; 
+                            border: none; 
+                            font-size: 1rem; 
+                            min-width: 200px;
+                            background: white;
+                            color: var(--primary);
+                            font-weight: 500;
+                            cursor: pointer;
+                        ">
+                            <option value="">🇺🇸 All States (National View)</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select>
+                    </div>
+
+                    <!-- Selected State Display -->
+                    <div id="selectedStateDisplay" style="
+                        background: rgba(255, 255, 255, 0.2); 
+                        padding: 1rem 2rem; 
+                        border-radius: 8px; 
+                        font-size: 1.1rem; 
+                        font-weight: 600;
+                        min-height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        Ready for National Analysis
+                    </div>
+
+                    <!-- Quick State Buttons for Common Military States -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
+                        <p style="width: 100%; text-align: center; margin: 0 0 0.5rem 0; font-size: 0.9rem; opacity: 0.9;">
+                            Quick Select - Major Military States:
+                        </p>
+                        <button class="quick-state-btn" data-state="TX">Texas</button>
+                        <button class="quick-state-btn" data-state="CA">California</button>
+                        <button class="quick-state-btn" data-state="FL">Florida</button>
+                        <button class="quick-state-btn" data-state="VA">Virginia</button>
+                        <button class="quick-state-btn" data-state="NC">N. Carolina</button>
+                        <button class="quick-state-btn" data-state="GA">Georgia</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platforms Section -->
+        <section class="platforms-section">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Dual-Platform Architecture</h2>
+            <div class="platforms-grid">
+                <!-- Tableau Platform -->
+                <div class="platform-card">
+                    <div class="platform-header">
+                        <div class="platform-icon tableau">T</div>
+                        <div>
+                            <h3 class="platform-title">Tableau Public</h3>
+                            <p class="platform-purpose">Geographic Discovery & Exploration</p>
+                        </div>
+                    </div>
+                    <p><strong>Purpose:</strong> Regional cost pattern discovery and interactive geographic analysis</p>
+                    <ul class="platform-features">
+                        <li>Superior mapping and geographic visualization</li>
+                        <li>Interactive U.S. state-level cost analysis</li>
+                        <li>6,163+ institution geographic distribution</li>
+                        <li>Cost pattern discovery across regions</li>
+                        <li>Public-facing exploration interface</li>
+                    </ul>
+                    <a href="tableau-dashboard.html" class="platform-button" id="tableauButton">
+                        <span id="tableauButtonText">Start Geographic Analysis →</span>
+                    </a>
+                </div>
+
+                <!-- Power BI Platform -->
+                <div class="platform-card powerbi">
+                    <div class="platform-header">
+                        <div class="platform-icon powerbi">P</div>
+                        <div>
+                            <h3 class="platform-title">Power BI Service</h3>
+                            <p class="platform-purpose">Military ROI & Decision Support</p>
+                        </div>
+                    </div>
+                    <p><strong>Purpose:</strong> Specialized military family cost-benefit analysis and decision optimization</p>
+                    <ul class="platform-features">
+                        <li>Advanced DAX calculations for ROI modeling</li>
+                        <li>GI Bill benefit optimization algorithms</li>
+                        <li>Military-specific cost scenarios (COTSOFF, COTSFAM)</li>
+                        <li>Decision support workflow design</li>
+                        <li>Specialized audience targeting</li>
+                    </ul>
+                    <a href="powerbi-dashboard.html" class="platform-button powerbi" id="powerbiButton">
+                        <span id="powerbiButtonText">Analyze Military ROI →</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integration Flow -->
+        <section class="integration-section">
+            <h2 style="text-align: center; margin-bottom: 2rem;">User Journey & Integration Flow</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">
+                Professional dual-platform workflow leveraging native analytics capabilities
+            </p>
+
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <h4 class="step-title">Geographic Discovery</h4>
+                    <p class="step-description">
+                        Start with Tableau to explore state-level cost patterns using native geographic 
+                        visualization and interactive filtering capabilities.
+                    </p>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <h4 class="step-title">Professional Transition</h4>
+                    <p class="step-description">
+                        Navigate to Power BI with state context guidance, then use native 
+                        platform slicers for focused analysis - embracing each platform's strengths.
+                    </p>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <h4 class="step-title">Military-Focused ROI</h4>
+                    <p class="step-description">
+                        Leverage Power BI's advanced DAX calculations for GI Bill optimization, 
+                        benefit analysis, and military-specific decision support.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Architecture -->
+        <section class="architecture-section">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Technical Architecture & Achievements</h2>
+            
+            <div class="architecture-grid">
+                <div class="architecture-card">
+                    <h3 class="architecture-title">
+                        <span class="architecture-icon"></span>
+                        Cross-Platform Integration
+                    </h3>
+                    <p>
+                        Implemented URL parameter passing and professional navigation between platforms, 
+                        demonstrating advanced solution architecture principles for enterprise environments.
+                    </p>
+                </div>
+
+                <div class="architecture-card">
+                    <h3 class="architecture-title">
+                        <span class="architecture-icon"></span>
+                        Constraint Optimization
+                    </h3>
+                    <p>
+                        Overcame Power BI Fabric mapping limitations by strategic platform selection, 
+                        showcasing problem-solving adaptability and technical constraint management.
+                    </p>
+                </div>
+
+                <div class="architecture-card">
+                    <h3 class="architecture-title">
+                        <span class="architecture-icon"></span>
+                        Optimal Tool Selection
+                    </h3>
+                    <p>
+                        Maximized each platform's strengths: Tableau for geographic analysis, 
+                        Power BI for complex financial calculations, demonstrating platform expertise.
+                    </p>
+                </div>
+
+                <div class="architecture-card">
+                    <h3 class="architecture-title">
+                        <span class="architecture-icon"></span>
+                        Comprehensive Dataset
+                    </h3>
+                    <p>
+                        Single IPEDS dataset powering both platforms: 6,163+ institutions, 
+                        22K+ cost scenarios, geographic coverage across all U.S. states.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2 class="cta-title">Experience the Integrated Solution</h2>
+            <p class="cta-description">
+                Explore both platforms to see advanced cross-platform analytics in action. 
+                Start with geographic discovery, then transition to specialized military analysis.
+            </p>
+            <div class="cta-buttons">
+                <a href="tableau-dashboard.html" class="cta-button" id="ctaTableauButton">
+                    <span id="ctaTableauText">Start with Tableau</span>
+                </a>
+                <a href="powerbi-dashboard.html" class="cta-button" id="ctaPowerbiButton">
+                    <span id="ctaPowerbiText">Military Analysis (Power BI)</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // State selector functionality
+        const stateSelector = document.getElementById('stateSelector');
+        const selectedStateDisplay = document.getElementById('selectedStateDisplay');
+        const quickStateBtns = document.querySelectorAll('.quick-state-btn');
+        
+        // Button elements
+        const tableauButton = document.getElementById('tableauButton');
+        const powerbiButton = document.getElementById('powerbiButton');
+        const ctaTableauButton = document.getElementById('ctaTableauButton');
+        const ctaPowerbiButton = document.getElementById('ctaPowerbiButton');
+        
+        // Text elements
+        const tableauButtonText = document.getElementById('tableauButtonText');
+        const powerbiButtonText = document.getElementById('powerbiButtonText');
+        const ctaTableauText = document.getElementById('ctaTableauText');
+        const ctaPowerbiText = document.getElementById('ctaPowerbiText');
+
+        // State name mapping
+        const stateNames = {
+            'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+            'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
+            'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+            'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+            'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi', 'MO': 'Missouri',
+            'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey',
+            'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+            'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+            'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+            'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+        };
+
+        // Update dashboard links and display
+        function updateStateSelection(stateCode) {
+            const stateName = stateNames[stateCode] || '';
+            
+            // Update display
+            if (stateCode) {
+                selectedStateDisplay.innerHTML = `Selected: <strong>${stateName} (${stateCode})</strong> - Ready for focused analysis`;
+                selectedStateDisplay.style.background = 'rgba(76, 175, 80, 0.3)';
+            } else {
+                selectedStateDisplay.innerHTML = 'Ready for National Analysis';
+                selectedStateDisplay.style.background = 'rgba(255, 255, 255, 0.2)';
+            }
+
+            // Base URLs
+            const baseTableauUrl = 'tableau-dashboard.html';
+            const basePowerbiUrl = 'powerbi-dashboard.html';
+
+            // Update URLs with state parameter
+            if (stateCode) {
+                const tableauUrl = `${baseTableauUrl}?state=${stateCode}`;
+                const powerbiUrl = `${basePowerbiUrl}?state=${stateCode}`;
+                
+                // Update href attributes
+                tableauButton.href = tableauUrl;
+                powerbiButton.href = powerbiUrl;
+                ctaTableauButton.href = tableauUrl;
+                ctaPowerbiButton.href = powerbiUrl;
+                
+                // Update button text
+                tableauButtonText.textContent = `Analyze ${stateName} Geography →`;
+                powerbiButtonText.textContent = `${stateName} Military ROI →`;
+                ctaTableauText.innerHTML = `${stateName} Analysis (Tableau)`;
+                ctaPowerbiText.innerHTML = `${stateName} Military ROI (Power BI)`;
+            } else {
+                // Reset to default
+                tableauButton.href = baseTableauUrl;
+                powerbiButton.href = basePowerbiUrl;
+                ctaTableauButton.href = baseTableauUrl;
+                ctaPowerbiButton.href = basePowerbiUrl;
+                
+                // Reset button text
+                tableauButtonText.textContent = 'Start Geographic Analysis →';
+                powerbiButtonText.textContent = 'Analyze Military ROI →';
+                ctaTableauText.innerHTML = 'Start with Tableau';
+                ctaPowerbiText.innerHTML = 'Military Analysis (Power BI)';
+            }
+
+            // Update quick state button active states
+            quickStateBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.state === stateCode) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // State selector dropdown change
+        stateSelector.addEventListener('change', (e) => {
+            updateStateSelection(e.target.value);
+        });
+
+        // Quick state button clicks
+        quickStateBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const stateCode = btn.dataset.state;
+                stateSelector.value = stateCode;
+                updateStateSelection(stateCode);
+            });
+        });
+
+        // Initialize with URL parameters if present
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialState = urlParams.get('state');
+        if (initialState && stateNames[initialState.toUpperCase()]) {
+            stateSelector.value = initialState.toUpperCase();
+            updateStateSelection(initialState.toUpperCase());
+        }
+    </script>
+</body>
+</html>

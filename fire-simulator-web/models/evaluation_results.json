@@ -1,0 +1,66 @@
+{
+  "total_scenarios": 3,
+  "source_performance": {
+    "unknown": [
+      7.208389119786173,
+      1.6454119732506454,
+      22.634053772098714
+    ]
+  },
+  "category_performance": {
+    "safety_management": [
+      7.208389119786173
+    ],
+    "technical_rescue": [
+      1.6454119732506454
+    ],
+    "marine_operations": [
+      22.634053772098714
+    ]
+  },
+  "scenario_details": [
+    {
+      "title": "Shipboard SAFETY OFFICER RESPONSE - MAJOR FIRE",
+      "source": "unknown",
+      "category": "safety_management",
+      "reward": 7.208389119786173,
+      "steps": 5,
+      "actions": [
+        0,
+        1,
+        18,
+        18,
+        18
+      ]
+    },
+    {
+      "title": "CONFINED SPACE RESCUE - FIRE CASUALTY",
+      "source": "unknown",
+      "category": "technical_rescue",
+      "reward": 1.6454119732506454,
+      "steps": 1,
+      "actions": [
+        16
+      ]
+    },
+    {
+      "title": "MULTI-PLATFORM MARINE FIRE RESPONSE",
+      "source": "unknown",
+      "category": "marine_operations",
+      "reward": 22.634053772098714,
+      "steps": 15,
+      "actions": [
+        18,
+        18,
+        1,
+        5,
+        5,
+        18,
+        18,
+        5,
+        18,
+        0
+      ]
+    }
+  ]
+}

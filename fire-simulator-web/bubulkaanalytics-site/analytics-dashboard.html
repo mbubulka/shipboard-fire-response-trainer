@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | Bubulka Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-bottom: 3px solid #3498db;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        .nav-pills .nav-link {
+            border-radius: 8px;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+        
+        .nav-pills .nav-link:not(.active):hover {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+        
+        .dashboard-section {
+            display: none;
+            padding: 30px 0;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .risk-low { color: #27ae60; font-weight: bold; }
+        .risk-moderate { color: #f39c12; font-weight: bold; }
+        .risk-high { color: #e74c3c; font-weight: bold; }
+        .risk-extreme { color: #8e44ad; font-weight: bold; }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-operational { background-color: #27ae60; }
+        .status-warning { background-color: #f39c12; }
+        .status-critical { background-color: #e74c3c; }
+        
+        .refresh-button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+            transform: translateY(-2px);
+        }
+        
+        .coming-soon {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .coming-soon h3 {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .coming-soon p {
+            color: #95a5a6;
+        }
+        
+        .iframe-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .iframe-container iframe {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">📊 Bubulka Analytics</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-pills justify-content-center mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showSection('potomac')">🌊 River Safety</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('business')">📈 Business Intelligence</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('predictive')">🔮 Predictive Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('realtime')">⚡ Real-time Monitoring</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Potomac River Safety Section -->
+        <div id="potomac-section" class="dashboard-section active">
+            <div class="section-header">
+                <h2>🌊 Potomac River Safety Dashboard</h2>
+                <p>Real-time river safety analytics with predictive flow forecasting and risk assessment</p>
+                <p><small>Powered by GitHub Pages - automatically updates when source is modified</small></p>
+            </div>
+
+            <div class="iframe-container">
+                <iframe 
+                    id="potomac-iframe"
+                    src="https://mbubulka.github.io/shipboard-fire-response-trainer/web/bubulkaanalytics-site/potomac_dashboard_final_exact.html"
+                    width="100%" 
+                    height="1000px" 
+                    frameborder="0"
+                    style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Business Intelligence Section -->
+        <div id="business-section" class="dashboard-section">
+            <div class="section-header">
+                <h2>📈 Business Intelligence Dashboard</h2>
+                <p>Comprehensive business analytics and performance metrics</p>
+            </div>
+            <div class="coming-soon">
+                <h3>🚧 Under Development</h3>
+                <p>Advanced business intelligence features coming soon including KPI tracking, revenue analytics, and customer insights.</p>
+            </div>
+        </div>
+
+        <!-- Predictive Analytics Section -->
+        <div id="predictive-section" class="dashboard-section">
+            <div class="section-header">
+                <h2>🔮 Predictive Analytics</h2>
+                <p>Machine learning powered forecasting and trend analysis</p>
+            </div>
+            <div class="coming-soon">
+                <h3>🚧 Under Development</h3>
+                <p>ML-powered predictive models for demand forecasting, risk assessment, and trend analysis.</p>
+            </div>
+        </div>
+
+        <!-- Real-time Monitoring Section -->
+        <div id="realtime-section" class="dashboard-section">
+            <div class="section-header">
+                <h2>⚡ Real-time Monitoring</h2>
+                <p>Live system monitoring and performance tracking</p>
+            </div>
+            <div class="coming-soon">
+                <h3>🚧 Under Development</h3>
+                <p>Real-time system monitoring, alerts, and performance dashboards.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+        }
+
+        // Handle iframe height adjustments from embedded Potomac dashboard
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'iframe-height' && event.data.source === 'potomac-dashboard') {
+                const iframe = document.getElementById('potomac-iframe');
+                if (iframe) {
+                    // Add some padding to ensure full content is visible
+                    iframe.style.height = (event.data.height + 50) + 'px';
+                    console.log('Iframe resized to:', event.data.height + 50, 'px');
+                }
+            }
+        });
+
+        // Fallback iframe resizing in case postMessage doesn't work
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('potomac-iframe');
+            if (iframe) {
+                iframe.onload = function() {
+                    // Give iframe time to fully load then adjust size
+                    setTimeout(function() {
+                        try {
+                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                            const height = iframeDoc.body.scrollHeight;
+                            if (height > 800) {
+                                iframe.style.height = (height + 50) + 'px';
+                                console.log('Iframe auto-resized to:', height + 50, 'px');
+                            }
+                        } catch (e) {
+                            console.log('Cross-origin iframe - using fixed height');
+                        }
+                    }, 2000);
+                };
+            }
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Analytics Dashboard loaded - Potomac data served from GitHub');
+        });
+    </script>
+</body>
+</html>
