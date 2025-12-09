@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Military Salary Estimator - Bubulka Analytics Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header nav {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        header a:hover {
+            color: #764ba2;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .section {
+            margin: 3rem 0;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .link-card {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .link-card:hover {
+            background: #667eea;
+            color: white;
+            border-left-color: #764ba2;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .link-card h3 {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .link-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 3px solid #667eea;
+        }
+
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-stack {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .tech-stack ul {
+            list-style: none;
+            columns: 2;
+            gap: 2rem;
+        }
+
+        .tech-stack li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-stack li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        footer {
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 3rem;
+            color: #666;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e8eaf6;
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .button:hover {
+            background: #764ba2;
+        }
+
+        .button.secondary {
+            background: #f5f5f5;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .button.secondary:hover {
+            background: #e8eaf6;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../../index.html">← Back to Portfolio</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>🎯 Military-to-Civilian Salary Estimator</h1>
+        <p>AI-powered salary prediction model with 96% accuracy, trained on 3,589 real military-to-civilian transitions</p>
+    </div>
+
+    <div class="container">
+        <!-- Stats Section -->
+        <div class="section">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>96%</h3>
+                    <p>Model Accuracy<br><span style="font-size: 0.9rem;">R² = 0.9627</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>3,589</h3>
+                    <p>Training Records<br><span style="font-size: 0.9rem;">Real transitions</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>±$3,246</h3>
+                    <p>Avg Error<br><span style="font-size: 0.9rem;">MAE on test set</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Live</h3>
+                    <p>Interactive<br><span style="font-size: 0.9rem;">Shiny Dashboard</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="section">
+            <h2>🚀 Quick Links</h2>
+            <div class="links">
+                <a href="https://mbubulka.shinyapps.io/military-salary/" class="link-card" target="_blank">
+                    <h3><i class="fas fa-chart-line"></i> Live Shiny Dashboard</h3>
+                    <p>Interactive salary estimator—try the model live</p>
+                </a>
+                <a href="https://github.com/mbubulka" class="link-card" target="_blank">
+                    <h3><i class="fab fa-github"></i> GitHub Repository</h3>
+                    <p>View source code, documentation, and contribute</p>
+                </a>
+                <a href="https://github.com/mbubulka" class="link-card" target="_blank">
+                    <h3><i class="fas fa-rocket"></i> Getting Started</h3>
+                    <p>Installation and quick start guide</p>
+                </a>
+                <a href="https://github.com/mbubulka" class="link-card" target="_blank">
+                    <h3><i class="fas fa-book"></i> Full Documentation</h3>
+                    <p>Complete technical documentation</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="section">
+            <h2>📊 Project Overview</h2>
+            <p>
+                This project analyzes <strong>3,589 real military-to-civilian salary transitions</strong> to build a predictive model 
+                that helps service members understand expected civilian salary outcomes. The model achieves <strong>96% accuracy</strong> 
+                using a Generalized Linear Model (GLM) trained with proper cross-validation.
+            </p>
+            <p style="margin-top: 1rem;">
+                Military rank dominates salary determination, explaining 95%+ of variance. This reflects direct salary-based rank correspondence 
+                and the alignment between military hierarchy and civilian career progression.
+            </p>
+        </div>
+
+        <!-- Key Features -->
+        <div class="section">
+            <h2>✨ Key Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>📈 High Accuracy</h3>
+                    <p>R² = 0.9627 on independent test set. Achieves 96% variance explanation with minimal overfitting.</p>
+                </div>
+                <div class="feature">
+                    <h3>🔍 Interpretable</h3>
+                    <p>Transparent GLM coefficients explain exactly which factors drive salary outcomes.</p>
+                </div>
+                <div class="feature">
+                    <h3>🎯 Interactive</h3>
+                    <p>Live Shiny dashboard for real-time salary estimation with confidence intervals.</p>
+                </div>
+                <div class="feature">
+                    <h3>🔄 Reproducible</h3>
+                    <p>Full analysis pipeline with cross-validation, testing, and comprehensive documentation.</p>
+                </div>
+                <div class="feature">
+                    <h3>🔐 Privacy-Aware</h3>
+                    <p>No personally identifiable information. Military data anonymized and aggregated.</p>
+                </div>
+                <div class="feature">
+                    <h3>📝 Open Source</h3>
+                    <p>MIT licensed. Full source code available on GitHub for transparency and collaboration.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Stack -->
+        <div class="section">
+            <h2>🛠️ Technical Stack</h2>
+            <div class="tech-stack">
+                <ul>
+                    <li><strong>Algorithm:</strong> Generalized Linear Model (GLM)</li>
+                    <li><strong>Language:</strong> R 4.0+</li>
+                    <li><strong>Dashboard:</strong> Shiny interactive framework</li>
+                    <li><strong>Training Size:</strong> 2,512 records (70%)</li>
+                    <li><strong>Test Size:</strong> 1,077 records (30%)</li>
+                    <li><strong>Validation:</strong> 10-fold cross-validation</li>
+                    <li><strong>Explainability:</strong> SHAP & LIME analysis</li>
+                    <li><strong>Visualization:</strong> ggplot2 publication-quality figures</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Model Insights -->
+        <div class="section">
+            <h2>🔬 Model Insights</h2>
+            
+            <h3 style="color: #667eea; margin-top: 1rem;">Feature Importance</h3>
+            <p>The model reveals clear feature importance rankings:</p>
+            <ul style="margin: 1rem 0; margin-left: 1.5rem;">
+                <li><strong>Military Rank:</strong> 95.2% - Dominates salary determination</li>
+                <li><strong>Years of Service:</strong> 3.1% - Secondary factor</li>
+                <li><strong>Occupation:</strong> 1.4% - Minor contribution</li>
+                <li><strong>Civilian Category:</strong> 0.2% - Minimal impact</li>
+                <li><strong>Skill Level:</strong> 0.1% - Negligible contribution</li>
+            </ul>
+
+            <h3 style="color: #667eea; margin-top: 1.5rem;">Key Findings</h3>
+            <ul style="margin: 1rem 0; margin-left: 1.5rem;">
+                <li>Rank directly encodes compensation bands—higher ranks earn significantly more</li>
+                <li>Years of service has modest secondary effect on salary</li>
+                <li>Model is near-optimal; additional complexity provides minimal improvement</li>
+                <li>Skills feature explored but found redundant with occupation coding</li>
+            </ul>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="section">
+            <h2>💡 Use Cases</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Military-to-civilian career transition planning</li>
+                <li>Salary expectation setting for separating service members</li>
+                <li>Career counselor reference tool for transitioning veterans</li>
+                <li>Veterans employment program benchmarking</li>
+                <li>Research on military-civilian workforce transitions</li>
+            </ul>
+        </div>
+
+        <!-- Data & Methodology -->
+        <div class="section">
+            <h2>📋 Data & Methodology</h2>
+            
+            <h3 style="color: #667eea;">Data Source</h3>
+            <p>3,589 real military-to-civilian transitions with complete records. Data quality: 0 duplicates, <1% missing.</p>
+
+            <h3 style="color: #667eea; margin-top: 1rem;">Train/Test Split</h3>
+            <ul style="margin: 1rem 0; margin-left: 1.5rem;">
+                <li>Training: 2,512 records (70%)</li>
+                <li>Testing: 1,077 records (30% holdout)</li>
+                <li>Method: Stratified random split</li>
+            </ul>
+
+            <h3 style="color: #667eea; margin-top: 1rem;">Model Validation</h3>
+            <ul style="margin: 1rem 0; margin-left: 1.5rem;">
+                <li>Cross-Validation: 10-fold with R² = 0.8202 ± 0.0304 (conservative)</li>
+                <li>Test Set: R² = 0.9627 (96.27% variance explained)</li>
+                <li>Overfitting Check: 0.02% train→test drop (minimal)</li>
+                <li>Residual Analysis: Normally distributed, homoscedastic</li>
+            </ul>
+
+            <h3 style="color: #667eea; margin-top: 1rem;">Performance Metrics</h3>
+            <ul style="margin: 1rem 0; margin-left: 1.5rem;">
+                <li>RMSE: $5,003</li>
+                <li>MAE: $3,246</li>
+                <li>Prediction Range: $28,000 - $180,000</li>
+                <li>Mean Salary: $68,450</li>
+            </ul>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="section">
+            <h2>🚀 Getting Started</h2>
+            <p>Clone the repository and get the model running in minutes:</p>
+            
+            <h3 style="color: #667eea; margin-top: 1rem;">1. Clone Repository</h3>
+            <code style="display: block; padding: 0.8rem; background: #f4f4f4; border-radius: 5px; margin: 0.5rem 0;">
+                git clone https://github.com/yourusername/military-salary-estimator.git
+            </code>
+
+            <h3 style="color: #667eea; margin-top: 1rem;">2. Install Dependencies</h3>
+            <code style="display: block; padding: 0.8rem; background: #f4f4f4; border-radius: 5px; margin: 0.5rem 0;">
+                # In R console:<br>
+                source("requirements.R")
+            </code>
+
+            <h3 style="color: #667eea; margin-top: 1rem;">3. Launch Dashboard</h3>
+            <code style="display: block; padding: 0.8rem; background: #f4f4f4; border-radius: 5px; margin: 0.5rem 0;">
+                library(shiny)<br>
+                runApp("10_shiny_dashboard/app_simple.R", port = 8100)
+            </code>
+
+            <p style="margin-top: 1rem;">Visit <code>http://127.0.0.1:8100</code> in your browser. Done! 🎉</p>
+        </div>
+
+        <!-- Limitations -->
+        <div class="section">
+            <h2>⚠️ Limitations & Disclaimer</h2>
+            <p>
+                This model is a powerful tool for understanding salary trends, but comes with important limitations:
+            </p>
+            <ul style="margin: 1rem 0; margin-left: 1.5rem;">
+                <li><strong>Selection Bias:</strong> Only includes successful transitions; may overestimate for struggling separatees</li>
+                <li><strong>Cross-Sectional:</strong> Snapshot in time; doesn't capture career progression</li>
+                <li><strong>Missing Variables:</strong> Education, location/COL, benefits not included</li>
+                <li><strong>Occupational Matching:</strong> ±3-5% error in niche specialties</li>
+                <li><strong>Regional Variation:</strong> Ignores geographic salary differences (future enhancement)</li>
+            </ul>
+            <p style="margin-top: 1rem;">
+                <strong>Use responsibly:</strong> Combine with BLS data, career counseling, and personal judgment.
+            </p>
+        </div>
+
+        <!-- License -->
+        <div class="section">
+            <h2>📜 License & Attribution</h2>
+            <p>
+                This project is licensed under the <strong>MIT License</strong>, allowing free commercial and research use with attribution.
+            </p>
+            <p style="margin-top: 1rem;">
+                <strong>Citation:</strong>
+            </p>
+            <code style="display: block; padding: 0.8rem; background: #f4f4f4; border-radius: 5px; margin: 0.5rem 0;">
+                @software{military_salary_estimator,<br>
+                &nbsp;&nbsp;title = {Military-to-Civilian Salary Estimator},<br>
+                &nbsp;&nbsp;author = {Your Name},<br>
+                &nbsp;&nbsp;year = {2024},<br>
+                &nbsp;&nbsp;url = {https://github.com/yourusername/military-salary-estimator}<br>
+                }
+            </code>
+        </div>
+
+        <!-- CTA -->
+        <div class="section" style="text-align: center; background: #f9f9f9; padding: 2rem; border-radius: 8px;">
+            <h2>Ready to explore?</h2>
+            <p style="margin-bottom: 1.5rem;">
+                Check out the repository on GitHub or launch the interactive dashboard to see the model in action.
+            </p>
+            <a href="https://github.com/yourusername/military-salary-estimator" class="button" target="_blank">
+                View on GitHub
+            </a>
+            <a href="https://github.com/yourusername/military-salary-estimator#quick-start" class="button secondary" target="_blank">
+                Get Started
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            Military Salary Estimator • 
+            <a href="https://github.com/yourusername/military-salary-estimator" target="_blank">GitHub</a> • 
+            <a href="https://github.com/yourusername/military-salary-estimator/blob/main/LICENSE" target="_blank">MIT License</a>
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            Part of <a href="../../">Bubulka Analytics Portfolio</a>
+        </p>
+    </footer>
+</body>
+</html>

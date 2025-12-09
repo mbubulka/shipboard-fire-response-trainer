@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive Tableau dashboard analyzing higher education costs across 6,163+ institutions using IPEDS data (2020-2024).">
+    <meta name="keywords" content="Tableau, Data Visualization, Higher Education, IPEDS, Cost Analysis, Interactive Dashboard">
+    <meta name="author" content="Michael Bubulka">
+    <title>Higher Education Cost Analysis - Michael Bubulka Portfolio</title>
+    <style>
+        :root {
+            --primary: #1a3a52;
+            --secondary: #2d5a7b;
+            --accent: #0073b8;
+            --accent-light: #4a9fd8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-light: #7a7a7a;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --border: #e0e0e0;
+            --success: #2d7a3e;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            line-height: 1.6;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .project-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-description {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* Dashboard Container */
+        .dashboard-section {
+            margin: 3rem 0;
+        }
+
+        .dashboard-wrapper {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        .tableau-embed {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 8px;
+            background: var(--bg-light);
+        }
+        /* Features Section */
+        .features-section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-icon.geographic {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .feature-icon.filter {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .feature-icon.chart {
+            background: linear-gradient(135deg, #fd7e14, #e55a4e);
+        }
+
+        .feature-icon.details {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        /* Technical Implementation Section */
+        .tech-section {
+            background-color: var(--bg-light);
+            padding: 3rem 2rem;
+            margin: 4rem -2rem;
+            border-radius: 12px;
+        }
+
+        .tech-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .tech-tag {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tech-tag:hover {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Links Section */
+        .links-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            margin: 0.5rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .link-button:hover {
+            background-color: var(--accent-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .link-button.secondary {
+            background-color: var(--bg-white);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .link-button.secondary:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .dashboard-wrapper {
+                padding: 1rem;
+            }
+
+            .tableau-embed {
+                height: 600px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tech-section {
+                margin: 3rem -1rem;
+                padding: 2rem 1rem;
+            }
+
+            .link-button {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-title {
+                font-size: 1.75rem;
+            }
+
+            .tableau-embed {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav>
+            <div class="nav-brand">Michael Bubulka</div>
+            <a href="index.html" class="back-button">
+                ← Back to Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="project-header">
+            <h1 class="project-title">U.S. College Cost Analysis</h1>
+            <p class="project-subtitle">Interactive Tableau Dashboard - Geographic Explorer</p>
+            <p class="project-description">
+                <strong>Step 1 of 2-Platform Analysis:</strong> Explore college and university costs across the United States with this comprehensive 
+                interactive dashboard analyzing 6,163+ institutions using federal education data (2020-2024). 
+                Discover geographic cost patterns, institutional trends, and detailed financial information 
+                through advanced filtering and visualization capabilities.
+            </p>
+            
+            <!-- Cross-Platform Integration Notice -->
+            <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid var(--accent); border-radius: 12px; padding: 1.5rem; margin: 2rem auto; max-width: 700px;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">Dual-Platform Analytics Suite</h3>
+                <p style="margin-bottom: 1rem; text-align: center;">
+                    <strong>Tableau:</strong> Geographic exploration and cost patterns<br>
+                    <strong>Power BI:</strong> Military-focused ROI analysis and decision support
+                </p>
+                <div style="text-align: center;">
+                    <a href="powerbi-dashboard.html" class="back-button" style="background: linear-gradient(135deg, #d63384, #e91e63); margin: 0.5rem;">
+                        Continue to Power BI Analysis →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section class="dashboard-section">
+            <div class="dashboard-wrapper">
+            <!-- Tableau Public Dashboard -->
+            <div class='tableauPlaceholder' id='viz1761522588562' style='position: relative'>
+                <noscript>
+                    <a href='#'>
+                        <img alt='US Higher Education Cost Analysis' 
+                             src='https://public.tableau.com/static/images/5H/5H2Q36NJ2/1_rss.png' 
+                             style='border: none' />
+                    </a>
+                </noscript>
+                <object class='tableauViz' style='display:none;'>
+                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                    <param name='embed_code_version' value='3' />
+                    <param name='path' value='shared&#47;5H2Q36NJ2' />
+                    <param name='toolbar' value='yes' />
+                    <param name='static_image' value='https://public.tableau.com/static/images/5H/5H2Q36NJ2/1.png' />
+                    <param name='animate_transition' value='yes' />
+                    <param name='display_static_image' value='yes' />
+                    <param name='display_spinner' value='yes' />
+                    <param name='display_overlay' value='yes' />
+                    <param name='display_count' value='yes' />
+                    <param name='language' value='en-US' />
+                    <param name='filter' value='publish=yes' />
+                </object>
+            </div>
+            <script type='text/javascript'>
+                var divElement = document.getElementById('viz1761522588562');
+                var vizElement = divElement.getElementsByTagName('object')[0];
+                if (divElement.offsetWidth > 800) {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+                } else if (divElement.offsetWidth > 500) {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+                } else {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = '777px';
+                }
+                var scriptElement = document.createElement('script');
+                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                vizElement.parentNode.insertBefore(scriptElement, vizElement);
+            </script>
+            </div>
+            
+            <!-- Dashboard Instructions -->
+            <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        <strong>Public Dashboard:</strong> This interactive dashboard is publicly accessible - no sign-in required! 
+                        Explore geographic cost patterns across all U.S. states.
+                    </p>
+                </div>
+                <div style="background: #e8f5e8; border-left: 4px solid #4caf50; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        <strong>Interactive Filtering:</strong> Use the <strong>State filter</strong> in the dashboard above to focus your analysis. 
+                        This gives you full control to explore individual states or compare multiple states as needed.
+                    </p>
+                </div>
+                <p style="text-align: center; margin-bottom: 1rem;">
+                    <strong>Interactive Features:</strong> Click on map regions, use filters, and hover over data points to explore. 
+                    The dashboard updates in real-time based on your selections.
+                </p>
+                
+                <!-- Financial Disclaimer -->
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+                    <h4 style="color: #856404; margin: 0 0 1rem 0; font-size: 1rem;">
+                        Important Disclaimer
+                    </h4>
+                    <p style="margin: 0; font-size: 0.9rem; color: #856404; line-height: 1.5;">
+                        <strong>This dashboard is for educational and informational purposes only.</strong> 
+                        The analysis, calculations, and cost data provided are not certified financial advice. 
+                        Individual circumstances vary significantly, and actual costs, benefits, and outcomes may differ. 
+                        Always consult with qualified financial advisors, education counselors, or military education benefits specialists 
+                        before making education investment decisions. Institution costs and financial aid availability are subject to change.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Dashboard Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon geographic">M</div>
+                    <h3 class="feature-title">Interactive Geographic Analysis</h3>
+                    <p class="feature-description">
+                        Explore state-level education costs with dynamic U.S. map visualization 
+                        and geographic filtering capabilities.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon filter">F</div>
+                    <h3 class="feature-title">Advanced Filtering</h3>
+                    <p class="feature-description">
+                        Filter by institution type, geographic region, and cost ranges with 
+                        real-time updates and interactive controls.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon chart">T</div>
+                    <h3 class="feature-title">Trend Analysis</h3>
+                    <p class="feature-description">
+                        Track 4-year cost changes (2020-2024) and identify institutional 
+                        patterns across different sectors.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon details">D</div>
+                    <h3 class="feature-title">Institution Details</h3>
+                    <p class="feature-description">
+                        Detailed tooltips with tuition, fees, enrollment data, and 
+                        comprehensive regional context.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- Technical Implementation Section -->
+        <section class="tech-section">
+            <h2 class="tech-title">Technical Implementation</h2>
+            <div class="tech-grid">
+                <span class="tech-tag">Tableau Public</span>
+                <span class="tech-tag">Federal Education Data</span>
+                <span class="tech-tag">Interactive Visualizations</span>
+                <span class="tech-tag">Responsive Design</span>
+                <span class="tech-tag">Geographic Mapping</span>
+                <span class="tech-tag">Data Analysis</span>
+                <span class="tech-tag">6,163+ Institutions</span>
+                <span class="tech-tag">22K+ Cost Scenarios</span>
+            </div>
+        </section>
+
+        <!-- External Links Section -->
+        <section class="links-section">
+            <a href="https://public.tableau.com/shared/5H2Q36NJ2?:display_count=n&:origin=viz_share_link" 
+               class="link-button" target="_blank">
+                View Full Dashboard
+            </a>
+            <a href="https://github.com/mbubulka/ipeds-education-cost-analysis" 
+               class="link-button secondary" target="_blank">
+                GitHub Repository
+            </a>
+        </section>
+    </main>
+
+    <script>
+        // Handle state parameter from integrated analytics page
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedState = urlParams.get('state');
+        
+        if (selectedState) {
+            // State name mapping
+            const stateNames = {
+                'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+                'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
+                'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+                'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+                'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi', 'MO': 'Missouri',
+                'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey',
+                'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+                'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+                'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+                'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+            };
+            
+            const stateName = stateNames[selectedState.toUpperCase()];
+            
+            if (stateName) {
+                // Add state focus banner
+                const focusBanner = document.createElement('div');
+                focusBanner.style.cssText = `
+                    background: linear-gradient(135deg, #4caf50, #45a049);
+                    color: white;
+                    padding: 1rem 2rem;
+                    text-align: center;
+                    font-weight: 600;
+                    position: sticky;
+                    top: 0;
+                    z-index: 100;
+                    box-shadow: var(--shadow-md);
+                `;
+                focusBanner.innerHTML = `
+                    <strong>Geographic Analysis: ${stateName} (${selectedState.toUpperCase()})</strong> 
+                    - Ready to explore ${stateName} education costs and geographic patterns
+                `;
+                
+                // Insert at top of body
+                document.body.insertBefore(focusBanner, document.body.firstChild);
+                
+                // Update ALL Power BI links to maintain state
+                const powerBILinks = document.querySelectorAll('a[href*="powerbi-dashboard.html"]');
+                powerBILinks.forEach(link => {
+                    link.href = `powerbi-dashboard.html?state=${selectedState.toUpperCase()}`;
+                    // Update text if it contains "Continue" or "Power BI"
+                    if (link.textContent.includes('Continue') || link.textContent.includes('Power BI')) {
+                        link.innerHTML = `Continue to ${stateName} Military ROI Analysis →`;
+                    }
+                });
+                
+                // Update page title
+                const titleElement = document.querySelector('.project-title');
+                if (titleElement) {
+                    titleElement.textContent = `${stateName} Geographic Cost Analysis`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

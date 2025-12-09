@@ -1,0 +1,33 @@
+# Development and planning files
+CLEANUP_PLAN.md
+CLEANUP_COMPLETE.md
+DEPLOYMENT_CHECKLIST.md
+
+# Development backup folder
+dev-backup/
+
+# Personal files
+*.personal.*
+*.private.*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (if any)
+node_modules/
+
+# Environment files
+.env
+.env.*

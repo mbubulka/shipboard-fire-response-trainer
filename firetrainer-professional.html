@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="description" content="Shipboard Fire Response Training System - AI-powered adaptive training for naval fire response procedures.">
+    <title>Fire Response Training System</title>
+    <style>
+        :root {
+            --primary: #1a3a52;
+            --secondary: #2d5a7b;
+            --accent: #0073b8;
+            --accent-light: #4a9fd8;
+            --success: #2d7a3e;
+            --warning: #c85a17;
+            --danger: #8b2c2c;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-light: #7a7a7a;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --border: #e0e0e0;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-back {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: var(--accent-light);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-banner h2 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .info-banner p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+            background-color: var(--bg-white);
+            margin: 2rem 0;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            margin: 2rem 0;
+        }
+
+        .question-block {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            background-color: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .question-context {
+            background-color: var(--bg-white);
+            border-left: 3px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .question-context strong {
+            color: var(--accent);
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .option input[type="radio"] {
+            margin-top: 0.3rem;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* Feedback */
+        .feedback {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background-color: rgba(45, 122, 62, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .feedback.incorrect {
+            background-color: rgba(139, 44, 44, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .feedback strong {
+            font-weight: 700;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-light);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Progress */
+        .progress-bar {
+            background-color: var(--border);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            background-color: var(--accent);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            background-color: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Scenario List */
+        .scenario-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .scenario-card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .scenario-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .scenario-header h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .scenario-body {
+            padding: 1.5rem;
+        }
+
+        .scenario-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .scenario-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #d0d0d0;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .scenario-button {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .scenario-button:hover {
+            background-color: var(--accent-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            .info-banner {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+
+            .question-block {
+                padding: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+            }
+
+            .summary-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .scenario-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="nav-brand">Fire Response Training System</div>
+            <a href="index-professional.html" class="nav-back">Back to Portfolio</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <section class="info-banner">
+            <h2>Shipboard Fire Response Training</h2>
+            <p><strong>Interactive adaptive training system powered by AI.</strong></p>
+            <p>This system presents realistic fire response scenarios with dynamic difficulty adjustment based on your performance. Each scenario is designed to reinforce critical decision-making skills in high-pressure situations.</p>
+        </section>
+
+        <main>
+            <div class="main-content">
+                <!-- Introduction Section -->
+                <section>
+                    <h2>System Overview</h2>
+                    <p>This training platform uses artificial intelligence to create personalized learning experiences. The system analyzes your responses and adjusts scenario complexity to optimize skill development.</p>
+
+                    <div class="summary-section">
+                        <h3>Key Features</h3>
+                        <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+                            <li>Adaptive difficulty based on performance</li>
+                            <li>Real-world shipboard scenarios</li>
+                            <li>Immediate feedback on responses</li>
+                            <li>Progress tracking and analytics</li>
+                            <li>Multi-scenario training modules</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Scenario Selection -->
+                <section>
+                    <h2>Training Scenarios</h2>
+                    <p>Select a scenario to begin training. Each scenario presents realistic fire response situations with multiple decision points.</p>
+
+                    <div class="scenario-list">
+                        <!-- Scenario 1 -->
+                        <div class="scenario-card">
+                            <div class="scenario-header">
+                                <h3>Engine Room Fire</h3>
+                            </div>
+                            <div class="scenario-body">
+                                <p class="scenario-description">A fire has broken out in the engine room. You must make critical decisions about containment, personnel safety, and system shutdown procedures.</p>
+                                <div class="scenario-meta">
+                                    <span class="meta-item">Difficulty: Advanced</span>
+                                    <span class="meta-item">Questions: 8-12</span>
+                                </div>
+                                <button class="scenario-button" onclick="startScenario('engine-room')">Begin Training</button>
+                            </div>
+                        </div>
+
+                        <!-- Scenario 2 -->
+                        <div class="scenario-card">
+                            <div class="scenario-header">
+                                <h3>Electrical Fire</h3>
+                            </div>
+                            <div class="scenario-body">
+                                <p class="scenario-description">An electrical fire threatens critical systems. Navigate power management, evacuation procedures, and system prioritization decisions.</p>
+                                <div class="scenario-meta">
+                                    <span class="meta-item">Difficulty: Intermediate</span>
+                                    <span class="meta-item">Questions: 6-10</span>
+                                </div>
+                                <button class="scenario-button" onclick="startScenario('electrical')">Begin Training</button>
+                            </div>
+                        </div>
+
+                        <!-- Scenario 3 -->
+                        <div class="scenario-card">
+                            <div class="scenario-header">
+                                <h3>Berthing Area Fire</h3>
+                            </div>
+                            <div class="scenario-body">
+                                <p class="scenario-description">Fire detected in crew berthing compartment. Master personnel evacuation, compartment isolation, and emergency response coordination.</p>
+                                <div class="scenario-meta">
+                                    <span class="meta-item">Difficulty: Intermediate</span>
+                                    <span class="meta-item">Questions: 7-11</span>
+                                </div>
+                                <button class="scenario-button" onclick="startScenario('berthing')">Begin Training</button>
+                            </div>
+                        </div>
+
+                        <!-- Scenario 4 -->
+                        <div class="scenario-card">
+                            <div class="scenario-header">
+                                <h3>Galley Fire</h3>
+                            </div>
+                            <div class="scenario-body">
+                                <p class="scenario-description">Fire breaks out in galley/food service area. Address cooking oil fires, ventilation system shutdown, and cooking equipment emergency procedures.</p>
+                                <div class="scenario-meta">
+                                    <span class="meta-item">Difficulty: Beginner</span>
+                                    <span class="meta-item">Questions: 5-8</span>
+                                </div>
+                                <button class="scenario-button" onclick="startScenario('galley')">Begin Training</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Technical Information -->
+                <section>
+                    <h2>How the System Works</h2>
+                    <p>This training system implements adaptive learning algorithms that analyze your decision patterns and adjust accordingly:</p>
+
+                    <div class="summary-section">
+                        <h3>System Components</h3>
+                        <p><strong>Performance Analysis:</strong> The system tracks your accuracy, response patterns, and decision reasoning to identify knowledge gaps.</p>
+                        <p><strong>Adaptive Difficulty:</strong> Question complexity increases or decreases based on your performance, ensuring optimal challenge level.</p>
+                        <p><strong>Decision Modeling:</strong> Each scenario includes multiple valid approaches. The system evaluates not just correctness but also decision quality and reasoning.</p>
+                        <p><strong>Feedback Generation:</strong> Real-time feedback explains why answers are correct or incorrect, reinforcing learning outcomes.</p>
+                        <p><strong>Progress Tracking:</strong> Detailed analytics show performance trends, skill development, and areas requiring additional focus.</p>
+                    </div>
+                </section>
+
+                <!-- Quiz Container (Hidden by default, shown when scenario is started) -->
+                <section id="quiz-section" style="display: none;">
+                    <div id="quiz-content"></div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="controls" style="margin-top: 3rem;">
+                    <a href="index-professional.html" class="btn btn-secondary">Return to Portfolio</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--primary); color: rgba(255,255,255,0.8); text-align: center; padding: 2rem; margin-top: 3rem;">
+        <p>&copy; 2025 Michael Bubulka - Fire Response Training System. Technical demonstration of adaptive AI training capabilities.</p>
+    </footer>
+
+    <script>
+        function startScenario(scenarioId) {
+            const quizSection = document.getElementById('quiz-section');
+            const quizContent = document.getElementById('quiz-content');
+            
+            // Scroll to quiz
+            quizSection.style.display = 'block';
+            quizSection.scrollIntoView({ behavior: 'smooth' });
+
+            // Sample quiz questions (in production, these would be loaded from a database)
+            const scenarios = {
+                'engine-room': {
+                    title: 'Engine Room Fire Response',
+                    questions: [
+                        {
+                            question: 'You receive report of smoke in engine room. What is your immediate priority?',
+                            context: 'Status: Fire alarm has not yet activated. You have visual confirmation of smoke.',
+                            options: [
+                                'Sound General Quarters alarm immediately',
+                                'Investigate source of smoke before taking action',
+                                'Notify damage control party and begin preparation',
+                                'Evacuate engine room personnel and activate fire suppression'
+                            ],
+                            correct: 3,
+                            explanation: 'Personnel safety is paramount. Evacuate the compartment immediately and activate suppression systems. Do not risk lives investigating unconfirmed threats.'
+                        },
+                        {
+                            question: 'Fire has been confirmed in engine room. Engine room is evacuated. What is the next critical step?',
+                            context: 'Engine room door has been sealed. Fire is visible but not spreading outside compartment.',
+                            options: [
+                                'Enter compartment with firefighting team',
+                                'Continue monitoring and activate fixed suppression systems',
+                                'Attempt to manually shut down engines',
+                                'Wait for ship fire party to arrive'
+                            ],
+                            correct: 1,
+                            explanation: 'Activate fixed suppression systems (CO2, foam, or water-based systems depending on fuel type) from outside the compartment. This is the safe and effective approach.'
+                        }
+                    ]
+                },
+                'electrical': {
+                    title: 'Electrical Fire Response',
+                    questions: [
+                        {
+                            question: 'Report received of smoke from electrical panel in control room. Your immediate action?',
+                            context: 'Control room is occupied. Smoke visible from panel but no flames.',
+                            options: [
+                                'Use water-based extinguisher on electrical panel',
+                                'Evacuate control room and de-energize affected circuits',
+                                'Attempt to manually restart circuit breakers',
+                                'Continue operations while monitoring situation'
+                            ],
+                            correct: 1,
+                            explanation: 'Electrical fires require isolating power. Evacuate the area and de-energize circuits. Use only non-conductive extinguishing agents like CO2 or dry powder.'
+                        }
+                    ]
+                },
+                'berthing': {
+                    title: 'Berthing Area Fire Response',
+                    questions: [
+                        {
+                            question: 'Fire alarm activated in crew berthing compartment. Multiple personnel are still inside. Primary action?',
+                            context: 'Compartment has limited exits. Fire appears to be in one section.',
+                            options: [
+                                'Order personnel to fight fire from their compartment',
+                                'Begin organized evacuation along designated escape routes',
+                                'Seal the compartment to contain fire',
+                                'Wait for additional damage control parties'
+                            ],
+                            correct: 1,
+                            explanation: 'Immediate, organized evacuation saves lives. Establish evacuation routes, account for personnel, then address fire suppression with trained teams.'
+                        }
+                    ]
+                },
+                'galley': {
+                    title: 'Galley Fire Response',
+                    questions: [
+                        {
+                            question: 'Cooking oil fire in galley has ignited. What is the correct suppression method?',
+                            context: 'Fire is contained to cooking vessel. Adjacent surfaces are beginning to heat.',
+                            options: [
+                                'Use water-based extinguisher directly on oil',
+                                'Use dry powder or Class B foam extinguisher',
+                                'Smother with baking soda from supply',
+                                'Allow fire to burn out naturally'
+                            ],
+                            correct: 1,
+                            explanation: 'Oil fires require dry powder or Class B foam. Water will cause the oil to explode and spread. Dry agents are designed specifically for oil fires.'
+                        }
+                    ]
+                }
+            };
+
+            const scenario = scenarios[scenarioId];
+            if (!scenario) {
+                quizContent.innerHTML = '<p>Scenario not found.</p>';
+                return;
+            }
+
+            renderQuiz(scenario, quizContent);
+        }
+
+        function renderQuiz(scenario, container) {
+            let html = `<h2>${scenario.title}</h2>`;
+            
+            scenario.questions.forEach((question, index) => {
+                html += `
+                    <div class="question-block">
+                        <div class="question-header">
+                            <div class="question-number">${index + 1}</div>
+                            <div class="question-text">${question.question}</div>
+                        </div>
+                        
+                        <div class="question-context">
+                            <strong>Scenario Context:</strong><br>
+                            ${question.context}
+                        </div>
+
+                        <div class="options">
+                            ${question.options.map((option, optIdx) => `
+                                <label class="option">
+                                    <input type="radio" name="q${index}" value="${optIdx}" 
+                        onchange="showFeedback(${index}, ${optIdx}, ${question.correct}, '${question.explanation.replace(/'/g, "\\'")}')">
+                                    <div class="option-text">
+                                        <div class="option-label">${option}</div>
+                                    </div>
+                                </label>
+                            `).join('')}
+                        </div>
+
+                        <div id="feedback-${index}" class="feedback"></div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="location.reload()">Reset Training</button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function showFeedback(questionIndex, selectedIndex, correctIndex, explanation) {
+            const feedbackEl = document.getElementById(`feedback-${questionIndex}`);
+            const isCorrect = selectedIndex === correctIndex;
+
+            feedbackEl.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackEl.innerHTML = `
+                <strong>${isCorrect ? 'Correct Response' : 'Incorrect Response'}</strong><br>
+                ${explanation}
+            `;
+        }
+    </script>
+</body>
+</html>
